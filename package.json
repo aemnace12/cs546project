@@ -1,0 +1,19 @@
+{
+  "name": "cs546project",
+  "version": "1.0.0",
+  "description": "546 final project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aemnace12/cs546project.git"
+  },
+  "author": "Jason Scheckner, Gabrielle Sokolik, Justin Lee, Achilles Emnace, Lorenzo Cafe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aemnace12/cs546project/issues"
+  },
+  "homepage": "https://github.com/aemnace12/cs546project#readme"
+}
