@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/aemnace12/cs546project/issues"
   },
-  "homepage": "https://github.com/aemnace12/cs546project#readme"
+  "homepage": "https://github.com/aemnace12/cs546project#readme",
+  "dependencies": {
+    "cs546project": "file:"
+  }
 }
