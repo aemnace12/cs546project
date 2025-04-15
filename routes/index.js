@@ -1,4 +1,4 @@
-import postRoutes from './post.js';
+import postRoutes from './vacationSpots.js';
 
 const constructorMethod = (app) => {
   app.use('/post', postRoutes);

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "546 final project",
   "main": "app.js",
+  "type": "module",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +19,9 @@
   },
   "homepage": "https://github.com/aemnace12/cs546project#readme",
   "dependencies": {
-    "cs546project": "file:"
+    "cs546project": "file:",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.1",
+    "mongodb": "^6.15.0"
   }
 }
