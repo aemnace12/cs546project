@@ -3,12 +3,11 @@ import {ObjectId} from 'mongodb';
 
 const exportedMethods = {
 // admins are able to create vacation spots
-async createSpot(
+async createLocation(
     location,
     name,
     description
 ){  
-
     if (!location || !name || !description) {
         throw ('ERROR: Missing required fields.');
     }
