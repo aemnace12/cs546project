@@ -1,7 +1,7 @@
 import {vacationSpots} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 
-const exportedMethods = {
+const exportedMethods = { // hello
     async createPost(
         location,
         name,
