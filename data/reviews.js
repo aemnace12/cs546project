@@ -1,0 +1,96 @@
+import {vacationSpots} from '../config/mongoCollections.js';
+import {ObjectId} from 'mongodb';
+
+const exportedMethods = {
+async createReview (
+    locationId,
+    userId,
+    foodRating,
+    safetyRating,
+    activityRating,
+    overallRating
+) {
+    if (!locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating) {
+        throw ('ERROR: Missing required fields.');
+    }
+    const stringFields = { locationId, userId };
+    for (const [key, value] of Object.entries(stringFields)) {
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            throw ('ERROR: string inputs must be a non-empty string');
+        }
+    }
+    const numberFields = { foodRating, safetyRating, activityRating, overallRating };
+    for (const [key, value] of Object.entries(numberFields)) {
+        if (typeof value !== 'number') {
+            throw ('ERROR: ratings must be a number');
+        }
+        if (value < 0 && value > 5){
+            throw ('ERROR: invalid rating (0 - 5)');
+        }
+    }
+    locationId = locationId.trim();
+    userId = userId.trim();
+    if (!ObjectId.isValid(locationId)) {
+        throw ('ERROR: invalid location ID');
+    }
+    if (!ObjectId.isValid(userId)) {
+        throw ('ERROR: invalid user ID');
+    }
+
+    let comments = [];
+    const newReview = {
+        _id: new ObjectId(),
+        locationId,
+        userId,
+        foodRating,
+        safetyRating,
+        activityRating,
+        overallRating,
+        comments
+    }
+
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
+    const reviewArray = location.reivews;
+    let updatedFoodRating = 0;
+    let updatedsafetyRating = 0;
+    let updatedActivityRating = 0;
+    let updatedOverallRating = 0;
+    for (let i = 0; i < reviewArray.length; i++){
+        updatedFoodRating += reviewArray[i].foodRating;
+        updatedsafetyRating += reviewArray[i].safetyRating;
+        updatedActivityRating += reviewArray[i].activityRating;
+        updatedOverallRating += reviewArray[i].overallRating;
+    }
+    updatedFoodRating = (updatedFoodRating + foodRating) / (reviewArray.length + 1);
+    updatedFoodRating = Math.trunc(updatedFoodRating * 10) / 10;
+
+    updatedsafetyRating = (updatedsafetyRating + safetyRating) / (reviewArray.length + 1);
+    updatedsafetyRating = Math.trunc(updatedsafetyRating * 10) / 10;
+
+    updatedActivityRating = (updatedActivityRating + activityRating) / (reviewArray.length + 1);
+    updatedActivityRating = Math.trunc(updatedActivityRating * 10) / 10;
+
+    updatedOverallRating = (updatedOverallRating + overallRating) / (reviewArray.length + 1);
+    updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
+    const updatedInfo = await movieCol.findOneAndUpdate(
+        {_id: new ObjectId(movieId)}, 
+        {
+            $push: {reviews: newReview}, 
+            $set: {foodRating: updatedFoodRating},
+            $set: {safetyRating: updatedsafetyRating},
+            $set: {activityRating: updatedActivityRating},
+            $set: {overallRating: updatedOverallRating}
+        }, 
+        {returnDocument: 'after'}
+    );
+
+    if (!updatedInfo) {
+        throw ('ERROR: could not insert review successfully');
+    }
+
+    return newReview;
+}
+};
+
+export default exportedMethods;
