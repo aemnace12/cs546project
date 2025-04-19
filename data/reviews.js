@@ -31,10 +31,10 @@ async createReview (
     locationId = locationId.trim();
     userId = userId.trim();
     if (!ObjectId.isValid(locationId)) {
-        throw ('ERROR: invalid location ID');
+        throw ('ERROR: invalid location object ID');
     }
     if (!ObjectId.isValid(userId)) {
-        throw ('ERROR: invalid user ID');
+        throw ('ERROR: invalid user object ID');
     }
 
     let comments = [];
@@ -90,6 +90,79 @@ async createReview (
     }
 
     return newReview;
+},
+
+async removeReview (reviewId) {
+    if (!reviewId){
+        throw ('ERROR: You must provide an id to search for');
+    }
+    if (typeof reviewId !== 'string'){
+        throw ('ERROR: Id must be a string');
+    }
+    if (reviewId.trim().length === 0){
+        throw ('ERROR: id cannot be an empty string or just spaces');
+    }
+    reviewId = reviewId.trim();
+    if (!ObjectId.isValid(reviewId)){
+        throw ('ERROR: invalid review object ID');
+    }
+
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({"reviews._id": new ObjectId(reviewId)});
+    if (!location) {
+        throw ('ERROR: could not find review with given id');
+    }
+    const deletedReview = location.reviews.find(review => review._id.toString() === reviewId);
+    const deletedFoodRating = deletedReview.foodRating;
+    const deletedSafetyRating = deletedReview.safetyRating;
+    const deletedActivityRating = deletedReview.activityRating;
+    const deletedOverallRating = deletedReview.overallRating;
+    const deletionInfo = await movieCol.updateOne({"reviews._id": new ObjectId(reviewId)}, {$pull: {reviews: {_id: new ObjectId(reviewId)}}});
+
+    if (!deletionInfo) {
+        throw ('ERROR: could not delete review with given id');
+    }
+
+    const reviewArray = location.reviews;
+    let updatedFoodRating = 0;
+    let updatedsafetyRating = 0;
+    let updatedActivityRating = 0;
+    let updatedOverallRating = 0;
+    if (reviewArray.length - 1 > 0){
+        for (let i = 0; i < reviewArray.length; i++){
+            updatedFoodRating += reviewArray[i].foodRating;
+            updatedsafetyRating += reviewArray[i].safetyRating;
+            updatedActivityRating += reviewArray[i].activityRating;
+            updatedOverallRating += reviewArray[i].overallRating;
+        }
+        updatedFoodRating = (updatedFoodRating - deletedFoodRating) / (reviewArray.length - 1);
+        updatedFoodRating = Math.trunc(updatedFoodRating * 10) / 10;
+
+        updatedsafetyRating = (updatedsafetyRating - deletedSafetyRating) / (reviewArray.length - 1);
+        updatedsafetyRating = Math.trunc(updatedsafetyRating * 10) / 10;
+
+        updatedActivityRating = (updatedActivityRating - deletedActivityRating) / (reviewArray.length - 1);
+        updatedActivityRating = Math.trunc(updatedActivityRating * 10) / 10;
+
+        updatedOverallRating = (updatedOverallRating - deletedOverallRating) / (reviewArray.length - 1);
+        updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
+    }
+
+    const updatedInfo = await movieCol.findOneAndUpdate(
+        {_id: new ObjectId(movie._id)}, 
+        {   
+            $set: {foodRating: updatedFoodRating},
+            $set: {safetyRating: updatedsafetyRating},
+            $set: {activityRating: updatedActivityRating},
+            $set: {overallRating: updatedOverallRating}
+        }, 
+        {returnDocument: 'after'}
+    );
+
+    if (!updatedInfo) {
+        throw ('ERROR: could not update movie successfully');
+    }
+    return updatedInfo;
 }
 };
 
