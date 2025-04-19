@@ -67,7 +67,7 @@ async getLocationById(id) {
     const locationCol = await vacationSpots();
     const location = await locationCol.findOne({_id: new ObjectId(id)});
     if (!location){
-        throw ('ERROR: No movie with that id');
+        throw ('ERROR: No location with that id');
     }
     location._id = location._id.toString();
 
