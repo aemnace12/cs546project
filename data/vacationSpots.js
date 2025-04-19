@@ -27,10 +27,13 @@ async createLocation(
     let activityRating = 0;
     let overallRating = 0;
 
+    const locationList = await this.getAllLocations();
+    let rank = locationList.length + 1;
+
     const newLocation = {
         location,
         name,
-        // rank,            // created spot will start with lowest rank
+        rank,
         description,
         foodRating,
         safetyRating,
@@ -48,6 +51,19 @@ async createLocation(
     const location = await this.getLocationById(newId);
 
     return location;
+},
+
+async getAllLocations() {
+  const locationCol = await vacationSpots();
+  let locationList = await locationCol.find({}).toArray();
+  if (!locationList){
+      throw ('ERROR: could not get all locations');
+  }
+  locationList = locationList.map((element) => {
+      element._id = element._id.toString();
+      return element;
+  });
+  return locationList;
 },
 
 async getLocationById(id) {
