@@ -73,8 +73,8 @@ async createReview (
 
     updatedOverallRating = (updatedOverallRating + overallRating) / (reviewArray.length + 1);
     updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
-    const updatedInfo = await movieCol.findOneAndUpdate(
-        {_id: new ObjectId(movieId)}, 
+    const updatedInfo = await locationeCol.findOneAndUpdate(
+        {_id: new ObjectId(locationId)}, 
         {
             $push: {reviews: newReview}, 
             $set: {foodRating: updatedFoodRating},
@@ -117,7 +117,7 @@ async removeReview (reviewId) {
     const deletedSafetyRating = deletedReview.safetyRating;
     const deletedActivityRating = deletedReview.activityRating;
     const deletedOverallRating = deletedReview.overallRating;
-    const deletionInfo = await movieCol.updateOne({"reviews._id": new ObjectId(reviewId)}, {$pull: {reviews: {_id: new ObjectId(reviewId)}}});
+    const deletionInfo = await locationCol.updateOne({"reviews._id": new ObjectId(reviewId)}, {$pull: {reviews: {_id: new ObjectId(reviewId)}}});
 
     if (!deletionInfo) {
         throw ('ERROR: could not delete review with given id');
@@ -148,8 +148,8 @@ async removeReview (reviewId) {
         updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
     }
 
-    const updatedInfo = await movieCol.findOneAndUpdate(
-        {_id: new ObjectId(movie._id)}, 
+    const updatedInfo = await locationCol.findOneAndUpdate(
+        {_id: new ObjectId(location._id)}, 
         {   
             $set: {foodRating: updatedFoodRating},
             $set: {safetyRating: updatedsafetyRating},
@@ -160,7 +160,7 @@ async removeReview (reviewId) {
     );
 
     if (!updatedInfo) {
-        throw ('ERROR: could not update movie successfully');
+        throw ('ERROR: could not update location successfully');
     }
     return updatedInfo;
 }
