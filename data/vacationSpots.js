@@ -27,7 +27,7 @@ async createLocation(
     let activityRating = 0;
     let overallRating = 0;
 
-    const newPost = {
+    const newLocation = {
         location,
         name,
         // rank,            // created spot will start with lowest rank
@@ -38,8 +38,13 @@ async createLocation(
         overallRating,
         reviews
     }
+    const spotsCol = await vacationSpots();
+    const insertInfo = await spotsCol.insertOne(newLocation);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) {
+        throw ('ERROR: Could not add location');
+    }
 
-    return newPost;
+    return newLocation;
 }
 }
 export default exportedMethods;
