@@ -38,13 +38,40 @@ async createLocation(
         overallRating,
         reviews
     }
-    const spotsCol = await vacationSpots();
-    const insertInfo = await spotsCol.insertOne(newLocation);
+    const locationCol = await vacationSpots();
+    const insertInfo = await locationCol.insertOne(newLocation);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) {
         throw ('ERROR: Could not add location');
     }
 
-    return newLocation;
+    const newId = insertInfo.insertedId.toString();
+    const location = await this.getLocationById(newId);
+
+    return location;
+},
+
+async getLocationById(id) {
+    if (!id){
+        throw ('ERROR: You must provide an id to search for');
+    }
+    if (typeof id !== 'string'){
+        throw ('ERROR: Id must be a string');
+    }
+    if (id.trim().length === 0){
+        throw ('ERROR: id cannot be an empty string or just spaces');
+    }
+    id = id.trim();
+    if (!ObjectId.isValid(id)){
+        throw ('ERROR: invalid object ID');
+    }
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(id)});
+    if (!location){
+        throw ('ERROR: No movie with that id');
+    }
+    location._id = location._id.toString();
+
+    return location;
 }
 }
 export default exportedMethods;
