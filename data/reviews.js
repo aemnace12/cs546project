@@ -8,12 +8,13 @@ async createReview (
     foodRating,
     safetyRating,
     activityRating,
-    overallRating
+    overallRating,
+    review
 ) {
-    if (!locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating) {
+    if (!locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
         throw ('ERROR: Missing required fields.');
     }
-    const stringFields = { locationId, userId };
+    const stringFields = { locationId, userId, review };
     for (const [key, value] of Object.entries(stringFields)) {
         if (typeof value !== 'string' || value.trim().length === 0) {
             throw ('ERROR: string inputs must be a non-empty string');
@@ -30,6 +31,7 @@ async createReview (
     }
     locationId = locationId.trim();
     userId = userId.trim();
+    review = review.trim();
     if (!ObjectId.isValid(locationId)) {
         throw ('ERROR: invalid location object ID');
     }
@@ -46,6 +48,7 @@ async createReview (
         safetyRating,
         activityRating,
         overallRating,
+        review,
         comments
     }
 
@@ -73,7 +76,7 @@ async createReview (
 
     updatedOverallRating = (updatedOverallRating + overallRating) / (reviewArray.length + 1);
     updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
-    const updatedInfo = await locationeCol.findOneAndUpdate(
+    const updatedInfo = await locationCol.findOneAndUpdate(
         {_id: new ObjectId(locationId)}, 
         {
             $push: {reviews: newReview}, 
@@ -90,6 +93,96 @@ async createReview (
     }
 
     return newReview;
+},
+
+async updateReview (
+    reviewId,
+    locationId,
+    userId,
+    foodRating,
+    safetyRating,
+    activityRating,
+    overallRating,
+    review
+) {
+    if (!reviewId || !locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
+        throw ('ERROR: Missing required fields.');
+    }
+    const stringFields = { reviewId, locationId, userId, review };
+    for (const [key, value] of Object.entries(stringFields)) {
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            throw ('ERROR: string inputs must be a non-empty string');
+        }
+    }
+    const numberFields = { foodRating, safetyRating, activityRating, overallRating };
+    for (const [key, value] of Object.entries(numberFields)) {
+        if (typeof value !== 'number') {
+            throw ('ERROR: ratings must be a number');
+        }
+        if (value < 0 && value > 5){
+            throw ('ERROR: invalid rating (0 - 5)');
+        }
+    }
+    reviewId = reviewId.trim();
+    locationId = locationId.trim();
+    userId = userId.trim();
+    review = review.trim();
+    if (!ObjectId.isValid(reviewId)) {
+        throw ('ERROR: invalid review object ID');
+    }
+    if (!ObjectId.isValid(locationId)) {
+        throw ('ERROR: invalid location object ID');
+    }
+    if (!ObjectId.isValid(userId)) {
+        throw ('ERROR: invalid user object ID');
+    }
+
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
+    const reviewArray = location.reivews;
+    let updatedFoodRating = 0;
+    let updatedsafetyRating = 0;
+    let updatedActivityRating = 0;
+    let updatedOverallRating = 0;
+    for (let i = 0; i < reviewArray.length; i++){
+        if (reviewArray[i]._id !== reviewId){
+            updatedFoodRating += reviewArray[i].foodRating;
+            updatedsafetyRating += reviewArray[i].safetyRating;
+            updatedActivityRating += reviewArray[i].activityRating;
+            updatedOverallRating += reviewArray[i].overallRating;
+        }
+    }
+    updatedFoodRating = (updatedFoodRating + foodRating) / (reviewArray.length);
+    updatedFoodRating = Math.trunc(updatedFoodRating * 10) / 10;
+
+    updatedsafetyRating = (updatedsafetyRating + safetyRating) / (reviewArray.length);
+    updatedsafetyRating = Math.trunc(updatedsafetyRating * 10) / 10;
+
+    updatedActivityRating = (updatedActivityRating + activityRating) / (reviewArray.length);
+    updatedActivityRating = Math.trunc(updatedActivityRating * 10) / 10;
+
+    updatedOverallRating = (updatedOverallRating + overallRating) / (reviewArray.length);
+    updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
+
+    const updatedReview = {
+        locationId,
+        userId,
+        foodRating: updatedFoodRating,
+        safetyRating: updatedsafetyRating,
+        activityRating: updatedActivityRating,
+        overallRating: updatedOverallRating,
+        review,
+    }
+
+    const updatedInfo = await locationCol.findOneAndUpdate({_id: new ObjectId(locationId)}, {$set: updatedReview}, {returnDocument: 'after'});
+
+    if (!updatedInfo) {
+        throw ('ERROR: could not update review successfully');
+    }
+
+    updatedInfo._id = updatedInfo._id.toString();
+
+    return updatedInfo;
 },
 
 async removeReview (reviewId) {
