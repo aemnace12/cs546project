@@ -18,3 +18,4 @@ const getCollectionFn = (collection) => {
 
 /* Now, you can list your collections here: */
 export const vacationSpots = getCollectionFn('vacationSpots');
+export const users = getCollectionFn('users');
