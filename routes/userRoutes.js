@@ -2,9 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import {userData} from '../data/index.js';
 
-router.get('/', (req, res) => {
-    res.render('users/home', {title: 'Users Home'});
-});
+
 
 
 router.get('/', async (req, res) => {
@@ -28,10 +26,12 @@ router.post('/login', async (req, res) => {
 
 // sign up/register page 
 
+router.get('/profile', async (req, res) => {
+  res.render('user/profile');
+});
 
-
-router.get('.signup', async (req, res) => {
-  res.render('users/signup', {title: 'Sign Up'});
+router.get('/signup', async (req, res) => {
+  res.render('signup', {title: 'Sign Up'});
 });
 
 router.post('/signup', async (req, res) => {

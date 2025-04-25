@@ -2,13 +2,14 @@ import vacationRoutes from './vacationSpots.js';
 import userRoutes from './userRoutes.js';
 import reviewRoutes from './reviewRoutes.js';
 import leaderboardRoutes from './leaderboardRoutes.js';
+import homePage from './homePage.js'
 
 const constructorMethod = (app) => {
-  app.use('/user', postRoutes);
+  app.use('/user', userRoutes);
   app.use('/leaderboard', leaderboardRoutes);
   app.use('/vacation', vacationRoutes);
   app.use('/reviews', reviewRoutes);
-
+  app.use('/', homePage);
 
   app.use(/.*/, (req, res) => {
     res.status(404).json({error: 'Route Not found'});

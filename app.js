@@ -2,6 +2,85 @@ import express from 'express';
 const app = express();
 import configRoutes from './routes/index.js';
 import exphbs from 'express-handlebars';
+import session from 'express-session';
+
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+app.use(
+     session({
+       name: 'AuthenticationState',
+       secret: "tripScoreString",
+       saveUninitialized: false,
+       resave: false,
+     })
+   );
+
+
+
+app.use('/login', (req, res, next) => {
+  if (req.session.user && req.session.user.role === "admin") {
+    return res.redirect("/admin")
+  }
+  if (req.session.user && req.session.user.role === "user") {
+     return res.redirect("/user")
+  }
+  next();
+  
+});
+
+app.use('/register', (req, res, next) => {
+     if (req.session.user && req.session.user.role === "admin") {
+       return res.redirect("/admin")
+     }
+     if (req.session.user && req.session.user.role === "user") {
+        return res.redirect("/user")
+     }
+     next();
+   
+   });
+
+app.use('/user', (req, res, next) => {
+     /*if (!req.session.user){
+          return res.redirect("/login");
+     }*/
+     next();
+
+});
+
+app.use('/superuser', (req, res, next) => {
+     if (!req.session.user) {
+       return res.redirect("/login")
+     }
+     if (req.session.user && req.session.user.role !== "superuser") {
+          return res.redirect("/error")
+     }
+     next();
+   
+   });
+
+app.use('/error', (req, res, next) => {
+     if (!req.session.user) {
+          return res.status(403).render("error", {error: "You do not have permission to view this page."})
+     }
+     
+     return res.status(403).render("error", {error: "You do not have permission to view this page.", backgroundColor: req.session.user.themePreference.backgroundColor, fontColor: req.session.user.themePreference.fontColor})
+     
+
+});
+
+app.use('/logout', (req, res, next) => {
+     if (!req.session.user) {
+          return res.redirect("/login")
+     }
+     next();
+
+});
+
+
+
+
 
 //code from lecture to allow for requests like put if we need them
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {

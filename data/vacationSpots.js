@@ -48,9 +48,9 @@ async createLocation(
     }
 
     const newId = insertInfo.insertedId.toString();
-    const location = await this.getLocationById(newId);
+    const returnLocation = await this.getLocationById(newId);
 
-    return location;
+    return returnLocation;
 },
 
 async getAllLocations() {
