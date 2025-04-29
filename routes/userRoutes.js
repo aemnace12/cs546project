@@ -99,7 +99,7 @@ router
   .get(async (req, res) => {
     //code here for GET
     try{
-      res.render('auth/register')
+      res.render('auth/register');
     }catch(e){
       return res.sendStatus(500).render("error", {error: e});
       
@@ -169,7 +169,7 @@ router
       }
 
       //This function is needed! from userData
-      const reg = await register(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.favoriteQuote, themePreference, regBody.role);
+      const reg = await createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
 
       if(reg.registrationCompleted){
         res.redirect("login")

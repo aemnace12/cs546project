@@ -51,8 +51,9 @@ async createUser (
         firstName,
         lastName,
         userId,
-        hash,
-    }
+        password: hash,
+        role
+    };
      
     const insertInfo = await userCollection.insertOne(newUser); //edit collection 
  
@@ -60,7 +61,7 @@ async createUser (
   throw 'Could not add user';
 
 
-return { registrationCompleted: true };
+return { registrationCompleted: true }; // not sure if needed
 
 },
 
@@ -68,9 +69,20 @@ return { registrationCompleted: true };
 async removeUser (
     userId
 ) {
+
+    if (!userId || typeof userId !== 'string') {
+        throw 'userId must be a non-empty string';
+      }
+
+
     const userCollection = await users();
-    const deletedOne = await userCollection.findOneandDelete(userId); //edit collection 
-    console.log(deletedOne);
+    const deletedResult = await userCollection.findOneAndDelete({ userId: userId }); //edit collection
+    if (!deletedResult.value) {
+        throw `No user found with userId: ${userId}`;
+      }
+   
+    console.log(deletedResult.value);
+
 
 }
 };
