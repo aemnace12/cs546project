@@ -1,5 +1,6 @@
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
+import bcrypt from "bcryptjs";
 
 const exportedMethods = {
 async createUser (
@@ -23,14 +24,53 @@ async createUser (
     userId = userId.trim();
     role = role.trim();
 
-    const newUser = {
-        
+    if(userId.lenth < 5){
+        throw "ID legnth must be atleast 5 characters" // we can edit this
     }
+    // password checks
+    // atleast 8 char, 1 uppper, a number and special character
+    //check for no including space
+
+    if(password.length > 6 && password.length < 20){
+        throw "Must be between 6 and 20 "
+    }
+
+    if(!password.include("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")){
+        throw "Password must include an uppercase, lowercase, special character!"
+    }
+
+    const hash = await bcrypt.hash(password, 16);
+    const userCollection = await users();
+    const exist = await userCollection.findOne({ userId: userId });
+
+  if (exist) {
+    throw 'There is already a user with that userId.';
+  }
+
+    const newUser = {
+        firstName,
+        lastName,
+        userId,
+        hash,
+    }
+     
+    const insertInfo = await userCollection.insertOne(newUser); //edit collection 
+ 
+ if (!insertInfo.acknowledged || !insertInfo.insertedId)
+  throw 'Could not add user';
+
+
+return { registrationCompleted: true };
+
 },
+
 
 async removeUser (
     userId
 ) {
+    const userCollection = await users();
+    const deletedOne = await userCollection.findOneandDelete(userId); //edit collection 
+    console.log(deletedOne);
 
 }
 };

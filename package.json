@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/aemnace12/cs546project#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "cs546project": "file:",
     "express": "^5.1.0",
     "express-handlebars": "^8.0.1",
