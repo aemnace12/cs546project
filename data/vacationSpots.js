@@ -63,6 +63,7 @@ async getAllLocations() {
       element._id = element._id.toString();
       return element;
   });
+  
   return locationList;
 },
 

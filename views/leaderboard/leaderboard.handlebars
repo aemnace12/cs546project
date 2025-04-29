@@ -1,0 +1,16 @@
+<p>This is the leaderboard page</p>
+<p>This is where the more specific leaderboars sorting by location/price/etc </p>
+<p>{{test}}</p>
+{{#if posts.length}}
+    <ol>
+        {{#each posts}}
+            <li>
+                <p>Name: {{name}}</p>
+                <p>Description: {{description}}</p>
+                <p>Location: {{location}}</p>
+            </li>
+        {{/each}}
+    </ol>
+{{else}}
+    <p class="not-found">We're sorry, but no results were found.</p>
+{{/if}}

@@ -8,7 +8,7 @@ const constructorMethod = (app) => {
   app.use('/user', userRoutes);
   app.use('/leaderboard', leaderboardRoutes);
   app.use('/vacation', vacationRoutes);
-  app.use('/reviews', reviewRoutes);
+  app.use('/review', reviewRoutes);
   app.use('/', homePage);
 
   app.use(/.*/, (req, res) => {

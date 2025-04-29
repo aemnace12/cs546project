@@ -8,7 +8,18 @@ router
     .get(async (req,res) => {
         console.log('request received');
         //sample code
-        res.render('partials/sample', {sample: 'hello'});
+        
     });
+//see specific vacation spot with data
+router.route('/:id')
+.get(async (req,res) => {
+    try{
+        res.render('vacation/vacation', {sample: 'hello'});
+        const spotData = await vacationSpotData.getLocationById(req.params.id)
+    }catch(e){
+        res.status(404).render('error', {error: e})
+    }
+})
+
 
 export default router;
