@@ -21,9 +21,9 @@ app.use(async (req, res, next) => {
   let date = new Date().toUTCString();
   let authentic = "(Non-Authenticated)";
   if(req.session && req.session.user && req.session.cookie) {
-    if (req.session.user.role === "superuser"){
-      authentic = "(Authenticated Super User)";
-      res.locals.loggedInSuper = true;
+    if (req.session.user.role === "admin"){
+      authentic = "(Authenticated Admin)";
+      res.locals.loggedInAdmin = true;
     }
     else if (req.session.user.role === "user"){
       authentic = "(Authenticated User)";
