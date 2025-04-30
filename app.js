@@ -17,7 +17,26 @@ app.use(
      })
    );
 
-
+app.use(async (req, res, next) => {
+  let date = new Date().toUTCString();
+  let authentic = "(Non-Authenticated)";
+  if(req.session && req.session.user && req.session.cookie) {
+    if (req.session.user.role === "superuser"){
+      authentic = "(Authenticated Super User)";
+      res.locals.loggedInSuper = true;
+    }
+    else if (req.session.user.role === "user"){
+      authentic = "(Authenticated User)";
+      res.locals.loggedInUser = true;
+    }
+  }
+  else {
+    res.locals.notLoggedIn = true;
+  }
+  let log = '[' + date + ']: ' + req.method + ' ' + req.path + ' ' + authentic;
+  console.log(log);
+  next();
+});
 
 app.use('/login', (req, res, next) => {
   if (req.session.user && req.session.user.role === "admin") {
