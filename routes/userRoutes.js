@@ -6,6 +6,7 @@ import validation from '../validation.js'
 
 
 
+
 router.get('/', async (req, res) => {
   res.json({route: '/users', method: req.method});
 });
@@ -18,7 +19,7 @@ router
   .get(async (req, res) => {
     //code here for GET
     try{
-      res.render('auth/login')
+      res.render('auth/login');
     }catch(e){
       res.sendStatus(500);
     }
@@ -61,10 +62,10 @@ router
         throw "needs number"
       }
       //Login function needed from userData page
-      const reg = await login(regBody.userId, regBody.password);
+      const reg = await userData.login(regBody.userId, regBody.password);
       
       if(!reg){
-        return res.status(400).render('user/login', {error: "Invalid username or password"});
+        return res.status(400).render('auth/login', {error: "Invalid username or password"});
       }
       
       req.session.user = {
@@ -78,7 +79,7 @@ router
         
         res.redirect("/admin") //NOT DONE
       }else if(reg.role === "user"){
-        res.redirect("/profile")
+        res.redirect("/user/profile");
       }else{
         throw "incorrect role"
       }
@@ -91,7 +92,18 @@ router
 // sign up/register page 
 
 router.get('/profile', async (req, res) => {
-  res.render('user/profile');
+  const user = req.session.user;
+  if (!user) {
+    return res.redirect('/users/login');
+  }
+
+  res.render('user/profile', {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userId: user.userId,
+    role: user.role
+  });
+
 });
 
 router
@@ -169,16 +181,17 @@ router
       }
 
       //This function is needed! from userData
-      const reg = await createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
-
+      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
+      console.log("Registration result:", reg);
       if(reg.registrationCompleted){
-        res.redirect("login")
+        res.redirect("/user/login");
         
       }else{
-        
+       // console.error("Registration failed:", e);
         res.status(500).json({error: "Internal Server Error"})
       }
     } catch (e) {
+      console.error("Registration failed:", e);
       return res.status(400).render('auth/register', {error: e});
     }
 

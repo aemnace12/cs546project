@@ -1,7 +1,7 @@
 <p>This is the registering page</p>
 
 <main>
-            <form method="POST" action="/register" id="signup-form">
+            <form method="POST" action="/user/register" id="signup-form">
                 <label for="firstName">Enter first name</label>
                 <input type="text" name="firstName" id="firstName">
 
@@ -12,11 +12,10 @@
                 <input type="text" name="userId" id="userId">
 
                 <label for="password">Enter password</label>
-                <input type="password" name="password" id="password">
+                <input type="text" name="password" id="password">
 
-                <label for="confirmPassword">Enter password</label>
-                <input type="password" name="confirmPassword" id="confirmPassword">
-
+                <label for="cornfirmPassword">ConfirmPassword:</label>
+                <input type="text" name="confirmPassword" id="confirmPassword">
                 <label for="role">Choose an option:</label>
                 <select id="role" name="role">
                     <option value="user">User</option>

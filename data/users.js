@@ -31,13 +31,16 @@ async createUser (
     // atleast 8 char, 1 uppper, a number and special character
     //check for no including space
 
-    if(password.length > 6 && password.length < 20){
-        throw "Must be between 6 and 20 "
-    }
+    if (password.length < 6 || password.length > 20) {
+        throw "Password must be between 6 and 20 characters";
+      }
+      
 
-    if(!password.include("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")){
-        throw "Password must include an uppercase, lowercase, special character!"
-    }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])/;
+
+      if (!passwordRegex.test(password)) {
+        throw "Password must include an uppercase letter, lowercase letter, number, and special character!";
+      }
 
     const hash = await bcrypt.hash(password, 16);
     const userCollection = await users();
@@ -62,6 +65,37 @@ async createUser (
 
 
 return { registrationCompleted: true }; // not sure if needed
+
+},
+
+async login(userId, password){
+    if(!userId){
+        throw 'please provide an userId!';
+    }
+    if(!password){
+        throw 'please provide a password!';
+    }
+    userId = userId.toLowerCase();
+    const userCollection = await users();
+
+    const user = await userCollection.findOne({userId: userId});
+    if(!user){
+        throw 'User does not exist in our database!';
+    }
+
+    const hashedPassword = user.password;
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    if(!isMatch){
+        throw 'Parameters are not correct!';
+    }
+
+    return{
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userId: user.userId,
+        role: user.role
+    }
+
 
 },
 
