@@ -14,8 +14,9 @@ router
 router.route('/:id')
 .get(async (req,res) => {
     try{
-        res.render('vacation/vacation', {sample: 'hello'});
+        console.log("in here")
         const spotData = await vacationSpotData.getLocationById(req.params.id)
+        res.render('vacation/vacation', {spot: spotData});
     }catch(e){
         res.status(404).render('error', {error: e})
     }

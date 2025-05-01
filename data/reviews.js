@@ -3,7 +3,7 @@ import {ObjectId} from 'mongodb';
 
 const exportedMethods = {
 async createReview (
-    locationId,
+    locationName,
     userId,
     foodRating,
     safetyRating,
@@ -11,10 +11,10 @@ async createReview (
     overallRating,
     review
 ) {
-    if (!locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
+    if (!locationName || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
         throw ('ERROR: Missing required fields.');
     }
-    const stringFields = { locationId, userId, review };
+    const stringFields = { locationName, userId, review };
     for (const [key, value] of Object.entries(stringFields)) {
         if (typeof value !== 'string' || value.trim().length === 0) {
             throw ('ERROR: string inputs must be a non-empty string');
@@ -29,7 +29,9 @@ async createReview (
             throw ('ERROR: invalid rating (0 - 5)');
         }
     }
-    locationId = locationId.trim();
+    locationName = locationName.trim();
+    const location = await locationCol.findOne({name: locationName});
+    const locationId = location._id;
     userId = userId.trim();
     review = review.trim();
     if (!ObjectId.isValid(locationId)) {
@@ -42,7 +44,7 @@ async createReview (
     let comments = [];
     const newReview = {
         _id: new ObjectId(),
-        locationId,
+        locationName,
         userId,
         foodRating,
         safetyRating,
@@ -53,8 +55,8 @@ async createReview (
     }
 
     const locationCol = await vacationSpots();
-    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
-    const reviewArray = location.reivews;
+    
+    const reviewArray = location.reviews;
     let updatedFoodRating = 0;
     let updatedsafetyRating = 0;
     let updatedActivityRating = 0;

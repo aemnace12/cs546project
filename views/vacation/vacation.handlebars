@@ -1,1 +1,22 @@
-<p>This is the handlebar for a specific vacation spot</p>
+<a href="/review/createreview">Click me to create a review for this vacation spot!</a>
+
+<p>Name: {{spot.name}}</p>
+<p>Description: {{spot.description}}</p>
+<p>Location: {{spot.location}}</p>
+<p>Overall Rating: {{spot.overallRating}}</p>
+<p>Food Rating: {{spot.foodRating}}</p>
+<p>Safety Rating: {{spot.safetyRating}}</p>
+<p>Activity Rating: {{spot.activityRating}}</p>
+
+{{#if spot.reviews.length}}
+    <ol>
+        {{#each spot.reviews}}
+            <li>
+                <p>Review: {{review}}</p>
+                
+            </li>
+        {{/each}}
+    </ol>
+{{else}}
+    <p class="not-found">We're sorry, but no reviews were for this vacation spot.</p>
+{{/if}}
