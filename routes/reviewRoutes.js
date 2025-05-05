@@ -13,7 +13,15 @@ router
 router.route('/createpost')
 .get(async(req,res) => {
     try{
+    if(req.session.user){
+        return res.redirect('/leaderboard');
+    }
+    let isAdmin = false;
+    if (req.session.user && req.session.user.role === 'admin') {
+        isAdmin = true;      
         res.render('review/createpost')
+    }
+    return res.redirect('/leaderboard');
     }catch(e){
         res.status(404).render('error', {error: e})
     }
