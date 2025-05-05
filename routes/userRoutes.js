@@ -106,6 +106,20 @@ router.get('/profile', async (req, res) => {
 
 });
 
+router.get('/profile/edit', async (req, res) => { // we need to work on this figure out how to edit profile here
+  const user = req.session.user;
+  if (!user) {
+    return res.redirect('/users/login');
+  }
+
+  res.render('user/edit', {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userId: user.userId,
+
+  });
+});
+
 router
   .route('/register')
   .get(async (req, res) => {

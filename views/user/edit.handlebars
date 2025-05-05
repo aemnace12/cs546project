@@ -1,0 +1,19 @@
+<p>Profile Edit HandleBars</p>
+
+<h1>Edit Profile</h1> <!-- Edit page THIS IS TENTATIVE -->
+<p>Welcome {{firstName}} {{lastName}}. Choose an item to edit!</p>
+
+<form action="/user/edit" method="post">
+  <div class="editForm">
+  <dropdown>
+    <label for="editItem">Edit Item</label>
+    <select id="editItem" name="editItem">
+      <option value="firstName">First Name</option>
+      <option value="lastName">Last Name</option>
+      <option value="email">Email</option>
+      <option value="password">Password</option>
+      <option value="favoritePlace">favoritePlace</option>
+    </select>
+  </div>
+
+
