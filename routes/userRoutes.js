@@ -106,7 +106,9 @@ router.get('/profile', async (req, res) => {
 
 });
 
-router.get('/profile/edit', async (req, res) => { // we need to work on this figure out how to edit profile here
+
+// if a user wants to edit their profile
+router.get('/profile/edit', async (req, res) => {
   const user = req.session.user;
   if (!user) {
     return res.redirect('/users/login');
@@ -115,11 +117,36 @@ router.get('/profile/edit', async (req, res) => { // we need to work on this fig
   res.render('user/edit', {
     firstName: user.firstName,
     lastName: user.lastName,
-    userId: user.userId,
-
+    userId: user.userId
   });
 });
 
+// POST route to handle form submission
+router.post('/edit', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/users/login');
+  }
+
+  const { editItem, newValue } = req.body;
+
+  if (!editItem || !newValue) {
+    return res.status(400).render('user/edit', {
+      error: 'All fields are required.',
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      userId: req.session.user.userId
+    });
+  }
+  const updatedUser = await updateUser(req.session.user._id, editItem, newValue);
+  if (!updatedUser) {
+    //error here
+  }
+  if (editItem !== 'password') {
+    req.session.user[editItem] = newValue;
+  }
+
+  res.redirect('/user');
+});
 router
   .route('/register')
   .get(async (req, res) => {

@@ -1,19 +1,23 @@
-<p>Profile Edit HandleBars</p>
-
-<h1>Edit Profile</h1> <!-- Edit page THIS IS TENTATIVE -->
-<p>Welcome {{firstName}} {{lastName}}. Choose an item to edit!</p>
+<h1>Edit Profile</h1>
+<p>Welcome {{firstName}} {{lastName}}. Choose an item to edit and enter the new value.</p>
 
 <form action="/user/edit" method="post">
   <div class="editForm">
-  <dropdown>
-    <label for="editItem">Edit Item</label>
-    <select id="editItem" name="editItem">
+    <label for="editItem">Field to edit:</label>
+    <select id="editItem" name="editItem" required>
+      <option value="" disabled selected>Select a field</option>
       <option value="firstName">First Name</option>
       <option value="lastName">Last Name</option>
       <option value="email">Email</option>
       <option value="password">Password</option>
-      <option value="favoritePlace">favoritePlace</option>
+      <option value="favoritePlace">Favorite Place</option>
     </select>
   </div>
 
+  <div class="editForm" style="margin-top:10px;">
+    <label for="newValue">New value:</label>
+    <input type="text" id="newValue" name="newValue" required>
+  </div>
 
+  <button type="submit" style="margin-top:10px;">Update</button>
+</form>
