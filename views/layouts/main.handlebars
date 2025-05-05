@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TripScore</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+  <link rel="stylesheet" href="public/css/main.css">
 </head>
 <body>
-    <main class="container">
+  <main class="container">
+    <header class="top-bar">
+      <div class="nav-bar">
         {{#if notLoggedIn}}
-            <a href="/user/register">Register Here</a>
-            <a href="/user/login">Login Here</a>
+          <a href="/user/register" class="nav-link">Register</a>
+          <a href="/user/login" class="nav-link">Login</a>
         {{/if}}
         {{#if loggedInUser}}
-            <a href="/user/profile">Profile</a>
-            <a href="/review/createpost">Create Post Here!</a>
+          <a href="/user/profile" class="nav-link">Profile</a>
+          <a href="/review/createpost" class="nav-link">New Post</a>
         {{/if}}
         {{#if loggedInAdmin}}
-            <a href="/user/profile">Profile</a>
-            <a href="/review/createpost">Create Post Here!</a>
-            {{!-- link to create vaction spots since only for super users --}}
+          <a href="/user/profile" class="nav-link">Admin Dashboard</a>
+          <a href="/review/createpost" class="nav-link">Create Destination</a>
         {{/if}}
-        <a href="/leaderboard">Leaderboard</a>
-        <h1>TripScore</h1>
-        {{{body}}}
-    </main>
+        <a href="/leaderboard" class="nav-link">Leaderboard</a>
+      </div>
+      <h1 class="site-title">TripScore</h1>
+    </header>
+
+    {{{body}}}
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 TripScore. Plan. Explore. Remember.</p>
+  </footer>
 </body>
 </html>
