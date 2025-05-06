@@ -99,26 +99,6 @@ async login(userId, password){
 
 },
 
-async updateUser (
-    userId,
-    oldField,
-    updateFields
-) {
-    if (!userId || typeof userId !== 'string') {
-        throw 'userId must be a non-empty string';
-      }
-    const userCollection = await users();
-    const updatedUser = await userCollection.findOneAndUpdate(
-        { userId: userId },
-        { $set: {[oldField]: updateFields} }, 
-        { returnDocument: 'after' }
-      );
-      if (!updatedUser.value) {
-        throw `No user found with userId: ${userId}`;
-      }
-      console.log(updatedUser.value);
-},
-
 
 async removeUser (
     userId
