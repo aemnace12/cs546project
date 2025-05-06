@@ -11,6 +11,7 @@ async createReview (
     overallRating,
     review
 ) {
+    //Basic error checking
     if (!locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
         throw ('ERROR: Missing required fields.');
     }
@@ -20,6 +21,7 @@ async createReview (
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
+    //Updated error checking function to ensure valid ratings
     const numberFields = { foodRating, safetyRating, activityRating, overallRating };
     for (const [key, value] of Object.entries(numberFields)) {
         const numValue = Number(value);
@@ -35,6 +37,8 @@ async createReview (
         }
         numberFields[key] = numValue;
     }
+
+    //Make sure raintgs are stored as numbers in database
     foodRating = Number(foodRating)
     safetyRating = Number(safetyRating)
     activityRating = Number(activityRating)
@@ -63,10 +67,11 @@ async createReview (
         review,
         comments
     }
-
+    //If reviews don't exist/empty, then make it empty array
     const reviewArray = location.reviews || [];
     const reviewNum = reviewArray.length;
     
+    //Initialize Food Ratings
     let updatedFoodRating = 0;
     let updatedsafetyRating = 0;
     let updatedActivityRating = 0;
@@ -86,12 +91,13 @@ async createReview (
         let totalOverallRating = 0;
     
         for (let rev of reviewArray) {
+            //Make sure all ratings are Number values and add to overall to give more refined result
             totalFoodRating += Number(rev.foodRating);
             totalSafetyRating += Number(rev.safetyRating);
             totalActivityRating += Number(rev.activityRating);
             totalOverallRating += Number(rev.overallRating);
         }
-    
+        //Updated Ratings calculations
         updatedFoodRating = (totalFoodRating + Number(foodRating)) / (reviewNum + 1);
         updatedsafetyRating = (totalSafetyRating + Number(safetyRating)) / (reviewNum + 1);
         updatedActivityRating = (totalActivityRating + Number(activityRating)) / (reviewNum + 1);
@@ -104,17 +110,15 @@ async createReview (
     updatedActivityRating = Math.trunc(updatedActivityRating * 10) / 10;
     updatedOverallRating = Math.trunc(updatedOverallRating * 10) / 10;
     const updatedInfo = await locationCol.findOneAndUpdate(
-        { _id: new ObjectId(locationId) },
+        {_id: new ObjectId(locationId)}, 
         {
-            $push: { reviews: newReview },
-            $set: {
-                foodRating: updatedFoodRating,
-                safetyRating: updatedsafetyRating,
-                activityRating: updatedActivityRating,
-                overallRating: updatedOverallRating
-            }
-        },
-        { returnDocument: 'after' }
+            $push: {reviews: newReview}, 
+            $set: {foodRating: updatedFoodRating},
+            $set: {safetyRating: updatedsafetyRating},
+            $set: {activityRating: updatedActivityRating},
+            $set: {overallRating: updatedOverallRating}
+        }, 
+        {returnDocument: 'after'}
     );
 
     if (!updatedInfo) {

@@ -44,8 +44,10 @@ router.route('/createpost')
 router.route('/createreview/:id')
 .get(async(req,res) => {
     try{
+        //CreateReview only accessible by ID now, use params.id to get the spot the review is for
         const spotId = req.params.id;
         const spotData = await vacationSpotData.getLocationById(spotId);
+        //Pass in user and spot data to the handlebar so the signed in user doesn't need to manually input anything
         res.render('review/createreview', {user: req.session.user, spot: spotData})
     }catch(e){
         res.status(404).render('error', {error: e})
@@ -58,13 +60,16 @@ router.route('/createreview/:id')
         if(!req.session.user){
             throw "You have to be signed in to post review";
         }
+        //Make sure the id is valid of the user
         if(!req.params.id || !ObjectId.isValid(req.params.id)){
             throw "Invalid locationId"
         }
+        //Use req.session.user.userId for the data function and req.params.id for the locationId
         const makeSpot = await reviewData.createReview(req.params.id, req.session.user.userId, regBody.foodRating, regBody.safetyRating, regBody.activityRating, regBody.overallRating,regBody.review);
         if(!makeSpot){
             throw "couldn't create location"
         }
+        
         res.redirect(`/vacation/${req.params.id}`);
     }catch(e){
         res.status(404).render('error', {error: e})
