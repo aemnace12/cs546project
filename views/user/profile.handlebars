@@ -6,6 +6,9 @@
 <h1 id="userID">{{userId}}</h1>
 <p id="welcome">Welcome {{firstName}} {{lastName}}.</p>
 
+{{#if success}}
+  <p class="success-message">{{success}}</p>
+{{/if}}
 <a href="/user/profile/edit">
   <button type="button">Edit Profile</button>
 </a>

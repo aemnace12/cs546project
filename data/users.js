@@ -104,6 +104,7 @@ async updateUser (
     oldField,
     updateFields
 ) {
+
     if (!userId || typeof userId !== 'string') {
         throw 'userId must be a non-empty string';
       }
@@ -113,10 +114,12 @@ async updateUser (
         { $set: {[oldField]: updateFields} }, 
         { returnDocument: 'after' }
       );
-      if (!updatedUser.value) {
-        throw `No user found with userId: ${userId}`;
+      if (!updatedUser) {
+        throw `couldnt find the user with userId: ${userId}`;
       }
       console.log(updatedUser.value);
+      updatedUser._id= updatedUser._id.toString();
+      return updatedUser;
 },
 
 

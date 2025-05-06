@@ -137,7 +137,9 @@ router.post('/edit', async (req, res) => {
       userId: req.session.user.userId
     });
   }
-  const updatedUser = await updateUser(req.session.user._id, editItem, newValue);
+  console.log('userId in session:', req.session.user.userId);
+  console.log('editItem:', editItem);
+  const updatedUser = await userData.updateUser(req.session.user.userId, editItem, newValue);
   if (!updatedUser) {
     //error here
   }
@@ -145,7 +147,16 @@ router.post('/edit', async (req, res) => {
     req.session.user[editItem] = newValue;
   }
 
-  res.redirect('/user');
+  const successMessage = req.session.success;
+  req.session.success = false; // debugging and clean
+  
+  res.render('user/profile', {
+    firstName: req.session.user.firstName,
+    lastName: req.session.user.lastName,
+    userId: req.session.user.userId,
+    role: req.session.user.role,
+    success: successMessage
+});
 });
 router
   .route('/register')
