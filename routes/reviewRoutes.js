@@ -7,9 +7,8 @@ import {ObjectId} from 'mongodb';
 router
     .route('/')
     .get(async (req,res) => {
-        console.log('request received');
         //sample code
-        res.render('review/review', {sample: 'hello'});
+        res.redirect('homepage');
     });
 router.route('/createpost')
 .get(async(req,res) => {
@@ -75,4 +74,11 @@ router.route('/createreview/:id')
         res.status(404).render('error', {error: e})
     }
 })
+router
+    .route('/:id')
+    .get(async (req,res) => {
+        //sample code
+        //const getReview = reviewData.getReview() NEED GETREVIEWBYID
+        res.render('review/review', {reviewContent: 'hello'});
+    });
 export default router;
