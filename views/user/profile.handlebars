@@ -4,11 +4,23 @@
 <div id="userView">
 
 <h1 id="userID">{{userId}}</h1>
-<p id="welcome">Welcome {{firstName}} {{lastName}}.</p>
-
+<img src="{{profilePicture}}" id="profilePicture"> <!-- unsure about this -->
 {{#if success}}
   <p class="success-message">{{success}}</p>
-{{/if}}
+{{/if}} 
+<p id="welcome">Welcome {{firstName}} {{lastName}}.</p>
+<h3>Favorite Place</h3>
+<p id="favoritePlace"> {{favoritePlace}} </p>
+<h3>Bio</h3>
+<p id="bio"> Sample Bio here </p>
+
+<h3>{{userId}}'s Reviews</h3>
+<p id="reviews"> Sample Reviews here </p>
+
+
+
+
+
 <a href="/user/profile/edit">
   <button type="button">Edit Profile</button>
 </a>

@@ -218,6 +218,31 @@ async updateReview (
     return updatedInfo;
 },
 
+async getReviewById (reviewId) {
+    if (!reviewId){
+        throw ('ERROR: You must provide an id to search for');
+    }
+    if (typeof reviewId !== 'string'){
+        throw ('ERROR: Id must be a string');
+    }
+    if (reviewId.trim().length === 0){
+        throw ('ERROR: id cannot be an empty string or just spaces');
+    }
+    reviewId = reviewId.trim();
+    if (!ObjectId.isValid(reviewId)){
+        throw ('ERROR: invalid review object ID');
+    }
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({"reviews._id": new ObjectId(reviewId)});
+    if (!location) {
+        throw ('ERROR: could not find review with given id');
+    }
+    review._id = reviewId.toString();
+
+    return review;
+},
+
+
 async removeReview (reviewId) {
     if (!reviewId){
         throw ('ERROR: You must provide an id to search for');
