@@ -106,9 +106,7 @@ router.get('/profile', async (req, res) => {
 
 });
 
-
-// if a user wants to edit their profile
-router.get('/profile/edit', async (req, res) => {
+router.get('/profile/edit', async (req, res) => { // we need to work on this figure out how to edit profile here
   const user = req.session.user;
   if (!user) {
     return res.redirect('/users/login');
@@ -117,7 +115,8 @@ router.get('/profile/edit', async (req, res) => {
   res.render('user/edit', {
     firstName: user.firstName,
     lastName: user.lastName,
-    userId: user.userId
+    userId: user.userId,
+
   });
 });
 
@@ -236,7 +235,7 @@ router
       const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
       console.log("Registration result:", reg);
       if(reg.registrationCompleted){
-        res.redirect("/user/login");
+        res.redirect("/auth/login");
         
       }else{
        // console.error("Registration failed:", e);
