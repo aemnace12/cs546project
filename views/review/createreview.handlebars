@@ -1,8 +1,8 @@
-<form id="createreview-form" action="/review/createreview" method="POST">
-    <label for="name">Location Name:</label>
-    <input type="text" name="name" id="name">
-    <label for="userId">userId</label>
-    <input type="text" name="userId" id="userId">
+<form id="createreview-form" action="/review/createreview/{{spot._id}}" method="POST">
+    <input type="hidden" name="locationId" value="{{spot._id}}">
+    <input type="hidden" name="locationName" value="{{spot.name}}">
+    <input type="hidden" name="userId" value="{{user._id}}">
+
     <label for="foodRating">Food Rating:</label>
     <input type="text" name="foodRating" id="foodRating">
     <label for="safetyRating">Safety Rating:</label>

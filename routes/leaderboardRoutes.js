@@ -12,8 +12,7 @@ router
             if(!leadData){
                 throw "couldn't load locations"
             }
-            console.log(JSON.stringify(leadData))
-            console.log("hello world")
+
             res.render('leaderboard/leaderboard', {posts: leadData});
         }catch(e){
             res.render('error', {error: e})
