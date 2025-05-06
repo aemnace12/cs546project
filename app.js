@@ -81,11 +81,21 @@ app.use('/superuser', (req, res, next) => {
 
 app.use('/error', (req, res, next) => {
      if (!req.session.user) {
-          return res.status(403).render("error", {error: "You do not have permission to view this page."})
+          return res.status(403).redirect("login", {error: "You do not have permission to view this page."})
      }
      
      return res.status(403).render("error", {error: "You do not have permission to view this page.", backgroundColor: req.session.user.themePreference.backgroundColor, fontColor: req.session.user.themePreference.fontColor})
      
+
+});
+
+app.use('/review/createreview', (req, res, next) => {
+  if (!req.session.user) {
+       return res.status(403).redirect("/user/login")
+  }
+  
+  next();
+  
 
 });
 

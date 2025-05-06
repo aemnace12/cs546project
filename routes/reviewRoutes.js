@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import {reviewData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
+import {ObjectId} from 'mongodb';
 
 router
     .route('/')
@@ -13,15 +14,16 @@ router
 router.route('/createpost')
 .get(async(req,res) => {
     try{
-    if(req.session.user){
+    if(!req.session.user){
         return res.redirect('/leaderboard');
     }
     let isAdmin = false;
     if (req.session.user && req.session.user.role === 'admin') {
-        isAdmin = true;      
-        res.render('review/createpost')
+        isAdmin = true;    
+        res.render('review/createpost')  
+    }else{
+    res.redirect('/leaderboard');
     }
-    return res.redirect('/leaderboard');
     }catch(e){
         res.status(404).render('error', {error: e})
     }
@@ -39,10 +41,12 @@ router.route('/createpost')
         res.status(404).render('error', {error: e})
     }
 })
-router.route('/createreview')
+router.route('/createreview/:id')
 .get(async(req,res) => {
     try{
-        res.render('review/createreview')
+        const spotId = req.params.id;
+        const spotData = await vacationSpotData.getLocationById(spotId);
+        res.render('review/createreview', {user: req.session.user, spot: spotData})
     }catch(e){
         res.status(404).render('error', {error: e})
     }
@@ -51,11 +55,17 @@ router.route('/createreview')
 .post(async(req, res) => {
     const regBody = req.body;
     try{
-        const makeSpot = await reviewData.createReview(regBody.locationName, regBody.userId, regBody.foodRating, regBody.safetyRating, regBody.activityRating, regBody.overallRating,regBody.review);
+        if(!req.session.user){
+            throw "You have to be signed in to post review";
+        }
+        if(!req.params.id || !ObjectId.isValid(req.params.id)){
+            throw "Invalid locationId"
+        }
+        const makeSpot = await reviewData.createReview(req.params.id, req.session.user.userId, regBody.foodRating, regBody.safetyRating, regBody.activityRating, regBody.overallRating,regBody.review);
         if(!makeSpot){
             throw "couldn't create location"
         }
-        res.redirect('/leaderboard')
+        res.redirect(`/vacation/${req.params.id}`);
     }catch(e){
         res.status(404).render('error', {error: e})
     }

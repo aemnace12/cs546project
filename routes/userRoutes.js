@@ -225,7 +225,7 @@ router
       const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
       console.log("Registration result:", reg);
       if(reg.registrationCompleted){
-        res.redirect("/user/login");
+        res.redirect("/auth/login");
         
       }else{
        // console.error("Registration failed:", e);
