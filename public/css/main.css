@@ -38,7 +38,6 @@
     border-radius: 4px;
     font-weight: 500;
     color: #0077cc;
-    transition: background 200ms;
   }
   
   .nav-link:hover {

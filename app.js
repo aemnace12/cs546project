@@ -135,7 +135,7 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
       cookie: {maxAge: 60000}, // 1 hour
     })
   ) */
-  app.use('/public', express.static('public'));
+  app.use('/public', express.static(path.join(__dirname, 'public')));
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
   app.use(rewriteUnsupportedBrowserMethods);

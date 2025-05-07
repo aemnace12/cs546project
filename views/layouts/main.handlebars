@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
-  <link rel="stylesheet" href="public/css/main.css">
+  <link rel="stylesheet" href="/public/css/main.css">
 </head>
 <body>
-  <main class="container">
     <header class="top-bar">
       <div class="nav-bar">
         {{#if notLoggedIn}}
@@ -26,9 +25,10 @@
       </div>
       <h1 class="site-title">TripScore</h1>
     </header>
-
-    {{{body}}}
-  </main>
+    
+    <main class="container">
+        {{{body}}}
+    </main>
 
   <footer class="site-footer">
     <p>&copy; 2025 TripScore. Plan. Explore. Remember.</p>

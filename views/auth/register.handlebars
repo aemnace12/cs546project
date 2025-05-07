@@ -1,28 +1,31 @@
 <p>This is the registering page</p>
 
-<main>
-            <form method="POST" action="/user/register" id="signup-form">
-                <label for="firstName">Enter first name</label>
-                <input type="text" name="firstName" id="firstName">
+<form method="POST" action="/user/register" id="signup-form" class="form">
+    <label for="firstName">Enter first name</label>
+    <input type="text" name="firstName" id="firstName">
 
-                <label for="lastName">Enter last name</label>
-                <input type="text" name="lastName" id="lastName">
+    <label for="lastName">Enter last name</label>
+    <input type="text" name="lastName" id="lastName">
 
-                <label for="userId">Enter userId</label>
-                <input type="text" name="userId" id="userId">
+    <label for="userId">Enter userId</label>
+    <input type="text" name="userId" id="userId">
 
-                <label for="password">Enter password</label>
-                <input type="password" name="password" id="password">
+    <label for="password">Enter password</label>
+    <input type="password" name="password" id="password">
 
-                <label for="confirmPassword">ConfirmPassword:</label>
-                <input type="password" name="confirmPassword" id="confirmPassword">
-                <label for="role">Choose an option:</label>
-                <select id="role" name="role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-                <input type="submit" value="Submit">
-            </form>
-            <a id="loginLink" href="/login">Already have an account? Click here to sign-in!</a>
-            <a href="/">home</a>
-</main>
+    <label for="confirmPassword">ConfirmPassword:</label>
+    <input type="password" name="confirmPassword" id="confirmPassword">
+    <label for="role">Choose an option:</label>
+    <select id="role" name="role">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+            
+<div class="link-group">
+  <a id="loginLink" href="/user/login" class="nav-link">
+    Already have an account? Click here to sign-in!
+  </a>
+  <a href="/" class="nav-link">Home</a>
+</div>

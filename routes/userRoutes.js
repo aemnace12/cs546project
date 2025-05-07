@@ -165,6 +165,7 @@ router
   .route('/register')
   .get(async (req, res) => {
     //code here for GET
+    const user = req.session.user;
     if(user){
       res.redirect('/');
     }
