@@ -18,6 +18,10 @@ router
   .route('/login')
   .get(async (req, res) => {
     //code here for GET
+    const user = req.session.user;
+    if(user){
+      res.redirect('/');
+    }
     try{
       res.render('auth/login');
     }catch(e){
@@ -94,7 +98,7 @@ router
 router.get('/profile', async (req, res) => {
   const user = req.session.user;
   if (!user) {
-    return res.redirect('/users/login');
+    return res.redirect('/user/login');
   }
 
   res.render('user/profile', {
@@ -109,7 +113,7 @@ router.get('/profile', async (req, res) => {
 router.get('/profile/edit', async (req, res) => { // we need to work on this figure out how to edit profile here
   const user = req.session.user;
   if (!user) {
-    return res.redirect('/users/login');
+    return res.redirect('/user/login');
   }
 
   res.render('user/edit', {
@@ -123,7 +127,7 @@ router.get('/profile/edit', async (req, res) => { // we need to work on this fig
 // POST route to handle form submission
 router.post('/edit', async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/users/login');
+    return res.redirect('/user/login');
   }
 
   const { editItem, newValue } = req.body;
@@ -161,6 +165,9 @@ router
   .route('/register')
   .get(async (req, res) => {
     //code here for GET
+    if(user){
+      res.redirect('/');
+    }
     try{
       res.render('auth/register');
     }catch(e){
@@ -247,6 +254,8 @@ router
     }
 
   });
+
+  
 
 router.get('/logout', async (req, res) => {
   req.session.destroy();

@@ -2,6 +2,7 @@ import vacationRoutes from './vacationSpots.js';
 import userRoutes from './userRoutes.js';
 import reviewRoutes from './reviewRoutes.js';
 import leaderboardRoutes from './leaderboardRoutes.js';
+import adminRoutes from './admin.js'
 import homePage from './homePage.js'
 
 const constructorMethod = (app) => {
@@ -9,6 +10,7 @@ const constructorMethod = (app) => {
   app.use('/leaderboard', leaderboardRoutes);
   app.use('/vacation', vacationRoutes);
   app.use('/review', reviewRoutes);
+  app.use('/admin', adminRoutes)
   app.use('/', homePage);
 
   app.use(/.*/, (req, res) => {
