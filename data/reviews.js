@@ -234,11 +234,16 @@ async getReviewById (reviewId) {
     }
     const locationCol = await vacationSpots();
     const location = await locationCol.findOne({"reviews._id": new ObjectId(reviewId)});
-    if (!location) {
-        throw ('ERROR: could not find review with given id');
+    let review = null;
+    for(let i = 0; i < location .reviews.length; i++){
+        if (location.reviews[i]._id.toString() === reviewId){
+            review = location.reviews[i];
+            break;
+        }
     }
-    review._id = reviewId.toString();
-
+    if (!review){
+        throw ('ERROR: No review with that id');
+    }
     return review;
 },
 
@@ -314,6 +319,36 @@ async removeReview (reviewId) {
         throw ('ERROR: could not update location successfully');
     }
     return updatedInfo;
+},
+
+async addComment(reviewId, userId, comment) { // idk if this works i just looked at the add review, i will test tmrw im going to bed
+    if(!reviewId || !userId || !comment) {
+        throw ('ERROR: Missing required fields.');
+    }
+    const stringFields = { reviewId, userId, comment };
+    for (const [key, value] of Object.entries(stringFields)) {
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            throw ('ERROR: string inputs must be a non-empty string');
+        }
+    }
+    reviewId = reviewId.trim();
+    userId = userId.trim();
+    const newComment = {
+        _id: new ObjectId(),
+        userId,
+        comment
+    }
+    const review = await this.getReviewById(reviewId);
+    const reviewtoAdd = await review.findOneAndUpdate(
+        {_id: new ObjectId(reviewId)}, 
+        {$push: {comments: {userId, comment}}}, 
+        {returnDocument: 'after'}
+    );
+    if (!reviewtoAdd) {
+        throw ('ERROR: could not add comment successfully');
+    }
+    return newComment;
+
 }
 };
 

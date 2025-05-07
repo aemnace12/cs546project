@@ -77,8 +77,13 @@ router.route('/createreview/:id')
 router
     .route('/:id')
     .get(async (req,res) => {
+        try{
         //sample code
-        //const getReview = reviewData.getReview() NEED GETREVIEWBYID
-        res.render('review/review', {reviewContent: 'hello'});
+        const getReview = await reviewData.getReviewById(req.params.id);
+        //getReview._id = getReview._id.toString();
+        res.render('review/review', {review: getReview});
+        }catch(e){
+            res.status(404).render('error', {error: e})
+        }
     });
 export default router;
