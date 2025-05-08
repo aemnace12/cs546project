@@ -155,6 +155,8 @@ router.post('/edit', async (req, res) => {
     firstName: req.session.user.firstName,
     lastName: req.session.user.lastName,
     userId: req.session.user.userId,
+    bio: req.session.user.bio,
+    favoritePlace: req.session.user.favoritePlace,
     role: req.session.user.role,
     success: successMessage
 });
