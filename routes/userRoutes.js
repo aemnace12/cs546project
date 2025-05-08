@@ -140,8 +140,6 @@ router.post('/edit', async (req, res) => {
       userId: req.session.user.userId
     });
   }
-  console.log('userId in session:', req.session.user.userId);
-  console.log('editItem:', editItem);
   const updatedUser = await userData.updateUser(req.session.user.userId, editItem, newValue);
   if (!updatedUser) {
     //error here

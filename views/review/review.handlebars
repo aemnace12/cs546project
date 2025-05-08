@@ -10,25 +10,25 @@
 <p>Review: {{review.review}}</p>
 </li>
 
-<h2>comments</h2>
-{{#if review.comments.length}}
-    <ol>
-        {{#each review.comments}}
-            <li>
-                <p>Comment: {{comment}}</p>
-                <a href="/review/{{_id}}">Click me to see this comment</a>
-                
-            </li>
-        {{/each}}
-    </ol>
+<h2>Comments</h2>
+{{#if comments.length}}
+  <ol>
+    {{#each comments}}
+      <li>
+        <p>Comment ID: {{_id}}</p>
+        <p>Commenter: {{userName}}</p>
+        <p>Comment: {{comment}}</p>
+      </li>
+    {{/each}}
+  </ol>
 {{else}}
-    <p class="not-found">We're sorry, but no comments were found for this review.</p>
-    
+  <p class="not-found">We're sorry, but no comments were found for this review.</p>
 {{/if}}
 
-<form action="/review/{{review._id}}" method="POST">
+
+<form action="/review/{{review._id}}/comment" method="POST">
     <label for="comment">Comment:</label>
-    <input type="text" id="comment">
+    <input type="text" id="comment" name="comment">
     <button type="submit">Submit Comment</button>
 </form>
 

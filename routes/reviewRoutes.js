@@ -1,6 +1,7 @@
 import {Router} from 'express';
 const router = Router();
 import {reviewData} from '../data/index.js';
+import {commentData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
 import {ObjectId} from 'mongodb';
 
@@ -80,10 +81,35 @@ router
         try{
         //sample code
         const getReview = await reviewData.getReviewById(req.params.id);
+        
         //getReview._id = getReview._id.toString();
-        res.render('review/review', {review: getReview});
+        console.log(getReview.comments);
+        res.render('review/review', {review: getReview, comments: getReview.comments});
         }catch(e){
             res.status(404).render('error', {error: e})
         }
-    });
+    })
+router.route('/:id/comment')
+.post(async(req, res) => {
+    const regBody = req.body;
+    const reviewId = req.params.id;
+    try{
+        if(!req.session.user){
+            throw "You have to be signed in to post a comment";
+        }
+       
+        if(!reviewId|| !ObjectId.isValid(reviewId)){
+            throw "Invalid review ID"
+        }
+        
+        const makeComment = await commentData.createComment(reviewId, req.session.user.userId, regBody.comment);
+        if(!makeComment){
+            throw "couldn't create comment"
+        }
+        
+        res.redirect(`/review/${req.params.id}`);
+    }catch(e){
+        res.status(404).render('error', {error: e})
+    }
+});
 export default router;

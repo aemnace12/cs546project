@@ -35,8 +35,11 @@ async createComment (
     if (!location) {
         throw ('ERROR: could not find review with given id');
     }
-    const updatedInfo = await locationCol.updateOne({"reviews._id": new ObjectId(reviewId)}, {$push: {comments: newComment}}, {returnDocument: 'after'});
-    
+    //https://www.mongodb.com/docs/manual/reference/operator/update/positional/
+    const updatedInfo = await locationCol.updateOne(
+        { "reviews._id": new ObjectId(reviewId) },
+        { $push: { "reviews.$.comments": newComment } }
+      );
     if (!updatedInfo) {
         throw ('ERROR: could not insert comment successfully');
     }

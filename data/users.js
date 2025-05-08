@@ -25,13 +25,13 @@ async createUser (
     role = role.trim();
 
     if(userId.lenth < 5){
-        throw "ID legnth must be atleast 5 characters" // we can edit this
+        throw "ID legth must be atleast 5 characters" // we can edit this
     }
     // password checks
     // atleast 8 char, 1 uppper, a number and special character
     //check for no including space
 
-    if (password.length < 6 || password.length > 20) {
+    if (password.length > 6 || password.length < 20) {
         throw "Password must be between 6 and 20 characters";
       }
       
