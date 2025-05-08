@@ -4,23 +4,42 @@ import {ObjectId} from 'mongodb';
 const exportedMethods = {
 // admins are able to create vacation spots
 async createLocation(
-    location,
     name,
+    city,
+    region,
+    country,
+    continent,
     description
 ){  
-    if (!location || !name || !description) {
+    if (!name || !description || !city || !region || !continent) {
         throw ('ERROR: Missing required fields.');
     }
-    const stringFields = { location, name, description };
+    const stringFields = {name, description, city, region, continent};
     for (const [key, value] of Object.entries(stringFields)) {
         if (typeof value !== 'string' || value.trim().length === 0) {
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
-    location = location.trim();
     name = name.trim();
     description = description.trim();
+    city = city.trim();
+    region = region.trim();
+    continent = continent.trim();
 
+    const continents = [
+        'africa',
+        'antarctica',
+        'asia',
+        'europe',
+        'north america',
+        'south america',
+        'australia'
+    ];
+    
+    if (!(continents.includes(continent.toLowerCase()))) {
+        throw "Continent not correct!"
+    }
+    continent=continent.toLowerCase();
     let reviews = [];
     let foodRating = 0;
     let safetyRating = 0;
@@ -31,8 +50,11 @@ async createLocation(
     let rank = locationList.length + 1;
 
     const newLocation = {
-        location,
         name,
+        city,
+        region,
+        country,
+        continent,
         rank,
         description,
         foodRating,
@@ -52,7 +74,10 @@ async createLocation(
 
     return returnLocation;
 },
-
+async getLocationByContinent(continent){
+    const locationCol = await vacationSpots();
+    //TODO finish later for leaderboard
+},
 async getAllLocations() {
   const locationCol = await vacationSpots();
   let locationList = await locationCol.find({}).toArray();
