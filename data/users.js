@@ -23,6 +23,7 @@ async createUser (
     lastName = lastName.trim();
     userId = userId.trim();
     role = role.trim();
+    userId = userId.toLowerCase();
 
     if(userId.lenth > 5){
         throw "ID legth must be atleast 5 characters" // we can edit this

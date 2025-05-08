@@ -32,7 +32,7 @@ router.route('/createpost')
 .post(async(req, res) => {
     const regBody = req.body;
     try{
-        const makeSpot = await vacationSpotData.createLocation(regBody.location, regBody.name, regBody.description);
+        const makeSpot = await vacationSpotData.createLocation(regBody.name, regBody.city, regBody.region, regBody.country, regBody.continent, regBody.description, true);
         if(!makeSpot){
             throw "couldn't create location"
         }
@@ -41,6 +41,37 @@ router.route('/createpost')
         res.status(404).render('error', {error: e})
     }
 })
+
+router.route('/requestpost')
+.get(async(req,res) => {
+    try{
+    if(!req.session.user){
+        return res.redirect('/leaderboard');
+    }
+    if (req.session.user.role === 'admin') {
+        res.redirect('/leaderboard')  
+    }else{
+        res.render('review/requestpost')
+    }
+    }catch(e){
+        res.status(404).render('error', {error: e})
+    }
+})
+//make a new review
+.post(async(req, res) => {
+    const regBody = req.body;
+    try{
+        const makeSpot = await vacationSpotData.createLocation(regBody.name, regBody.city, regBody.region, regBody.country, regBody.continent, regBody.description, false);
+        if(!makeSpot){
+            throw "couldn't create location"
+        }
+        res.redirect('/leaderboard')
+    }catch(e){
+        res.status(404).render('error', {error: e})
+    }
+})
+
+
 router.route('/createreview/:id')
 .get(async(req,res) => {
     try{

@@ -259,8 +259,11 @@ router
   
 
 router.get('/logout', async (req, res) => {
+  if(!req.session.user){
+    res.redirect('/leaderboard')
+  }
   req.session.destroy();
-  res.send('Logged out');
+  res.redirect('/leaderboard')
 });
 
 export default router;

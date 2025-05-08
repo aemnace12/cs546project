@@ -8,7 +8,7 @@ router
     .get(async (req,res) => {
         console.log('request received');
         try{
-            const leadData = await vacationSpotData.getAllLocations();
+            const leadData = await vacationSpotData.getAllApprovedLocations();
             if(!leadData){
                 throw "couldn't load locations"
             }

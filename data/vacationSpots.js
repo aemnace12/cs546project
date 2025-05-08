@@ -9,17 +9,22 @@ async createLocation(
     region,
     country,
     continent,
-    description
+    description,
+    isApproved
 ){  
-    if (!name || !description || !city || !region || !continent) {
+    if (!name || !description || !city || !region || !country || !continent) {
         throw ('ERROR: Missing required fields.');
     }
-    const stringFields = {name, description, city, region, continent};
+    if(typeof(isApproved) !== 'boolean'){
+        throw "Approved Var needs to be bool"
+    }
+    const stringFields = {name, description, city, region, country, continent};
     for (const [key, value] of Object.entries(stringFields)) {
         if (typeof value !== 'string' || value.trim().length === 0) {
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
+
     name = name.trim();
     description = description.trim();
     city = city.trim();
@@ -55,6 +60,7 @@ async createLocation(
         region,
         country,
         continent,
+        isApproved,
         rank,
         description,
         foodRating,
@@ -91,6 +97,38 @@ async getAllLocations() {
   
   return locationList;
 },
+//for leaderboard purposes, isApproved checks if admin has approved or not
+async getAllApprovedLocations() {
+    const locationCol = await vacationSpots();
+    let locationList = await locationCol.find({isApproved: true}).toArray();
+    if (!locationList){
+        throw ('ERROR: could not get all locations');
+    }
+    locationList = locationList.map((element) => {
+        element._id = element._id.toString();
+        return element;
+    });
+    
+    return locationList;
+  },
+  async getAllUnapprovedLocations() {
+    const locationCol = await vacationSpots();
+    let locationList = await locationCol.find({isApproved: false}).toArray();
+    if (!locationList){
+        throw ('ERROR: could not get all locations');
+    }
+    locationList = locationList.map((element) => {
+        element._id = element._id.toString();
+        return element;
+    });
+    
+    return locationList;
+  },
+  async updateLocation(locationId) {
+    //finish this
+    const locationCol = await vacationSpots();
+
+  },
 
 async getLocationById(id) {
     if (!id){

@@ -15,11 +15,13 @@
         {{/if}}
         {{#if loggedInUser}}
           <a href="/user/profile" class="nav-link">Profile</a>
-          <a href="/review/createpost" class="nav-link">New Post</a>
+          <a href="/review/requestpost" class="nav-link">Want a new place added? Request here.</a>
+          <a href="/user/logout" class="nav-link">Logout</a>
         {{/if}}
         {{#if loggedInAdmin}}
           <a href="/admin" class="nav-link">Admin Dashboard</a>
           <a href="/review/createpost" class="nav-link">Create Destination</a>
+          <a href="/user/logout" class="nav-link">Logout</a>
         {{/if}}
         <a href="/leaderboard" class="nav-link">Leaderboard</a>
       </div>
