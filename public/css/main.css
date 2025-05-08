@@ -120,4 +120,44 @@
     font-size: 14px;
     color: #666;
   }
+
+  .intro-section {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+  }
   
+  .intro-section h2 {
+    margin-top: 0;
+    color: #004080;
+  }
+  
+  .intro-section p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .qa-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.qa-section h2 {
+  margin-top: 0;
+  color: #004080;
+}
+
+.qa-list dt {
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.qa-list dd {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
