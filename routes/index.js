@@ -10,7 +10,7 @@ const constructorMethod = (app) => {
   app.use('/leaderboard', leaderboardRoutes);
   app.use('/vacation', vacationRoutes);
   app.use('/review', reviewRoutes);
-  app.use('/admin', adminRoutes)
+  app.use('/admin', adminRoutes);
   app.use('/', homePage);
 
   app.use(/.*/, (req, res) => {
