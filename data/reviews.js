@@ -51,6 +51,12 @@ async createReview (
     }
     userId = userId.trim();
     review = review.trim();
+    if(review.length < 3){
+        throw "Too short of a review."
+    }
+    if(review.length > 500){
+        throw "Too long of a review."
+    }
     if (!ObjectId.isValid(locationId)) {
         throw ('ERROR: invalid location object ID');
     }
@@ -113,10 +119,10 @@ async createReview (
         {_id: new ObjectId(locationId)}, 
         {
             $push: {reviews: newReview}, 
-            $set: {foodRating: updatedFoodRating},
-            $set: {safetyRating: updatedsafetyRating},
-            $set: {activityRating: updatedActivityRating},
-            $set: {overallRating: updatedOverallRating}
+            $set: {foodRating: updatedFoodRating, 
+                   safetyRating: updatedsafetyRating, 
+                   activityRating: updatedActivityRating, 
+                   overallRating: updatedOverallRating}
         }, 
         {returnDocument: 'after'}
     );
@@ -321,34 +327,34 @@ async removeReview (reviewId) {
     return updatedInfo;
 },
 
-async addComment(reviewId, userId, comment) { // idk if this works i just looked at the add review, i will test tmrw im going to bed
-    if(!reviewId || !userId || !comment) {
-        throw ('ERROR: Missing required fields.');
-    }
-    const stringFields = { reviewId, userId, comment };
-    for (const [key, value] of Object.entries(stringFields)) {
-        if (typeof value !== 'string' || value.trim().length === 0) {
-            throw ('ERROR: string inputs must be a non-empty string');
+    async addComment(reviewId, userId, comment) { // idk if this works i just looked at the add review, i will test tmrw im going to bed
+        if(!reviewId || !userId || !comment) {
+            throw ('ERROR: Missing required fields.');
         }
-    }
-    reviewId = reviewId.trim();
-    userId = userId.trim();
-    const newComment = {
-        _id: new ObjectId(),
-        userId,
-        comment
-    }
-    const review = await this.getReviewById(reviewId);
-    const reviewtoAdd = await review.findOneAndUpdate(
-        {_id: new ObjectId(reviewId)}, 
-        {$push: {comments: {userId, comment}}}, 
-        {returnDocument: 'after'}
-    );
-    if (!reviewtoAdd) {
-        throw ('ERROR: could not add comment successfully');
-    }
-    return newComment;
-
+        const stringFields = { reviewId, userId, comment };
+        for (const [key, value] of Object.entries(stringFields)) {
+            if (typeof value !== 'string' || value.trim().length === 0) {
+                throw ('ERROR: string inputs must be a non-empty string');
+            }
+        }
+        reviewId = reviewId.trim();
+        userId = userId.trim();
+        const newComment = {
+            _id: new ObjectId(),
+            userId,
+            comment
+        }
+        const review = await this.getReviewById(reviewId);
+        const reviewtoAdd = await review.findOneAndUpdate(
+            {_id: new ObjectId(reviewId)}, 
+            {$push: {comments: {userId, comment}}}, 
+            {returnDocument: 'after'}
+        );
+        if (!reviewtoAdd) {
+            throw ('ERROR: could not add comment successfully');
+        }
+        return newComment;
+    
 }
 };
 

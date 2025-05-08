@@ -3,7 +3,13 @@ const app = express();
 import configRoutes from './routes/index.js';
 import exphbs from 'express-handlebars';
 import session from 'express-session';
+import {fileURLToPath} from 'url';
+import {dirname} from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const staticDir = express.static(__dirname + '/public');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -135,7 +141,7 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
       cookie: {maxAge: 60000}, // 1 hour
     })
   ) */
-  app.use('/public', express.static(path.join(__dirname, 'public')));
+  app.use('/public', staticDir);
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
   app.use(rewriteUnsupportedBrowserMethods);
