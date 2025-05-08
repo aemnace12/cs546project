@@ -64,7 +64,7 @@ async createUser (
   throw 'Could not add user';
 
 
-return { registrationCompleted: true }; // not sure if needed
+return { registrationCompleted: true, userId: userId }; // not sure if needed
 
 },
 
