@@ -28,11 +28,46 @@ router.route('/createpost')
         res.status(404).render('error', {error: e})
     }
 })
-//make a new review
+//create a unique vacation spot
 .post(async(req, res) => {
     const regBody = req.body;
     try{
-        const makeSpot = await vacationSpotData.createLocation(regBody.name, regBody.city, regBody.region, regBody.country, regBody.continent, regBody.description, true);
+        if (!regBody.name || !regBody.description || !regBody.city || !regBody.region || !regBody.country || !regBody.continent) {
+            throw ('ERROR: Missing required fields.');
+        }
+
+        const name = validation.checkString(regBody.name, 'name');
+        const description = validation.checkString(regBody.description, 'description');
+        const city = validation.checkString(regBody.city, 'city');
+        const region = validation.checkString(regBody.region, 'region');
+        const country = validation.checkString(regBody.country, 'country');
+        const continent = validation.checkString(regBody.continent, 'continent');
+    
+
+    
+        const continents = [
+            'africa',
+            'antarctica',
+            'asia',
+            'europe',
+            'north america',
+            'south america',
+            'australia'
+        ];
+        
+        if (!(continents.includes(continent.toLowerCase()))) {
+            throw "Continent not correct!"
+        }
+        continent=continent.toLowerCase();
+        const makeSpot = await vacationSpotData.createLocation(
+            name,
+            city,
+            region,
+            country,
+            continent,
+            description,
+            true  //BECAUSE ADMIN APPROVED REQUEST
+          )
         if(!makeSpot){
             throw "couldn't create location"
         }
@@ -57,11 +92,43 @@ router.route('/requestpost')
         res.status(404).render('error', {error: e})
     }
 })
-//make a new review
+//request a review from admin
 .post(async(req, res) => {
     const regBody = req.body;
     try{
-        const makeSpot = await vacationSpotData.createLocation(regBody.name, regBody.city, regBody.region, regBody.country, regBody.continent, regBody.description, false);
+        if (!regBody.name || !regBody.description || !regBody.city || !regBody.region || !regBody.country || !regBody.continent) {
+            throw ('ERROR: Missing required fields.');
+        }
+        const name = validation.checkString(regBody.name, 'name');
+        const description = validation.checkString(regBody.description, 'description');
+        const city = validation.checkString(regBody.city, 'city');
+        const region = validation.checkString(regBody.region, 'region');
+        const country = validation.checkString(regBody.country, 'country');
+        const continent = validation.checkString(regBody.continent, 'continent');
+
+        const continents = [
+            'africa',
+            'antarctica',
+            'asia',
+            'europe',
+            'north america',
+            'south america',
+            'australia'
+        ];
+        
+        if (!(continents.includes(continent.toLowerCase()))) {
+            throw "Continent not correct!"
+        }
+        continent=continent.toLowerCase();
+        const makeSpot = await vacationSpotData.createLocation(
+            name,
+            city,
+            region,
+            country,
+            continent,
+            description,
+            false //BECAUSE IT IS REQUEST ADMIN DID NOT APPROVE
+          )
         if(!makeSpot){
             throw "couldn't create location"
         }
@@ -92,16 +159,58 @@ router.route('/createreview/:id')
             throw "You have to be signed in to post review";
         }
         //Make sure the id is valid of the user
-        if(!req.params.id || !ObjectId.isValid(req.params.id)){
+        if(!req.params.id || typeof(req.params.id !== "string") || !ObjectId.isValid(req.params.id)){
             throw "Invalid locationId"
         }
+        let userId = validation.checkString(regBody.user.userId, "userId");
+        let reviewText = validation.checkString(regBody.review, 'review');
+        let foodRating = checkRating(regBody.foodRating, 'foodRating');
+        let safetyRating = checkRating(regBody.safetyRating, 'safetyRating');
+        let activityRating = checkRating(regBody.activityRating, 'activityRating');
+        let overallRating = checkRating(regBody.overallRating, 'overallRating');
+        const numberFields = { foodRating, safetyRating, activityRating, overallRating };
+        for (const [key, value] of Object.entries(numberFields)) {
+            const numValue = Number(value);
+            if (isNaN(numValue)) {
+                throw `ERROR: ${key} must be a valid number`;
+            }
+            if (numValue < 0 || numValue > 5) {
+                throw `ERROR: ${key} must be between 0 and 5`;
+            }
+            //must be one decimal point
+            const decimal = value.toString().split('.')[1];
+            if (decimal && decimal.length > 1) {
+                throw `ERROR: ${key} must have at most 1 decimal place`;
+            }
+            numberFields[key] = numValue;
+        }
+    
+        //Make sure raintgs are stored as numbers in database
+        foodRating = Number(foodRating)
+        safetyRating = Number(safetyRating)
+        activityRating = Number(activityRating)
+        overallRating = Number(overallRating)
+        if(reviewText.length < 3){
+            throw "Too short of a review."
+        }
+        if(reviewText.length > 500){
+            throw "Too long of a review."
+        }
         //Use req.session.user.userId for the data function and req.params.id for the locationId
-        const makeSpot = await reviewData.createReview(req.params.id, req.session.user.userId, regBody.foodRating, regBody.safetyRating, regBody.activityRating, regBody.overallRating,regBody.review);
+        const makeSpot = await reviewData.createReview(
+            locationId,
+            userId,
+            foodRating,
+            safetyRating,
+            activityRating,
+            overallRating,
+            reviewText
+          );
         if(!makeSpot){
             throw "couldn't create location"
         }
         
-        res.redirect(`/vacation/${req.params.id}`);
+        res.redirect(`/vacation/${locationId}`);
     }catch(e){
         res.status(404).render('error', {error: e})
     }
@@ -123,15 +232,21 @@ router
 router.route('/:id/comment')
 .post(async(req, res) => {
     const regBody = req.body;
-    const reviewId = req.params.id;
+    let reviewId = req.params.id;
     try{
         if(!req.session.user){
-            throw "You have to be signed in to post a comment";
+            res.redirect('/user/login')
         }
        
-        if(!reviewId|| !ObjectId.isValid(reviewId)){
-            throw "Invalid review ID"
+        if(!reviewId || !userId || !comment) {
+            throw ('ERROR: Missing required fields.');
         }
+        reviewId = validation.checkId(reviewId, "Review ID");
+        userId = validation.checkString(userId, "User ID");
+        comment = validation.checkString(comment, 'comment');
+        if (comment.length > 500 || comment.length < 3) {
+            throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
+          }
         
         const makeComment = await commentData.createComment(reviewId, req.session.user.userId, regBody.comment);
         if(!makeComment){

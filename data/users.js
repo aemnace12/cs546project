@@ -1,6 +1,7 @@
 import {users} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import bcrypt from "bcryptjs";
+import validation from '../validation.js'
 
 const exportedMethods = {
 async createUser (
@@ -8,6 +9,7 @@ async createUser (
     lastName,
     userId,
     password,
+    confirmPassword,
     role
 ) {
     if (!firstName || !lastName || !userId || !password || !role) {
@@ -24,12 +26,12 @@ async createUser (
     userId = userId.trim();
     role = role.trim();
     userId = userId.toLowerCase();
-
+    confirmPassword = validation.checkString(confirmPassword, "ConfirmPassword")
     if(userId.lenth > 5){
         throw "ID legth must be atleast 5 characters" // we can edit this
     }
     // password checks
-    // atleast 8 char, 1 uppper, a number and special character
+    // atleast 8 char, 1 upper, a number and special character
     //check for no including space
     if (password.length < 6 || password.length > 20) {
         throw "Password must be between 6 and 20 characters";
@@ -40,6 +42,9 @@ async createUser (
 
       if (!passwordRegex.test(password)) {
         throw "Password must include an uppercase letter, lowercase letter, number, and special character!";
+      }
+      if(password !== confirmPassword){
+        throw "passwords are not the same"
       }
 
     const hash = await bcrypt.hash(password, 16);

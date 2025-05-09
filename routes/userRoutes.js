@@ -7,13 +7,6 @@ import validation from '../validation.js'
 
 
 
-router.get('/', async (req, res) => {
-  res.json({route: '/users', method: req.method});
-});
-
-router.post('/', async (req, res) => {
-  res.json({route: '/users', method: req.method});
-});
 router
   .route('/login')
   .get(async (req, res) => {
@@ -34,25 +27,25 @@ router
     
     try{
       
-      regBody.userId=validation.checkString(regBody.userId);
-      regBody.userId=regBody.userId.toLowerCase();
+      let userId=validation.checkString(regBody.userId);
+      userId = userId.toLowerCase();
 
-      regBody.password=validation.checkString(regBody.password);
+      let password=validation.checkString(regBody.password);
 
       //userId Logic
-      if(!(/^[A-Za-z0-9]+$/).test(regBody.userId)){
+      if(!(/^[A-Za-z0-9]+$/).test(userId)){
         throw "userID contains non-letters/numbers"
       }
-      if(regBody.userId.length > 10 || regBody.userId.length < 5){
+      if(userId.length > 10 || userId.length < 5){
         throw "userId is wrong length"
       }
       regBody.userId=regBody.userId.toLowerCase();
 
       //password logic
-      if(regBody.password.length < 8){
+      if(password.length < 8){
         throw "password too short"
       }
-      let chars = Array.from(regBody.password);
+      let chars = Array.from(password);
       let uppercase = chars.some(char => /[A-Z]/.test(char));
       let specialChar = chars.some(char => /[^a-zA-Z0-9 ]/.test(char));
       let number = chars.some(char => !isNaN(char) && char !== ' ');
@@ -82,8 +75,7 @@ router
       };
       
       if(reg.role === "admin"){
-        
-        res.redirect("/admin") //NOT DONE
+        res.redirect("/admin")
       }else if(reg.role === "user"){
         res.redirect("/user/profile");
       }else{
@@ -130,41 +122,74 @@ router.get('/profile/edit', async (req, res) => {
 
 // POST route to handle form submission
 router.post('/edit', async (req, res) => {
+
   if (!req.session.user) {
     return res.redirect('/user/login');
   }
 
   const { editItem, newValue } = req.body;
+  try{
+    if (!editItem || !newValue) {
+      throw "All fields are required"
+    }
 
-  if (!editItem || !newValue) {
+    const allowedFields = ['firstName', 'lastName', 'bio', 'favoritePlace', 'password'];
+    if (!allowedFields.includes(editItem)) {
+      throw "Invalid field to edit.";
+    }
+    let finValue = newValue;
+    if(editItem !== "password"){
+      finValue = validation.checkString(newValue, editItem);
+    }else{
+      let password = finValue;
+      if(password.length < 8){
+        throw "password too short"
+      }
+      let chars = Array.from(password);
+      let uppercase = chars.some(char => /[A-Z]/.test(char));
+      let specialChar = chars.some(char => /[^a-zA-Z0-9 ]/.test(char));
+      let number = chars.some(char => !isNaN(char) && char !== ' ');
+      if (!uppercase) {
+        throw "Password must contain at least one uppercase letter";
+      }
+      if (!specialChar) {
+        throw "Password must contain at least one special character";
+      }
+      if (!number) {
+        throw "Password must contain at least one number";
+      }
+    }
+    const updatedUser = await userData.updateUser(req.session.user.userId, editItem, finValue);
+    if (!updatedUser) {
+      //error here
+      throw "Updating did not work."
+    }
+    if (editItem !== 'password') {
+      req.session.user[editItem] = finValue;
+    }
+  
+    const successMessage = req.session.success;
+    req.session.success = false; // debugging and clean
+    
+    res.render('user/profile', {
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      userId: req.session.user.userId,
+      bio: req.session.user.bio,
+      favoritePlace: req.session.user.favoritePlace,
+      role: req.session.user.role,
+      success: successMessage
+  });
+  }catch(e){
     return res.status(400).render('user/edit', {
-      error: 'All fields are required.',
+      error: e,
       firstName: req.session.user.firstName,
       lastName: req.session.user.lastName,
       userId: req.session.user.userId
 
     });
   }
-  const updatedUser = await userData.updateUser(req.session.user.userId, editItem, newValue);
-  if (!updatedUser) {
-    //error here
-  }
-  if (editItem !== 'password') {
-    req.session.user[editItem] = newValue;
-  }
 
-  const successMessage = req.session.success;
-  req.session.success = false; // debugging and clean
-  
-  res.render('user/profile', {
-    firstName: req.session.user.firstName,
-    lastName: req.session.user.lastName,
-    userId: req.session.user.userId,
-    bio: req.session.user.bio,
-    favoritePlace: req.session.user.favoritePlace,
-    role: req.session.user.role,
-    success: successMessage
-});
 });
 router
   .route('/register')
@@ -174,6 +199,7 @@ router
     if(user){
       res.redirect('/');
     }
+    
     try{
       res.render('auth/register');
     }catch(e){
@@ -245,10 +271,10 @@ router
       }
 
       //This function is needed! from userData
-      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.role);
+      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.confirmPassword, regBody.role);
       console.log("Registration result:", reg);
       if(reg.registrationCompleted){
-        res.redirect("/auth/login");
+        res.redirect("/user/login");
         
       }else{
        // console.error("Registration failed:", e);

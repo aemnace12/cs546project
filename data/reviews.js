@@ -331,14 +331,12 @@ async removeReview (reviewId) {
         if(!reviewId || !userId || !comment) {
             throw ('ERROR: Missing required fields.');
         }
-        const stringFields = { reviewId, userId, comment };
-        for (const [key, value] of Object.entries(stringFields)) {
-            if (typeof value !== 'string' || value.trim().length === 0) {
-                throw ('ERROR: string inputs must be a non-empty string');
-            }
-        }
-        reviewId = reviewId.trim();
-        userId = userId.trim();
+        reviewId = validation.checkId(reviewId, "Review ID");
+        userId = validation.checkString(userId, "User ID");
+        comment = validation.checkString(comment, 'comment');
+        if (comment.length > 500 || comment.length < 3) {
+            throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
+          }
         const newComment = {
             _id: new ObjectId(),
             userId,
