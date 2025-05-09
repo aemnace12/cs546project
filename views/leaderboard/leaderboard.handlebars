@@ -1,5 +1,13 @@
 <p>This is the leaderboard page</p>
 <p>This is where the more specific leaderboard sorting by location/price/etc </p>
+<select name="filter" id="filter">
+    <option value="overallRating">Overall Rating</option>
+    <option value="foodRating">Food Rating</option>
+    <option value="safetyRating">Safety Rating</option>
+    <option value="activityRating">Activity Rating</option>
+    <option value="name">Name</option>
+</select>
+<button name="submitButton" id="submitButton">Submit</button>
 <p>{{test}}</p>
 {{#if posts.length}}
     <ol>
