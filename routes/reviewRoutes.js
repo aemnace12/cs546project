@@ -5,6 +5,7 @@ import {commentData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
 //import {toggleLike, toggleDislike} from '../data/reviews.js';
 import {ObjectId} from 'mongodb';
+import validation from '../validation.js'
 
 router
     .route('/')
@@ -160,15 +161,17 @@ router.route('/createreview/:id')
             throw "You have to be signed in to post review";
         }
         //Make sure the id is valid of the user
-        if(!req.params.id || typeof(req.params.id !== "string") || !ObjectId.isValid(req.params.id)){
+        if(!req.params.id || typeof(req.params.id) !== "string" || !ObjectId.isValid(req.params.id)){
             throw "Invalid locationId"
         }
-        let userId = validation.checkString(regBody.user.userId, "userId");
+
+        let locationId = validation.checkId(req.params.id, "locationId")
+        let userId = validation.checkString(req.session.user.userId, "userId");
         let reviewText = validation.checkString(regBody.review, 'review');
-        let foodRating = checkRating(regBody.foodRating, 'foodRating');
-        let safetyRating = checkRating(regBody.safetyRating, 'safetyRating');
-        let activityRating = checkRating(regBody.activityRating, 'activityRating');
-        let overallRating = checkRating(regBody.overallRating, 'overallRating');
+        let foodRating = regBody.foodRating
+        let safetyRating = regBody.safetyRating
+        let activityRating = regBody.activityRating
+        let overallRating = regBody.overallRating
         const numberFields = { foodRating, safetyRating, activityRating, overallRating };
         for (const [key, value] of Object.entries(numberFields)) {
             const numValue = Number(value);
