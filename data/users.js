@@ -27,9 +27,14 @@ async createUser (
     role = role.trim();
     userId = userId.toLowerCase();
     confirmPassword = validation.checkString(confirmPassword, "ConfirmPassword")
-    if(userId.lenth > 5){
-        throw "ID legth must be atleast 5 characters" // we can edit this
+    if(userId.length < 5 || userId.length > 10){
+        throw "ID length must be at least 5 characters and maximum 10 characters long" // we can edit this
     }
+    
+    if (!/^[a-zA-Z0-9]+$/.test(userId)) {
+        throw "ID length must contain only letters and positive whole numbers";
+    }
+    
     // password checks
     // atleast 8 char, 1 upper, a number and special character
     //check for no including space
