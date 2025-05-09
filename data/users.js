@@ -50,12 +50,17 @@ async createUser (
     throw 'There is already a user with that userId.';
   }
 
+    const favoritePlace = "none"; // default value
+    const bio = "none"; // default value
+
     const newUser = {
         firstName,
         lastName,
         userId,
         password: hash,
-        role
+        role, 
+        favoritePlace,
+        bio,
     };
      
     const insertInfo = await userCollection.insertOne(newUser); //edit collection 
@@ -93,7 +98,10 @@ async login(userId, password){
         firstName: user.firstName,
         lastName: user.lastName,
         userId: user.userId,
-        role: user.role
+        role: user.role,
+        favoritePlace: user.favoritePlace,
+        bio: user.bio,
+        
     }
 
 

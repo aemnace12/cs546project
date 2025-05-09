@@ -77,6 +77,8 @@ router
         lastName: reg.lastName,
         userId: reg.userId,
         role: reg.role,
+        bio: reg.bio,
+        favoritePlace: reg.favoritePlace,
       };
       
       if(reg.role === "admin"){
@@ -100,17 +102,19 @@ router.get('/profile', async (req, res) => {
   if (!user) {
     return res.redirect('/user/login');
   }
-
+  console.log("Session data:", req.session.user);
   res.render('user/profile', {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    userId: user.userId,
-    role: user.role
+    firstName: req.session.user.firstName,
+    lastName: req.session.user.lastName,
+    userId: req.session.user.userId,
+    bio: req.session.user.bio,
+    favoritePlace: req.session.user.favoritePlace,
+    role: req.session.user.role,
   });
 
 });
 
-router.get('/profile/edit', async (req, res) => { // we need to work on this figure out how to edit profile here
+router.get('/profile/edit', async (req, res) => {
   const user = req.session.user;
   if (!user) {
     return res.redirect('/user/login');
@@ -138,6 +142,7 @@ router.post('/edit', async (req, res) => {
       firstName: req.session.user.firstName,
       lastName: req.session.user.lastName,
       userId: req.session.user.userId
+
     });
   }
   const updatedUser = await userData.updateUser(req.session.user.userId, editItem, newValue);
