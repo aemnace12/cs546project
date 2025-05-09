@@ -3,7 +3,7 @@ const router = Router();
 import {reviewData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
-import {toggleLike, toggleDislike} from '../data/reviews.js';
+//import {toggleLike, toggleDislike} from '../data/reviews.js';
 import {ObjectId} from 'mongodb';
 
 router
@@ -269,7 +269,7 @@ function _requireLogin(req, res, next) {
   
 router.post('/:id/like', _requireLogin, async (req, res) => {
     try {
-      const updated = await toggleLike(req.params.id, req.session.user.userId);
+      const updated = await reviewData.toggleLike(req.params.id, req.session.user.userId);
       res.json({ likes: updated.likes, dislikes: updated.dislikes });
     } catch (e) {
       res.status(400).json({ error: e.toString() });
@@ -278,7 +278,7 @@ router.post('/:id/like', _requireLogin, async (req, res) => {
   
 router.post('/:id/dislike', _requireLogin, async (req, res) => {
     try {
-      const updated = await toggleDislike(req.params.id, req.session.user.userId);
+      const updated = await reviewData.toggleDislike(req.params.id, req.session.user.userId);
       res.json({ likes: updated.likes, dislikes: updated.dislikes });
     } catch (e) {
       res.status(400).json({ error: e.toString() });
