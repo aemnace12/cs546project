@@ -1,8 +1,16 @@
 <p>This is the leaderboard page</p>
 <p>This is where the more specific leaderboard sorting by location/price/etc </p>
+<header class="top-bar">
+      <div class="nav-bar">
+        <button class="sort-button" id="sortByFood">Sort by Food Rating</button>
+        <button class="sort-button" id="sortBySafety">Sort by Safety Rating</button>
+        <button class="sort-button" id="sortByActivity">Sort by Activity Rating</button> 
+        <button class="sort-button" id="sortByOverall">Sort by Overall Rating</button> 
+      </div>
+
 <p>{{test}}</p>
 {{#if posts.length}}
-    <ol>
+    <ol id="leaderboard">
         {{#each posts}}
             <li>
                 <a href="/vacation/{{_id}}">Click me to see full {{name}} page!</a>
