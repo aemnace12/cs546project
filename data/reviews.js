@@ -144,6 +144,7 @@ async updateReview (
     overallRating,
     review
 ) {
+    //Basic error checking
     if (!reviewId || !locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
         throw ('ERROR: Missing required fields.');
     }
@@ -153,32 +154,61 @@ async updateReview (
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
+    //Updated error checking function to ensure valid ratings
     const numberFields = { foodRating, safetyRating, activityRating, overallRating };
     for (const [key, value] of Object.entries(numberFields)) {
-        if (typeof value !== 'number') {
-            throw ('ERROR: ratings must be a number');
+        const numValue = Number(value);
+        if (isNaN(numValue)) {
+            throw `ERROR: ${key} must be a valid number`;
         }
-        if (value < 0 && value > 5){
-            throw ('ERROR: invalid rating (0 - 5)');
+        if (numValue < 0 || numValue > 5) {
+            throw `ERROR: ${key} must be between 0 and 5`;
         }
+        const decimal = value.toString().split('.')[1];
+        if (decimal && decimal.length > 1) {
+            throw `ERROR: ${key} must have at most 1 decimal place`;
+        }
+        numberFields[key] = numValue;
     }
+
+    //Make sure raintgs are stored as numbers in database
+    foodRating = Number(foodRating)
+    safetyRating = Number(safetyRating)
+    activityRating = Number(activityRating)
+    overallRating = Number(overallRating)
+
     reviewId = reviewId.trim();
-    locationId = locationId.trim();
-    userId = userId.trim();
-    review = review.trim();
     if (!ObjectId.isValid(reviewId)) {
         throw ('ERROR: invalid review object ID');
     }
+
+    locationId = locationId.trim();
     if (!ObjectId.isValid(locationId)) {
         throw ('ERROR: invalid location object ID');
     }
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
+    if(!locationId || !location){
+        throw ("ERROR: invalid location ID");
+    }
+
+    userId = userId.trim();
     if (!ObjectId.isValid(userId)) {
         throw ('ERROR: invalid user object ID');
     }
 
-    const locationCol = await vacationSpots();
-    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
-    const reviewArray = location.reivews;
+    review = review.trim();
+    if (!ObjectId.isValid(reviewId)) {
+        throw ('ERROR: invalid review object ID');
+    }
+    if(review.length < 3){
+        throw "Too short of a review."
+    }
+    if(review.length > 500){
+        throw "Too long of a review."
+    }
+
+    const reviewArray = location.reviews;
     let updatedFoodRating = 0;
     let updatedsafetyRating = 0;
     let updatedActivityRating = 0;
@@ -213,7 +243,7 @@ async updateReview (
         review,
     }
 
-    const updatedInfo = await locationCol.findOneAndUpdate({_id: new ObjectId(locationId)}, {$set: updatedReview}, {returnDocument: 'after'});
+    const updatedInfo = await location.findOneAndUpdate({_id: new ObjectId(reviewId)}, {$set: updatedReview}, {returnDocument: 'after'});
 
     if (!updatedInfo) {
         throw ('ERROR: could not update review successfully');
