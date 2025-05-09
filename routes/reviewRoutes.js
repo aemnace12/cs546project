@@ -3,6 +3,7 @@ const router = Router();
 import {reviewData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
+import {toggleLike, toggleDislike} from '../data/reviews.js';
 import {ObjectId} from 'mongodb';
 
 router
@@ -258,4 +259,30 @@ router.route('/:id/comment')
         res.status(404).render('error', {error: e})
     }
 });
+
+function _requireLogin(req, res, next) {
+    if (!req.session.user) {
+      return res.status(403).json({error: 'You must log in to vote'});
+    }
+    next();
+}
+  
+router.post('/:id/like', _requireLogin, async (req, res) => {
+    try {
+      const updated = await toggleLike(req.params.id, req.session.user.userId);
+      res.json({ likes: updated.likes, dislikes: updated.dislikes });
+    } catch (e) {
+      res.status(400).json({ error: e.toString() });
+    }
+});
+  
+router.post('/:id/dislike', _requireLogin, async (req, res) => {
+    try {
+      const updated = await toggleDislike(req.params.id, req.session.user.userId);
+      res.json({ likes: updated.likes, dislikes: updated.dislikes });
+    } catch (e) {
+      res.status(400).json({ error: e.toString() });
+    }
+});
+  
 export default router;

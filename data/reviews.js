@@ -38,7 +38,7 @@ async createReview (
         numberFields[key] = numValue;
     }
 
-    //Make sure raintgs are stored as numbers in database
+    //Make sure ratinggs are stored as numbers in database
     foodRating = Number(foodRating)
     safetyRating = Number(safetyRating)
     activityRating = Number(activityRating)
@@ -71,7 +71,11 @@ async createReview (
         activityRating,
         overallRating,
         review,
-        comments
+        comments,
+        likes: 0,
+        dislikes: 0,
+        likedBy: [],       // array of userIds who have liked
+        dislikedBy: []     // array of userIds who have disliked
     }
     //If reviews don't exist/empty, then make it empty array
     const reviewArray = location.reviews || [];
@@ -383,7 +387,92 @@ async removeReview (reviewId) {
         }
         return newComment;
     
-}
+},
+async toggleLike(reviewId, userId) {
+    if (!reviewId || !userId) throw 'You must supply reviewId and userId';
+    const reviewObjId = new ObjectId(reviewId);
+    const col = await vacationSpots();
+
+    // 1) Find the parent document (vacation spot)
+    const spot = await col.findOne({ 'reviews._id': reviewObjId });
+    if (!spot) throw 'Review not found';
+
+    // 2) Map over reviews array, mutating only the matching one
+    const reviews = spot.reviews.map(r => {
+      if (!r._id.equals(reviewObjId)) return r;
+
+      // use Sets to add/remove easily
+      const liked = new Set(r.likedBy || []);
+      const disliked = new Set(r.dislikedBy || []);
+
+      if (liked.has(userId)) {
+        // undo a like
+        liked.delete(userId);
+      } else {
+        // add a like, and remove any prior dislike
+        liked.add(userId);
+        disliked.delete(userId);
+      }
+
+      return {
+        ...r,
+        likes: liked.size,
+        dislikes: disliked.size,
+        likedBy: Array.from(liked),
+        dislikedBy: Array.from(disliked)
+      };
+    });
+
+    // 3) Write back the updated reviews array
+    const { modifiedCount } = await col.updateOne(
+      { _id: spot._id },
+      { $set: { reviews } }
+    );
+    if (modifiedCount === 0) throw 'Could not update review likes';
+
+    // 4) Return the updated review object
+    return reviews.find(r => r._id.equals(reviewObjId));
+  },
+    async toggleDislike(reviewId, userId) {
+    if (!reviewId || !userId) throw 'You must supply reviewId and userId';
+    const reviewObjId = new ObjectId(reviewId);
+    const col = await vacationSpots();
+
+    const spot = await col.findOne({ 'reviews._id': reviewObjId });
+    if (!spot) throw 'Review not found';
+
+    const reviews = spot.reviews.map(r => {
+      if (!r._id.equals(reviewObjId)) return r;
+
+      const liked = new Set(r.likedBy || []);
+      const disliked = new Set(r.dislikedBy || []);
+
+      if (disliked.has(userId)) {
+        // undo a dislike
+        disliked.delete(userId);
+      } else {
+        // add a dislike, and remove any prior like
+        disliked.add(userId);
+        liked.delete(userId);
+      }
+
+      return {
+        ...r,
+        likes: liked.size,
+        dislikes: disliked.size,
+        likedBy: Array.from(liked),
+        dislikedBy: Array.from(disliked)
+      };
+    });
+
+    const { modifiedCount } = await col.updateOne(
+      { _id: spot._id },
+      { $set: { reviews } }
+    );
+    if (modifiedCount === 0) throw 'Could not update review dislikes';
+
+    return reviews.find(r => r._id.equals(reviewObjId));
+  }
 };
 
 export default exportedMethods;

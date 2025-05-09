@@ -35,6 +35,7 @@ app.use(async (req, res, next) => {
       authentic = "(Authenticated User)";
       res.locals.loggedInUser = true;
     }
+    res.locals.userId = req.session.user.userId;
   }
   else {
     res.locals.notLoggedIn = true;
