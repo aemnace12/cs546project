@@ -110,8 +110,8 @@ async getAllApprovedLocations() {
     });
     
     return locationList;
-  },
-  async getAllUnapprovedLocations() {
+},
+async getAllUnapprovedLocations() {
     const locationCol = await vacationSpots();
     let locationList = await locationCol.find({isApproved: false}).toArray();
     if (!locationList){
@@ -123,12 +123,78 @@ async getAllApprovedLocations() {
     });
     
     return locationList;
-  },
-  async updateLocation(locationId) {
-    //finish this
-    const locationCol = await vacationSpots();
+},
+async updateLocation(
+    locationId,
+    name,
+    city,
+    region,
+    country,
+    continent,
+    description,
+    isApproved
+) {
+    if (!locationId || !name || !description || !city || !region || !country || !continent) {
+        throw ('ERROR: Missing required fields.');
+    }
+    if(typeof(isApproved) !== 'boolean'){
+        throw "Approved Var needs to be bool"
+    }
+    const stringFields = {locationId, name, description, city, region, country, continent};
+    for (const [key, value] of Object.entries(stringFields)) {
+        if (typeof value !== 'string' || value.trim().length === 0) {
+            throw ('ERROR: string inputs must be a non-empty string');
+        }
+    }
+    name = name.trim();
+    description = description.trim();
+    city = city.trim();
+    region = region.trim();
+    continent = continent.toLowerCase().trim();
+    const continents = [
+        'africa',
+        'antarctica',
+        'asia',
+        'europe',
+        'north america',
+        'south america',
+        'australia'
+    ];
+    if (!(continents.includes(continent))) {
+        throw "Continent not correct!"
+    }
 
-  },
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
+
+    const updatedLocation = {
+        name,
+        city,
+        region,
+        country,
+        continent,
+        isApproved,
+        rank: location.rank,
+        description,
+        foodRating,
+        safetyRating,
+        activityRating,
+        overallRating,
+        reviews: location.reviews
+    }
+
+    
+    const updatedInfo = await locationCol.findOneAndUpdate({_id: new ObjectId(locationId)}, {$set: updatedLocation}, {returnDocument: 'after'});
+
+    if (!updatedInfo) {
+      throw ('ERROR: could not update location successfully');
+    }
+  
+    updatedInfo._id = updatedInfo._id.toString();
+  
+    return updatedInfo;
+
+},
 
 async getLocationById(id) {
     if (!id){
