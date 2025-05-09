@@ -38,7 +38,7 @@ async createReview (
         numberFields[key] = numValue;
     }
 
-    //Make sure raintgs are stored as numbers in database
+    //Make sure ratinggs are stored as numbers in database
     foodRating = Number(foodRating)
     safetyRating = Number(safetyRating)
     activityRating = Number(activityRating)
@@ -71,7 +71,11 @@ async createReview (
         activityRating,
         overallRating,
         review,
-        comments
+        comments,
+        likes: 0,
+        dislikes: 0,
+        likedBy: [],       // array of userIds who have liked
+        dislikedBy: []     // array of userIds who have disliked
     }
     //If reviews don't exist/empty, then make it empty array
     const reviewArray = location.reviews || [];
@@ -144,6 +148,7 @@ async updateReview (
     overallRating,
     review
 ) {
+    //Basic error checking
     if (!reviewId || !locationId || !userId || !foodRating || !safetyRating || !activityRating || !overallRating || !review) {
         throw ('ERROR: Missing required fields.');
     }
@@ -153,32 +158,61 @@ async updateReview (
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
+    //Updated error checking function to ensure valid ratings
     const numberFields = { foodRating, safetyRating, activityRating, overallRating };
     for (const [key, value] of Object.entries(numberFields)) {
-        if (typeof value !== 'number') {
-            throw ('ERROR: ratings must be a number');
+        const numValue = Number(value);
+        if (isNaN(numValue)) {
+            throw `ERROR: ${key} must be a valid number`;
         }
-        if (value < 0 && value > 5){
-            throw ('ERROR: invalid rating (0 - 5)');
+        if (numValue < 0 || numValue > 5) {
+            throw `ERROR: ${key} must be between 0 and 5`;
         }
+        const decimal = value.toString().split('.')[1];
+        if (decimal && decimal.length > 1) {
+            throw `ERROR: ${key} must have at most 1 decimal place`;
+        }
+        numberFields[key] = numValue;
     }
+
+    //Make sure raintgs are stored as numbers in database
+    foodRating = Number(foodRating)
+    safetyRating = Number(safetyRating)
+    activityRating = Number(activityRating)
+    overallRating = Number(overallRating)
+
     reviewId = reviewId.trim();
-    locationId = locationId.trim();
-    userId = userId.trim();
-    review = review.trim();
     if (!ObjectId.isValid(reviewId)) {
         throw ('ERROR: invalid review object ID');
     }
+
+    locationId = locationId.trim();
     if (!ObjectId.isValid(locationId)) {
         throw ('ERROR: invalid location object ID');
     }
+    const locationCol = await vacationSpots();
+    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
+    if(!locationId || !location){
+        throw ("ERROR: invalid location ID");
+    }
+
+    userId = userId.trim();
     if (!ObjectId.isValid(userId)) {
         throw ('ERROR: invalid user object ID');
     }
 
-    const locationCol = await vacationSpots();
-    const location = await locationCol.findOne({_id: new ObjectId(locationId)});
-    const reviewArray = location.reivews;
+    review = review.trim();
+    if (!ObjectId.isValid(reviewId)) {
+        throw ('ERROR: invalid review object ID');
+    }
+    if(review.length < 3){
+        throw "Too short of a review."
+    }
+    if(review.length > 500){
+        throw "Too long of a review."
+    }
+
+    const reviewArray = location.reviews;
     let updatedFoodRating = 0;
     let updatedsafetyRating = 0;
     let updatedActivityRating = 0;
@@ -213,7 +247,7 @@ async updateReview (
         review,
     }
 
-    const updatedInfo = await locationCol.findOneAndUpdate({_id: new ObjectId(locationId)}, {$set: updatedReview}, {returnDocument: 'after'});
+    const updatedInfo = await location.findOneAndUpdate({_id: new ObjectId(reviewId)}, {$set: updatedReview}, {returnDocument: 'after'});
 
     if (!updatedInfo) {
         throw ('ERROR: could not update review successfully');
@@ -331,14 +365,12 @@ async removeReview (reviewId) {
         if(!reviewId || !userId || !comment) {
             throw ('ERROR: Missing required fields.');
         }
-        const stringFields = { reviewId, userId, comment };
-        for (const [key, value] of Object.entries(stringFields)) {
-            if (typeof value !== 'string' || value.trim().length === 0) {
-                throw ('ERROR: string inputs must be a non-empty string');
-            }
-        }
-        reviewId = reviewId.trim();
-        userId = userId.trim();
+        reviewId = validation.checkId(reviewId, "Review ID");
+        userId = validation.checkString(userId, "User ID");
+        comment = validation.checkString(comment, 'comment');
+        if (comment.length > 500 || comment.length < 3) {
+            throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
+          }
         const newComment = {
             _id: new ObjectId(),
             userId,
@@ -355,7 +387,92 @@ async removeReview (reviewId) {
         }
         return newComment;
     
-}
+},
+async toggleLike(reviewId, userId) {
+    if (!reviewId || !userId) throw 'You must supply reviewId and userId';
+    const reviewObjId = new ObjectId(reviewId);
+    const col = await vacationSpots();
+
+    // 1) Find the parent document (vacation spot)
+    const spot = await col.findOne({ 'reviews._id': reviewObjId });
+    if (!spot) throw 'Review not found';
+
+    // 2) Map over reviews array, mutating only the matching one
+    const reviews = spot.reviews.map(r => {
+      if (!r._id.equals(reviewObjId)) return r;
+
+      // use Sets to add/remove easily
+      const liked = new Set(r.likedBy || []);
+      const disliked = new Set(r.dislikedBy || []);
+
+      if (liked.has(userId)) {
+        // undo a like
+        liked.delete(userId);
+      } else {
+        // add a like, and remove any prior dislike
+        liked.add(userId);
+        disliked.delete(userId);
+      }
+
+      return {
+        ...r,
+        likes: liked.size,
+        dislikes: disliked.size,
+        likedBy: Array.from(liked),
+        dislikedBy: Array.from(disliked)
+      };
+    });
+
+    // 3) Write back the updated reviews array
+    const { modifiedCount } = await col.updateOne(
+      { _id: spot._id },
+      { $set: { reviews } }
+    );
+    if (modifiedCount === 0) throw 'Could not update review likes';
+
+    // 4) Return the updated review object
+    return reviews.find(r => r._id.equals(reviewObjId));
+  },
+    async toggleDislike(reviewId, userId) {
+    if (!reviewId || !userId) throw 'You must supply reviewId and userId';
+    const reviewObjId = new ObjectId(reviewId);
+    const col = await vacationSpots();
+
+    const spot = await col.findOne({ 'reviews._id': reviewObjId });
+    if (!spot) throw 'Review not found';
+
+    const reviews = spot.reviews.map(r => {
+      if (!r._id.equals(reviewObjId)) return r;
+
+      const liked = new Set(r.likedBy || []);
+      const disliked = new Set(r.dislikedBy || []);
+
+      if (disliked.has(userId)) {
+        // undo a dislike
+        disliked.delete(userId);
+      } else {
+        // add a dislike, and remove any prior like
+        disliked.add(userId);
+        liked.delete(userId);
+      }
+
+      return {
+        ...r,
+        likes: liked.size,
+        dislikes: disliked.size,
+        likedBy: Array.from(liked),
+        dislikedBy: Array.from(disliked)
+      };
+    });
+
+    const { modifiedCount } = await col.updateOne(
+      { _id: spot._id },
+      { $set: { reviews } }
+    );
+    if (modifiedCount === 0) throw 'Could not update review dislikes';
+
+    return reviews.find(r => r._id.equals(reviewObjId));
+  }
 };
 
 export default exportedMethods;

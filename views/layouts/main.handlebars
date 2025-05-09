@@ -8,7 +8,14 @@
 </head>
 <body>
     <header class="top-bar">
-      <div class="nav-bar">
+      <div class="container header-content">
+      <a href="/" class="logo-link">
+        <img
+          src="/public/images/tripscorelogoside.png"
+          alt="TripScore Logo"
+          class="logo"
+        />
+      </a>
         <a href="/" class="nav-link">Home</a>
         {{#if notLoggedIn}}
           <a href="/user/register" class="nav-link">Register</a>
@@ -26,7 +33,6 @@
         {{/if}}
         <a href="/leaderboard" class="nav-link">Leaderboard</a>
       </div>
-      <h1 class="site-title">TripScore</h1>
     </header>
     
     <main class="container">

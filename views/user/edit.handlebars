@@ -1,9 +1,9 @@
 <p>Profile Edit HandleBars</p>
-
+<p id="error">{{error}}</p>
 <h1>Edit Profile</h1> <!-- Edit page THIS IS TENTATIVE -->
 <p>Welcome {{firstName}} {{lastName}}. Choose an item to edit!</p>
 
-<form action="/user/edit" method="post">
+<form id="profileedit-form" action="/user/edit" method="post">
   <div class="editForm">
   <dropdown>
     <label for="editItem">Edit Item</label>

@@ -4,6 +4,7 @@ import {commentData} from '../data/index.js';
 import {vacationSpotData} from '../data/index.js';
 import {ObjectId} from 'mongodb';
 import {vacationSpots} from '../config/mongoCollections.js';
+import validation from '../validation.js'
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -42,7 +43,7 @@ router.route('/reviewrequests')
     if(req.session.user.role !== 'admin'){
         res.redirect('/leaderboard');
     }
-    const locationId = req.body.locationId;
+    const locationId = validation.checkId(req.body.locationId,"locationId");
     const locationCol = await vacationSpots();
     const modifyLocation = await locationCol.findOneAndUpdate(
         { _id: new ObjectId(locationId) },

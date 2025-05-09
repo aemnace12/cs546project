@@ -1,12 +1,30 @@
-import {vacationSpots} from '../config/mongoCollections.js';
-import {ObjectId} from 'mongodb';
+import {vacationSpotData} from '../data/index.js';
 
 const exportedMethods = {
-   async sortby(value){
-    //https://www.geeksforgeeks.org/mongodb-sort-method/
-    const locationCol = await vacationSpots();
-    const locations = await locationCol.find().sort({[value]: -1});
-    return locations;
-    }
+async sortByOverallRating(){
+    const leadData = await vacationSpotData.getAllApprovedLocations();
+    const sortedLocations = leadData.sort((a, b) => b.overallRating - a.overallRating);
+    return sortedLocations;
+},
+async sortByFoodRating(){
+    const leadData = await vacationSpotData.getAllApprovedLocations();
+    const sortedLocations = leadData.sort((a, b) => b.foodRating - a.foodRating);
+    return sortedLocations;
+},
+async sortBySafetyRating(){
+    const leadData = await vacationSpotData.getAllApprovedLocations();
+    const sortedLocations = leadData.sort((a, b) => b.safetyRating - a.safetyRating);
+    return sortedLocations;
+},
+async sortByActivityRating(){
+    const leadData = await vacationSpotData.getAllApprovedLocations();
+    const sortedLocations = leadData.sort((a, b) => b.activityRating - a.activityRating);
+    return sortedLocations;
+}, 
+async sortByAlphabet(){
+    const leadData = await vacationSpotData.getAllApprovedLocations();
+    const sortedLocations = leadData.sort((a, b) => a.name.localeCompare(b.name));
+    return sortedLocations;
 }
+};
 export default exportedMethods;

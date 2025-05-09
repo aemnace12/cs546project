@@ -14,10 +14,13 @@
 {{#if spot.reviews.length}}
     <ol>
         {{#each spot.reviews}}
-            <li>
+            <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}"></li>
                 <p>Review: {{review}}</p>
                 <a href="/review/{{_id}}">Click me to see this review</a>
-                
+                <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
+                <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
+                <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
+                </div>
             </li>
         {{/each}}
     </ol>
@@ -40,3 +43,5 @@
     <dd>A: Expect to spend around $100–$150 per day, including meals and basic activities.</dd>
   </dl>
 </section>
+
+<script src="/public/js/likes.js"></script>

@@ -26,7 +26,7 @@
 {{/if}}
 
 
-<form action="/review/{{review._id}}/comment" method="POST">
+<form id="commentreview-form" action="/review/{{review._id}}/comment" method="POST">
     <label for="comment">Comment:</label>
     <input type="text" id="comment" name="comment">
     <button type="submit">Submit Comment</button>
