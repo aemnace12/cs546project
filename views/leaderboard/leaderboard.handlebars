@@ -8,7 +8,7 @@
         <option value="Activity Rating">Activity Rating</option>
         <option value="Name">Name</option>
     </select>
-    <button name="submitButton" id="submitButton">Submit</button>
+    <button name="submitButton" id="submitButton">Filter</button>
 </form>
 <p>Curretly filtering leaderboard by: {{filterBy}}</p>
 <p>{{test}}</p>
@@ -16,7 +16,7 @@
     <ol id="leaderboard">
         {{#each posts}}
             <li>
-                <a href="/vacation/{{_id}}">Click me to see full {{name}} page!</a>
+                <p><a href="/vacation/{{_id}}">{{name}}</a></p>
                 <p>Name: {{name}}</p>
                 <p>Description: {{description}}</p>
                 <p>City: {{city}}</p>

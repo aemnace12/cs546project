@@ -294,7 +294,7 @@ router.get('/logout', async (req, res) => {
     res.redirect('/leaderboard')
   }
   req.session.destroy();
-  res.redirect('/leaderboard')
+  res.render('auth/logout')
 });
 
 export default router;
