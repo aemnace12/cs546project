@@ -1,7 +1,8 @@
 import {Router} from 'express';
 const router = Router();
 import {userData} from '../data/index.js';
-import validation from '../validation.js'
+import {reviewData} from '../data/index.js';
+import validation from '../validation.js';
 import xss from 'xss';
 
 router
@@ -87,19 +88,28 @@ router
 
 router.get('/profile', async (req, res) => {
   const user = req.session.user;
-  if (!user) {
-    return res.redirect('/user/login');
-  }
-  console.log("Session data:", req.session.user);
-  res.render('user/profile', {
-    firstName: req.session.user.firstName,
-    lastName: req.session.user.lastName,
-    userId: req.session.user.userId,
-    bio: req.session.user.bio,
-    favoritePlace: req.session.user.favoritePlace,
-    role: req.session.user.role,
-  });
+  try {
+    if (!user) {
+      return res.redirect('/user/login');
+    }
 
+    const userId = user.userId;
+    const userReviews = await reviewData.getReviewsByUserid(userId);
+
+    console.log("Session data:", req.session.user);
+
+    res.render('user/profile', {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      userId: user.userId,
+      bio: user.bio,
+      favoritePlace: user.favoritePlace,
+      reviews: userReviews,
+      role: user.role
+    });
+  } catch (e) {
+    return res.status(400).render('error', { error: e.toString() });
+  }
 });
 
 router.get('/profile/edit', async (req, res) => {
@@ -208,12 +218,12 @@ router
     const regBody = req.body;
     try {
       //Validate user input for registering
-      regBody.firstName = validation.checkString(regBody.firstName);
-      regBody.lastName = validation.checkString(regBody.lastName);
-      regBody.userId = validation.checkString(regBody.userId);
-      regBody.password = validation.checkString(regBody.password);
-      regBody.confirmPassword = validation.checkString(regBody.confirmPassword);
-      regBody.role = validation.checkString(regBody.role);
+      regBody.firstName = validation.checkString(xss(regBody.firstName));
+      regBody.lastName = validation.checkString(xss(regBody.lastName));
+      regBody.userId = validation.checkString(xss(regBody.userId));
+      regBody.password = validation.checkString(xss(regBody.password));
+      regBody.confirmPassword = validation.checkString(xss(regBody.confirmPassword));
+      regBody.role = validation.checkString(xss(regBody.role));
 
       if(!(/^[A-Za-z]+$/).test(regBody.firstName)){
         throw "first name contains non-letters"

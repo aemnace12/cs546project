@@ -6,6 +6,7 @@ import {vacationSpotData} from '../data/index.js';
 //import {toggleLike, toggleDislike} from '../data/reviews.js';
 import {ObjectId} from 'mongodb';
 import validation from '../validation.js'
+import xss from 'xss';
 
 router
     .route('/')
@@ -38,12 +39,12 @@ router.route('/createpost')
             throw ('ERROR: Missing required fields.');
         }
 
-        const name = validation.checkString(regBody.name, 'name');
-        const description = validation.checkString(regBody.description, 'description');
-        const city = validation.checkString(regBody.city, 'city');
-        const region = validation.checkString(regBody.region, 'region');
-        const country = validation.checkString(regBody.country, 'country');
-        const continent = validation.checkString(regBody.continent, 'continent');
+        const name = validation.checkString(xss(regBody.name), 'name');
+        const description = validation.checkString(xss(regBody.description), 'description');
+        const city = validation.checkString(xss(regBody.city), 'city');
+        const region = validation.checkString(xss(regBody.region), 'region');
+        const country = validation.checkString(xss(regBody.country), 'country');
+        const continent = validation.checkString(xss(regBody.continent), 'continent');
     
 
     
@@ -222,10 +223,7 @@ router
     .route('/:id')
     .get(async (req,res) => {
         try{
-        //sample code
         const getReview = await reviewData.getReviewById(xss(req.params.id));
-        
-        //getReview._id = getReview._id.toString();
         console.log(getReview.comments);
         res.render('review/review', {review: getReview, comments: getReview.comments});
         }catch(e){

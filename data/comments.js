@@ -32,6 +32,7 @@ async createComment (
 
     const locationCol = await vacationSpots();
     const location = await locationCol.findOne({"reviews._id": new ObjectId(reviewId)});
+    
     if (!location) {
         throw ('ERROR: could not find review with given id');
     }
@@ -45,27 +46,6 @@ async createComment (
     }
 
     return newComment;
-},
-async getCommentById (commentId) {
-    if (!commentId){
-        throw ('ERROR: You must provide an id to search for');
-    }
-    if (typeof commentId !== 'string'){
-        throw ('ERROR: Id must be a string');
-    }
-    if (commentId.trim().length === 0){
-        throw ('ERROR: id cannot be an empty string or just spaces');
-    }
-    commentId = commentId.trim();
-    if (!ObjectId.isValid(commentId)){
-        throw ('ERROR: invalid comment object ID');
-    }
-    const locationCol = await vacationSpots();
-    const comment = await locationCol.findOne({"reviews.comments._id": new ObjectId(commentId)});
-    if (!comment){
-        throw ('ERROR: No comment with that id');
-    }
-    return comment;
 }
 };
 

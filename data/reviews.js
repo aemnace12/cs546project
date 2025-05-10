@@ -287,6 +287,50 @@ async getReviewById (reviewId) {
     return review;
 },
 
+async getReviewsByUserid(userId){
+    if(!userId){
+        throw ('ERROR: You must provide an userId to search for');
+
+    }
+    if(typeof userId !== 'string'){
+        throw ('ERROR: Id must be a string')
+    }
+    if (userId.trim().length === 0){
+        throw ('ERROR: id cannot be an empty string or just spaces');
+    }
+    userId = userId.trim();
+    let reviews = [];
+    const locationCol = await vacationSpots();
+    const locations = await locationCol.find({}).toArray();
+
+    for (let i = 0; i < locations.length; i++) {
+        const location = locations[i];
+        
+        if (location.reviews && location.reviews.length > 0) {
+    
+          for (let j = 0; j < location.reviews.length; j++) {
+            const review = location.reviews[j];
+        
+            if (review.userId === userId) {
+              reviews.push({
+                locationId: location._id.toString(),
+                foodRating: review.foodRating,
+                safetyRating: review.safetyRating,
+                activityRating: review.activityRating,
+                overallRating: review.overallRating,
+                review: review.review,
+              });
+            }
+          }
+        }
+      }
+
+      if (reviews.length === 0) {
+        throw (`No reviews found for user with id ${userId}`);
+      }
+    
+      return reviews;
+    },
 
 async removeReview (reviewId) {
     if (!reviewId){

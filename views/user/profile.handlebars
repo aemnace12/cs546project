@@ -6,7 +6,7 @@
 <h1 id="userID">{{userId}}</h1>
 <img src="{{profilePicture}}" id="profilePicture"> <!-- unsure about this -->
 {{#if success}}
-  <p class="success-message">{{success}}</p>
+  <p class="success-message">{{success}} Sucessfully changed!</p>
 {{/if}} 
 <p id="welcome">Welcome {{firstName}} {{lastName}}.</p>
 <h3>Favorite Place</h3>
@@ -15,7 +15,25 @@
 <p id="bio">{{bio}} </p>
 
 <h3>{{userId}}'s Reviews</h3>
-<p id="reviews"> Sample Reviews here </p>
+
+    {{#if reviews.length}}
+      <p>Reviews are here!</p>
+      <ul id="reviews">
+        {{#each reviews}}
+          <li>
+            <h4>{{userId}}'s Review</h4>
+            <p>Vacation Spot: {{vacationSpotId}}</p>
+            <p>Food Rating: {{foodRating}}</p>
+            <p>Safety Rating: {{safetyRating}}</p>
+            <p>Activity Rating: {{activityRating}}</p>
+            <p>Overall Rating: {{overallRating}}</p>
+            <p>Review: {{review}}</p>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p id="reviews">This user hasn't posted any reviews yet.</p>
+    {{/if}}
 
 
 
