@@ -4,7 +4,6 @@
 <div id="userView">
 
 <h1 id="userID">{{userId}}</h1>
-<img src="{{profilePicture}}" id="profilePicture"> <!-- unsure about this -->
 {{#if success}}
   <p class="success-message">{{success}} Sucessfully changed!</p>
 {{/if}} 
@@ -17,7 +16,6 @@
 <h3>{{userId}}'s Reviews</h3>
 
     {{#if reviews.length}}
-      <p>Reviews are here!</p>
       <ul id="reviews">
         {{#each reviews}}
           <li>

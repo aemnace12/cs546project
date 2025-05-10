@@ -1,6 +1,5 @@
 <p>This is a page for an individual review</p>
 
-
 <h1>{{review.userId}}'s Review</h1>
 <p>Vacation Spot: {{review.vacationSpotId}}</p>
 <p>Food Rating: {{review.foodRating}}</p>
@@ -8,26 +7,31 @@
 <p>Activity Rating: {{review.activityRating}}</p>
 <p>Overall Rating: {{review.overallRating}}</p>
 <p>Review: {{review.review}}</p>
+<!-- had to demolish a lot for ajax-->
+<h2>Comments</h2>
+<ul id="commentsList">
+  <!--https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes-->
+  {{#if review.comments.length}}
+    {{#each review.comments}}
+      <li data-id=="{{this._id}}">
+        <p>{{this.comment}}</p>
+      </li>
+    {{/each}}
+  {{else}}
+    <li class="not-found">No comments yet.</li>
+  {{/if}}
+</ul>
 
+<form id="comment-form">
 
-<h2>comments</h2>
-{{#if review.comments.length}}
-    <ol>
-        {{#each review.comments}}
-            <li>
-                <p>Comment: {{comment}}</p>
-                <a href="/review/{{_id}}">Click me to see this comment</a>
-            </li>
-        {{/each}}
-    </ol>
-{{else}}
-    <p class="not-found">We're sorry, but no comments were found for this review.</p>
-    
-{{/if}}
+  <input type="hidden" id="reviewId" value="{{review._id}}" />
+  <input type="hidden" id="UserId" value="{{session.user.userId}}"/>
 
-<form action="/review/{{review._id}}" method="POST">
-    <label for="comment">Comment:</label>
-    <input type="text" id="comment">
-    <button type="submit">Submit Comment</button>
+  <label for="comment"></label>
+  <input type="text" id="comment" name="comment" />
+
+  <button type="submit">Submit</button>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/public/js/ajax.js"></script>

@@ -4,20 +4,20 @@ import {ObjectId} from 'mongodb';
 const exportedMethods = {
 async createComment (
     reviewId,
-    userName,
+    userId,
     comment
 ) {
-    if (!reviewId || !userName || !comment) {
+    if (!reviewId || !userId || !comment) {
         throw ('ERROR: Missing required fields.');
     }
-    const stringFields = { reviewId, userName, comment };
+    const stringFields = { reviewId, userId, comment };
     for (const [key, value] of Object.entries(stringFields)) {
         if (typeof value !== 'string' || value.trim().length === 0) {
             throw ('ERROR: string inputs must be a non-empty string');
         }
     }
     reviewId = reviewId.trim();
-    userName = userName.trim();
+    userId = userId.trim();
     comment = comment.trim();
     if (!ObjectId.isValid(reviewId)) {
         throw ('ERROR: invalid review object ID');
@@ -26,13 +26,13 @@ async createComment (
     const newComment = {
         _id: new ObjectId(),
         reviewId,
-        userName,
+        userId,
         comment
     }
 
     const locationCol = await vacationSpots();
     const location = await locationCol.findOne({"reviews._id": new ObjectId(reviewId)});
-    
+
     if (!location) {
         throw ('ERROR: could not find review with given id');
     }
@@ -44,8 +44,9 @@ async createComment (
     if (!updatedInfo) {
         throw ('ERROR: could not insert comment successfully');
     }
-
+    console.log(newComment);
     return newComment;
+    
 }
 };
 

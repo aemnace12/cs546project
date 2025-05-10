@@ -230,36 +230,30 @@ router
             res.status(404).render('error', {error: e})
         }
     })
-router.route('/:id/comment')
-.post(async(req, res) => {
-    const regBody = req.body;
-    let reviewId = xss(req.params.id);
-    try{
-        if(!req.session.user){
-            res.redirect('/user/login')
-        }
-        let userId = req.session.user.userId
-        let comment = xss(regBody.comment);
-        if(!reviewId || !userId || !comment) {
-            throw ('ERROR: Missing required fields.');
-        }
-        reviewId = validation.checkId(reviewId, "Review ID");
-        userId = validation.checkString(userId, "User ID");
-        comment = validation.checkString(comment, 'comment');
-        if (comment.length > 500 || comment.length < 3) {
-            throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
-          }
-        
-        const makeComment = await commentData.createComment(reviewId, userId, comment);
-        if(!makeComment){
-            throw "couldn't create comment"
-        }
-        
-        res.redirect(`/review/${req.params.id}`);
-    }catch(e){
+
+// this uses AJAX DO NOT TOUCH ANYTHING HERE
+  router.post('/:id/comment', async (req, res) => {
+    const reviewId = req.params.id;
+    let { comment } = req.body;
+  
+    try {
+      if (!req.session.user) {
+        return res.status(401).json({ error: 'You must be logged in to comment.' });
+      }
+      validation.checkId(reviewId, 'Review ID');
+      comment = xss(comment);
+      validation.checkString(comment, 'Comment');
+      if (comment.length < 3 || comment.length > 500) {
+        throw 'Comment must be between 3 and 500 characters.';
+      }
+  
+      await commentData.createComment(reviewId, req.session.user.userId, comment);
+      const updatedReview = await reviewData.getReviewById(reviewId);
+      return res.json(updatedReview.comments); //render with ajax 
+    } catch (e) {
         res.status(404).render('error', {error: e})
     }
-});
+  });
 
 function _requireLogin(req, res, next) {
     if (!req.session.user) {
