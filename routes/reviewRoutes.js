@@ -238,7 +238,8 @@ router.route('/:id/comment')
         if(!req.session.user){
             res.redirect('/user/login')
         }
-       
+        let userId = req.session.user.userId
+        let comment = xss(regBody.comment);
         if(!reviewId || !userId || !comment) {
             throw ('ERROR: Missing required fields.');
         }
@@ -249,7 +250,7 @@ router.route('/:id/comment')
             throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
           }
         
-        const makeComment = await commentData.createComment(reviewId, req.session.user.userId, xss(regBody.comment));
+        const makeComment = await commentData.createComment(reviewId, userId, comment);
         if(!makeComment){
             throw "couldn't create comment"
         }

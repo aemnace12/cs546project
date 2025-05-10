@@ -1,6 +1,6 @@
 <p>This is a page for an individual review</p>
 
-<li>
+
 <h1>{{review.userId}}'s Review</h1>
 <p>Vacation Spot: {{review.vacationSpotId}}</p>
 <p>Food Rating: {{review.foodRating}}</p>
@@ -8,27 +8,26 @@
 <p>Activity Rating: {{review.activityRating}}</p>
 <p>Overall Rating: {{review.overallRating}}</p>
 <p>Review: {{review.review}}</p>
-</li>
 
-<h2>Comments</h2>
-{{#if comments.length}}
-  <ol>
-    {{#each comments}}
-      <li>
-        <p>Comment ID: {{_id}}</p>
-        <p>Commenter: {{userName}}</p>
-        <p>Comment: {{comment}}</p>
-      </li>
-    {{/each}}
-  </ol>
+
+<h2>comments</h2>
+{{#if review.comments.length}}
+    <ol>
+        {{#each review.comments}}
+            <li>
+                <p>Comment: {{comment}}</p>
+                <a href="/review/{{_id}}">Click me to see this comment</a>
+            </li>
+        {{/each}}
+    </ol>
 {{else}}
-  <p class="not-found">We're sorry, but no comments were found for this review.</p>
+    <p class="not-found">We're sorry, but no comments were found for this review.</p>
+    
 {{/if}}
 
-
-<form id="commentreview-form" action="/review/{{review._id}}/comment" method="POST">
+<form action="/review/{{review._id}}" method="POST">
     <label for="comment">Comment:</label>
-    <input type="text" id="comment" name="comment">
+    <input type="text" id="comment">
     <button type="submit">Submit Comment</button>
 </form>
 

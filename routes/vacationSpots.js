@@ -2,6 +2,7 @@
 import {Router} from 'express';
 const router = Router();
 import {vacationSpotData} from '../data/index.js';
+import xss from 'xss';
 
 router
     .route('/')
