@@ -36,6 +36,147 @@ const exportedMethods = {
     }
 
     return arr;
+  },
+
+  checkValidName(firstName) {     
+    if (typeof firstName !== 'string') {        // checking string type
+        return false;
+    }
+    firstName = firstName.trim();
+  
+    if (firstName.length === 0 || firstName.length < 2 || firstName.length > 20) {       //  checking not just string of spaces or within valid length
+        return false;
+    }
+  
+    for (let i = 0; i < firstName.length; i++) {        //  checking if each character is a letter
+        let charCode = firstName.charCodeAt(i);
+        if (!((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122))) {
+            return false;
+        }
+    }
+    return true;
+},
+
+checkValidUserId(userId) {     
+    if (typeof userId !== 'string') {        // checking string type
+        return false;
+    }
+    userId = userId.trim();
+  
+    if (userId.length === 0 || userId.length < 5 || userId.length > 10) {       //  checking not just string of spaces or within valid length
+        return false;
+    }
+  
+    for (let i = 0; i < userId.length; i++) {        //  checking if each character is a letter or positive whole number
+        let charCode = userId.charCodeAt(i);
+        if (!((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122) || (charCode >= 48 && charCode <= 57))) {
+            return false;
+        }
+    }
+    return true;
+},
+
+checkValidRole(role) {
+    if (typeof role !== 'string') {
+        return false;
+    }
+  
+    role = role.trim().toLowerCase();
+  
+    if (role !== 'user' && role !== 'admin') {
+        return false;
+    }
+    return true;
+},
+
+
+checkValidPassword(password) {
+    if (typeof password !== 'string') {        // checking string type
+        return false;
+    }
+    password = password.trim();
+  
+    if (password.length === 0) {       //  checking not just string of spaces
+        return false;
+    }
+
+    if (password.length < 6 || password.length > 20) {      //  checking within valid length
+        return false;
+      }
+  
+    if (password.includes(' '))  {          //  checking if no space characters
+        return false;
+    }
+  
+    if (!/[A-Z]/.test(password)) {          //  checking at least one uppercase
+        return false;
+    }
+  
+    if (!/[0-9]/.test(password)) {          //  checking at least one number
+        return false;
+    }
+  
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\;/]/.test(password)) {       //  checking at least one special
+        return false;
+    }
+  
+    return true;
+  },
+
+  checkValidLocationName(name) {
+
+  },
+
+  checkValidCity(city) {
+
+  },
+
+  checkValidRegion(region) {
+
+  },
+
+  checkValidCountry(country) {
+
+  },
+
+  checkValidContinent(continent) {
+
+  },
+
+  checkValidDescription(description) {
+
+  },
+
+  checkValidFoodRating(foodRating) {
+
+  },
+
+  checkValidSafetyRating(safetyRating) {
+
+  },
+
+  checkValidActivityRating(activityRating) {
+
+  },
+
+  checkValidOverallRating(overallRating) {
+
+  },
+
+  checkValidReview(review) {
+
+  },
+
+  checkValidComment(comment) {
+
+  },
+
+  checkValidEditItem(editItem) {
+
+  },
+
+  checkValidNewValue(newValue) {
+
   }
 };
 
