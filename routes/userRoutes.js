@@ -174,6 +174,8 @@ router.post('/edit', async (req, res) => {
       req.session.user[editItem] = finValue;
     }
   
+    const userId = user.userId;
+    const userReviews = await reviewData.getReviewsByUserid(userId);
     const successMessage = req.session.success;
     req.session.success = false; // debugging and clean
     
@@ -184,6 +186,7 @@ router.post('/edit', async (req, res) => {
       bio: req.session.user.bio,
       favoritePlace: req.session.user.favoritePlace,
       role: req.session.user.role,
+      reviews: userReviews,
       success: successMessage
   });
   }catch(e){
