@@ -313,7 +313,7 @@ async getReviewsByUserid(userId){
         
             if (review.userId === userId) {
               reviews.push({
-                locationId: location._id.toString(),
+                locationName: location.name,
                 foodRating: review.foodRating,
                 safetyRating: review.safetyRating,
                 activityRating: review.activityRating,
