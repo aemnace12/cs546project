@@ -2,10 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import {userData} from '../data/index.js';
 import validation from '../validation.js'
-
-
-
-
+import xss from 'xss';
 
 router
   .route('/login')
@@ -27,10 +24,10 @@ router
     
     try{
       
-      let userId=validation.checkString(regBody.userId);
+      let userId=validation.checkString(xss(regBody.userId));
       userId = userId.toLowerCase();
 
-      let password=validation.checkString(regBody.password);
+      let password=validation.checkString(xss(regBody.password));
 
       //userId Logic
       if(!(/^[A-Za-z0-9]+$/).test(userId)){
@@ -58,8 +55,7 @@ router
       if(!number){
         throw "needs number"
       }
-      //Login function needed from userData page
-      const reg = await userData.login(regBody.userId, regBody.password);
+      const reg = await userData.login(xss(regBody.userId), xss(regBody.password));
       
       if(!reg){
         return res.status(400).render('auth/login', {error: "Invalid username or password"});
@@ -137,7 +133,7 @@ router.post('/edit', async (req, res) => {
     if (!allowedFields.includes(editItem)) {
       throw "Invalid field to edit.";
     }
-    let finValue = newValue;
+    let finValue = xss(newValue);
     if(editItem !== "password"){
       finValue = validation.checkString(newValue, editItem);
     }else{

@@ -12,7 +12,6 @@ const exportedMethods = {
     return id;
   },
 
-  
   checkString(strVal, varName) {
     if (!strVal) throw `Error: You must supply a ${varName}!`;
     if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;

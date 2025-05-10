@@ -14,7 +14,7 @@ router
 router.route('/:id')
 .get(async (req,res) => {
     try{
-        const spotData = await vacationSpotData.getLocationById(req.params.id)
+        const spotData = await vacationSpotData.getLocationById(xss(req.params.id));
 
         spotData._id = spotData._id.toString();
         res.render('vacation/vacation', {spot: spotData});

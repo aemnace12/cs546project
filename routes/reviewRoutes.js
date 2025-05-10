@@ -101,13 +101,12 @@ router.route('/requestpost')
         if (!regBody.name || !regBody.description || !regBody.city || !regBody.region || !regBody.country || !regBody.continent) {
             throw ('ERROR: Missing required fields.');
         }
-        const name = validation.checkString(regBody.name, 'name');
-        const description = validation.checkString(regBody.description, 'description');
-        const city = validation.checkString(regBody.city, 'city');
-        const region = validation.checkString(regBody.region, 'region');
-        const country = validation.checkString(regBody.country, 'country');
-        const continent = validation.checkString(regBody.continent, 'continent');
-
+        const name = validation.checkString(xss(regBody.name), 'name');
+        const description = validation.checkString(xss(regBody.description), 'description');
+        const city = validation.checkString(xss(regBody.city), 'city');
+        const region = validation.checkString(xss(regBody.region), 'region');
+        const country = validation.checkString(xss(regBody.country), 'country');
+        let continent = validation.checkString(xss(regBody.continent), 'continent');
         const continents = [
             'africa',
             'antarctica',
@@ -165,13 +164,13 @@ router.route('/createreview/:id')
             throw "Invalid locationId"
         }
 
-        let locationId = validation.checkId(req.params.id, "locationId")
+        let locationId = validation.checkId(xss(req.params.id), "locationId")
         let userId = validation.checkString(req.session.user.userId, "userId");
-        let reviewText = validation.checkString(regBody.review, 'review');
-        let foodRating = regBody.foodRating
-        let safetyRating = regBody.safetyRating
-        let activityRating = regBody.activityRating
-        let overallRating = regBody.overallRating
+        let reviewText = validation.checkString(xss(regBody.review), 'review');
+        let foodRating = xss(regBody.foodRating);
+        let safetyRating = xss(regBody.safetyRating);
+        let activityRating = xss(regBody.activityRating);
+        let overallRating = xss(regBody.overallRating);
         const numberFields = { foodRating, safetyRating, activityRating, overallRating };
         for (const [key, value] of Object.entries(numberFields)) {
             const numValue = Number(value);
@@ -224,7 +223,7 @@ router
     .get(async (req,res) => {
         try{
         //sample code
-        const getReview = await reviewData.getReviewById(req.params.id);
+        const getReview = await reviewData.getReviewById(xss(req.params.id));
         
         //getReview._id = getReview._id.toString();
         console.log(getReview.comments);
@@ -236,7 +235,7 @@ router
 router.route('/:id/comment')
 .post(async(req, res) => {
     const regBody = req.body;
-    let reviewId = req.params.id;
+    let reviewId = xss(req.params.id);
     try{
         if(!req.session.user){
             res.redirect('/user/login')
@@ -252,7 +251,7 @@ router.route('/:id/comment')
             throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
           }
         
-        const makeComment = await commentData.createComment(reviewId, req.session.user.userId, regBody.comment);
+        const makeComment = await commentData.createComment(reviewId, req.session.user.userId, xss(regBody.comment));
         if(!makeComment){
             throw "couldn't create comment"
         }
@@ -272,7 +271,7 @@ function _requireLogin(req, res, next) {
   
 router.post('/:id/like', _requireLogin, async (req, res) => {
     try {
-      const updated = await reviewData.toggleLike(req.params.id, req.session.user.userId);
+      const updated = await reviewData.toggleLike(xss(req.params.id), req.session.user.userId);
       res.json({ likes: updated.likes, dislikes: updated.dislikes });
     } catch (e) {
       res.status(400).json({ error: e.toString() });
@@ -281,7 +280,7 @@ router.post('/:id/like', _requireLogin, async (req, res) => {
   
 router.post('/:id/dislike', _requireLogin, async (req, res) => {
     try {
-      const updated = await reviewData.toggleDislike(req.params.id, req.session.user.userId);
+      const updated = await reviewData.toggleDislike(xss(req.params.id), req.session.user.userId);
       res.json({ likes: updated.likes, dislikes: updated.dislikes });
     } catch (e) {
       res.status(400).json({ error: e.toString() });
