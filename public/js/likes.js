@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
     async function sendVote(reviewId, type) {
       const res = await fetch(`/review/${reviewId}/${type}`, { method: 'POST', credentials: 'same-origin'});
+
+      //redirects user if they aren't logged in
+      if (res.status === 403) {
+        window.location.href = '/user/login';
+        return;
+      }
       if (!res.ok) throw new Error('Vote failed');
       return res.json(); // { likes, dislikes }
     }
