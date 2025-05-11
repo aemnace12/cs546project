@@ -14,7 +14,7 @@
 {{#if spot.reviews.length}}
     <ol>
         {{#each spot.reviews}}
-            <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}"></li>
+            <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}">
                 <p>Review: {{review}}</p>
                 <a href="/review/{{_id}}">Click me to see this review</a>
                 <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">

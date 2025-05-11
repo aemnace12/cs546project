@@ -13,8 +13,8 @@ await db.dropDatabase();
 try{
     //users
     //firstname, lastname, userId, password, role
-    const adminUser = await users.createUser("John", "Doe", "admin", "Admin123!", "admin")
-    const normalUser = await users.createUser("Harry", "Styles", "normalUser", "User1234!", "user");
+    const adminUser = await users.createUser("John", "Doe", "admin", "Admin123!", "Admin123!", "admin")
+    const normalUser = await users.createUser("Harry", "Styles", "normalUser", "User1234!", "User1234!", "user");
 
     //posts
     const nyc = await posts.createLocation("NYC", "New York City", "New York", "United States of America", "North America", "New York City is the economic capital of America.", true)
@@ -26,6 +26,8 @@ try{
 
     //comments?
 
+    //likes
+    
 }catch(e){
     console.log(e);
 }
