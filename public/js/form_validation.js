@@ -1,11 +1,11 @@
 //used to take up space for further use
 
-const signupForm = document.getElementById('signup-form');
-const signinForm = document.getElementById('signin-form');
-const createPostForm = document.getElementById('createpost-form');
-const createReviewForm = document.getElementById('createreview-form');
-const commentReviewForm = document.getElementById('commentreview-form');
-const profileEditForm = document.getElementById('profileedit-form');
+const signupForm = document.getElementById('signup-form');        //  good
+const signinForm = document.getElementById('signin-form');      //  good
+const createPostForm = document.getElementById('createpost-form');      //  good
+const createReviewForm = document.getElementById('createreview-form');      // good
+const commentReviewForm = document.getElementById('commentreview-form');      //  fine
+const profileEditForm = document.getElementById('profileedit-form');      //  good
 const errorDiv = document.getElementById('error');
 
 
@@ -190,14 +190,10 @@ const checkValidCountry = async (country) => {
     if (!checkValidString(country)) {
       return false;
     }
-
-    try {
-      const countries = await fetchCountries();
-      return countries.includes(country.trim().toLowerCase());
-    } catch (e) {
-      console.error('Error validating country:', e);
-      return false;
-    }
+    let countries = await fetchCountries();
+    countries.push('USA','U.S.A.','U.S.','US','United States of America');
+    countries = countries.map(country => country.toLowerCase().trim());
+    return countries.includes(country.trim().toLowerCase());
 };
 
 const checkValidContinent = (continent) => {
@@ -210,8 +206,8 @@ const checkValidContinent = (continent) => {
       'antarctica',
       'asia',
       'europe',
-      'north America',
-      'south America',
+      'north america',
+      'south america',
       'australia'
     ];
 
@@ -278,7 +274,7 @@ const checkValidEditItem = (editItem) => {
 };
 
 const checkValidEmail = (email) => {
-    if (!checkValidString(activityRating)) {
+    if (!checkValidString(email)) {
       return false;
     }
 
@@ -446,7 +442,7 @@ if (signinForm) {
 }
 
 //  helper function for createpost-form validation
-const inputCheckCreatePost = (name, city, region, country, continent, description) => {
+const inputCheckCreatePost = async (name, city, region, country, continent, description) => {
     let missingFields = [];
     let errors = [];
 
@@ -489,7 +485,7 @@ const inputCheckCreatePost = (name, city, region, country, continent, descriptio
         errors.push('Invalid region');
       }
 
-      if (!checkValidCountry(country)) {    //  checking valid country
+      if (!(await checkValidCountry(country))) {    //  checking valid country
         errors.push('Invalid country');
       }
 
@@ -512,18 +508,19 @@ const inputCheckCreatePost = (name, city, region, country, continent, descriptio
 
 //  createpost-form validation
 if (createPostForm) {
-    createPostForm.addEventListener('submit', (event) => {
+    createPostForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
         const name = document.getElementById('name').value;
         const city = document.getElementById('city').value;
         const region = document.getElementById('region').value;
         const country = document.getElementById('country').value;
         const continent = document.getElementById('continent').value;
         const description = document.getElementById('description').value;
-
-        if (inputCheckCreatePost(name, city, region, country, continent, description)) {        // error checking
+        const result = await inputCheckCreatePost(name, city, region, country, continent, description);
+        if (result) {        // error checking
             errorDiv.hidden = true;
+            createPostForm.submit();
         } else {
-            event.preventDefault();
             errorDiv.hidden = false;
         }
     });
