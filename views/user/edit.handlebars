@@ -2,7 +2,7 @@
 <p id="error">{{error}}</p>
 <h1>Edit Profile</h1> <!-- Edit page THIS IS TENTATIVE -->
 <p>Welcome {{firstName}} {{lastName}}. Choose an item to edit!</p>
-
+<p id="error" hidden></p>
 <form id="profileedit-form" action="/user/edit" method="post">
   <div class="editForm">
   <dropdown>
@@ -24,3 +24,5 @@
 
   <button type="submit">Update</button>
 </form>
+
+<script src="/public/js/form_validation.js"></script>

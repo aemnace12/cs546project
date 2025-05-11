@@ -22,6 +22,7 @@
   {{/if}}
 </ul>
 
+<p id="error" hidden></p>
 <form id="comment-form">
 
   <input type="hidden" id="reviewId" value="{{review._id}}" />
@@ -33,5 +34,6 @@
   <button type="submit">Submit</button>
 </form>
 
+<script src="/public/js/form_validation.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/public/js/ajax.js"></script>

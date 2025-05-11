@@ -1,5 +1,4 @@
 //used to take up space for further use
-import validation from '../../validation.js'
 
 const signupForm = document.getElementById('signup-form');
 const signinForm = document.getElementById('signin-form');
@@ -8,6 +7,306 @@ const createReviewForm = document.getElementById('createreview-form');
 const commentReviewForm = document.getElementById('commentreview-form');
 const profileEditForm = document.getElementById('profileedit-form');
 const errorDiv = document.getElementById('error');
+
+
+const checkValidRating = (rating) => {
+  rating = parseFloat(rating);
+
+  if (isNaN(rating)) {
+    return false;
+  }
+
+  if (rating < 0 || rating > 5) {
+    return false;
+  }
+
+  if (Math.round(rating * 10) !== rating * 10) {
+    return false;
+  }
+
+  return true;
+};
+
+
+const fetchCountries = async () => {
+  const response = await fetch('https://restcountries.com/v3.1/all');
+  if (!response.ok) {
+    throw 'Failed to fetch countries';
+  } 
+  const data = await response.json();
+  return data.map(country => country.name.common.toLowerCase());
+};
+
+const checkId = (id, varName) => {
+    if (!id) throw `Error: You must provide a ${varName}`;
+    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
+    id = id.trim();
+    if (id.length === 0)
+      throw `Error: ${varName} cannot be an empty string or just spaces`;
+    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
+    return id;
+};
+
+const checkString = (strVal, varName) => {
+    if (!strVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
+    strVal = strVal.trim();
+    if (strVal.length === 0)
+      throw `Error: ${varName} cannot be an empty string or string with just spaces`;
+    if (!isNaN(strVal))
+      throw `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`;
+    return strVal;
+};
+
+const checkStringArray = (arr, varName) => {
+    //We will allow an empty array for this,
+    //if it's not empty, we will make sure all tags are strings
+    if (!arr || !Array.isArray(arr))
+      throw `You must provide an array of ${varName}`;
+    for (let i in arr) {
+      if (typeof arr[i] !== 'string' || arr[i].trim().length === 0) {
+        throw `One or more elements in ${varName} array is not a string or is an empty string`;
+      }
+      arr[i] = arr[i].trim();
+    }
+
+    return arr;
+};
+
+const checkValidName = (firstName) => {     
+    if (typeof firstName !== 'string') {        // checking string type
+        return false;
+    }
+    firstName = firstName.trim();
+  
+    if (firstName.length === 0 || firstName.length < 2 || firstName.length > 20) {       //  checking not just string of spaces or within valid length
+        return false;
+    }
+  
+    for (let i = 0; i < firstName.length; i++) {        //  checking if each character is a letter
+        let charCode = firstName.charCodeAt(i);
+        if (!((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122))) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const checkValidUserId = (userId) => {     
+    if (typeof userId !== 'string') {        // checking string type
+        return false;
+    }
+    userId = userId.trim();
+  
+    if (userId.length === 0 || userId.length < 5 || userId.length > 10) {       //  checking not just string of spaces or within valid length
+        return false;
+    }
+  
+    for (let i = 0; i < userId.length; i++) {        //  checking if each character is a letter or positive whole number
+        let charCode = userId.charCodeAt(i);
+        if (!((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122) || (charCode >= 48 && charCode <= 57))) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const checkValidRole = (role) => {
+    if (typeof role !== 'string') {
+        return false;
+    }
+  
+    role = role.trim().toLowerCase();
+  
+    if (role !== 'user' && role !== 'admin') {
+        return false;
+    }
+    return true;
+};
+
+
+const checkValidPassword = (password) => {
+    if (typeof password !== 'string') {        // checking string type
+        return false;
+    }
+    password = password.trim();
+  
+    if (password.length === 0) {       //  checking not just string of spaces
+        return false;
+    }
+
+    if (password.length < 6 || password.length > 20) {      //  checking within valid length
+        return false;
+      }
+  
+    if (password.includes(' '))  {          //  checking if no space characters
+        return false;
+    }
+  
+    if (!/[A-Z]/.test(password)) {          //  checking at least one uppercase
+        return false;
+    }
+  
+    if (!/[0-9]/.test(password)) {          //  checking at least one number
+        return false;
+    }
+  
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\;/]/.test(password)) {       //  checking at least one special
+        return false;
+    }
+  
+    return true;
+  };
+
+const checkValidString = (str) => {
+    if (!str) {        //  check if empty
+      return false;
+    }
+
+  if (typeof str !== "string") {     //  check if string
+    return false;
+  }
+
+  if (str.trim().length === 0) {      //  check if just spaces
+    return false;
+  }
+
+  return true;
+  };
+
+const checkValidLocationName = (name) => {
+    return checkValidString(name);
+  };
+
+const checkValidCity = (city) => {
+    return checkValidString(city);
+  };
+
+const checkValidRegion = (region) => {
+    return checkValidString(region);
+  };
+
+const checkValidCountry = async (country) => {
+    if (!checkValidString(country)) {
+      return false;
+    }
+
+    try {
+      const countries = await fetchCountries();
+      return countries.includes(country.trim().toLowerCase());
+    } catch (e) {
+      console.error('Error validating country:', e);
+      return false;
+    }
+};
+
+const checkValidContinent = (continent) => {
+    if (!checkValidString(continent)) {
+      return false;
+    }
+
+    const validContinents = [
+      'africa',
+      'antarctica',
+      'asia',
+      'europe',
+      'north America',
+      'south America',
+      'australia'
+    ];
+
+    if (!validContinents.includes(continent.trim().toLowerCase())) {
+      return false;
+    }
+
+    return true;
+  };
+
+const checkValidDescription = (description) => {
+    return checkValidString(description);
+};
+
+const checkValidFoodRating = (foodRating) => {
+    if (!checkValidString(foodRating)) {
+      return false;
+    }
+
+    return checkValidRating(foodRating.trim());
+};
+
+const checkValidSafetyRating = (safetyRating) => {
+    if (!checkValidString(safetyRating)) {
+      return false;
+    }
+    return checkValidRating(safetyRating.trim());
+};
+
+const checkValidActivityRating = (activityRating) => {
+    if (!checkValidString(activityRating)) {
+      return false;
+    }
+    return checkValidRating(activityRating.trim());
+};
+
+const checkValidOverallRating = (overallRating) => {
+    if (!checkValidString(overallRating)) {
+      return false;
+    }
+    return checkValidRating(overallRating.trim());
+};
+
+const checkValidReview = (review) => {
+    return checkValidString(review);
+};
+
+const checkValidComment = (comment) => {
+    return checkValidString(comment);
+}
+
+const checkValidEditItem = (editItem) => {
+    if (!checkValidString(editItem)) {
+      return false;
+    }
+
+    const validEditItems = ['firstName', 'lastName', 'email', 'bio', 'password', 'favoritePlace'];
+
+    if (!validEditItems.includes(editItem.trim())) {
+        return false;
+    }
+
+    return true;;
+};
+
+const checkValidEmail = (email) => {
+    if (!checkValidString(activityRating)) {
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    return emailRegex.test(email);
+};
+
+const checkValidNewValue = (editItem, newValue) => {
+    if (editItem === 'firstName') {
+      return checkValidName(newValue);
+    }
+    if (editItem === 'lastName') {
+      return checkValidName(newValue);
+    }
+    if (editItem === 'email') {
+      return checkValidEmail(newValue);
+    }
+    if (editItem === 'bio') {
+      return checkValidString(newValue);
+    }
+    if (editItem === 'password') {
+      return checkValidPassword(newValue);
+    }
+    if (editItem === 'favoritePlace') {
+      return checkValidString(newValue);
+    }
+};
 
 //  helper function for signup-form validation
 const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword, role) => {
@@ -42,19 +341,19 @@ const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword
         return false;
       }
 
-      if (!validation.checkValidName(firstName)) {   //  checking valid firstName
+      if (!checkValidName(firstName)) {   //  checking valid firstName
         errors.push('Invalid firstName, must be a string of only letters at least 2 characters long with a max length of 20');
       }
 
-      if (!validation.checkValidName(lastName)) {    //  checking valid lastName
+      if (!checkValidName(lastName)) {    //  checking valid lastName
         errors.push('Invalid lastName, must be a string of only letters at least 2 characters long with a max length of 20');
       }
 
-      if (!validation.checkValidUserId(userId)) {    //  checking valid userId
+      if (!checkValidUserId(userId)) {    //  checking valid userId
         errors.push('Invalid userId, must be a string of only letters or positive whole numbers at least 5 characters long with a max length of 10');
       }
 
-      if (!validation.checkValidPassword(password)) {    //  checking valid password
+      if (!checkValidPassword(password)) {    //  checking valid password
         errors.push('Invalid password. Must contain at least one uppercase character, at least one number, and at least one special character');
       }
 
@@ -62,7 +361,7 @@ const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword
         errors.push('Confirm password must be the same as initial password');
       }
 
-      if (!validation.checkValidRole(role)) {       //  checking valid role
+      if (!checkValidRole(role)) {       //  checking valid role
         errors.push('Invalid role, must be user or admin');
       }
       
@@ -114,11 +413,11 @@ const inputCheckSignin = (userId, password) => {
         return false;
       }
 
-      if (!validation.checkValidUserId(userId)) {    //  checking valid userId
+      if (!checkValidUserId(userId)) {    //  checking valid userId
         errors.push('Invalid userId, must be a string of only letters or positive whole numbers at least 5 characters long with a max length of 10');
       }
 
-      if (!validation.checkValidPassword(password)) {    //  checking valid password
+      if (!checkValidPassword(password)) {    //  checking valid password
         errors.push('Invalid password. Must contain at least one uppercase character, at least one number, and at least one special character');
       }
 
@@ -178,28 +477,28 @@ const inputCheckCreatePost = (name, city, region, country, continent, descriptio
         return false;
       }
 
-      if (!validation.checkValidLocationName(name)) {    //  checking valid name
-        errors.push('');
+      if (!checkValidLocationName(name)) {    //  checking valid name
+        errors.push('Invalid location name');
       }
 
-      if (!validation.checkValidCity(city)) {    //  checking valid city
-        errors.push('');
+      if (!checkValidCity(city)) {    //  checking valid city
+        errors.push('Invalid city');
       }
 
-      if (!validation.checkValidRegion(region)) {    //  checking valid region
-        errors.push('');
+      if (!checkValidRegion(region)) {    //  checking valid region
+        errors.push('Invalid region');
       }
 
-      if (!validation.checkValidCountry(country)) {    //  checking valid country
-        errors.push('');
+      if (!checkValidCountry(country)) {    //  checking valid country
+        errors.push('Invalid country');
       }
 
-      if (!validation.checkValidContinent(continent)) {    //  checking valid continent
-        errors.push('');
+      if (!checkValidContinent(continent)) {    //  checking valid continent
+        errors.push('Invalid continent');
       }
 
-      if (!validation.checkValidDescription(description)) {    //  checking valid description
-        errors.push('');
+      if (!checkValidDescription(description)) {    //  checking valid description
+        errors.push('Invalid description');
       }
 
       if (errors.length > 0) {
@@ -259,24 +558,24 @@ const inputCheckCreateReview = (foodRating, safetyRating, activityRating, overal
         return false;
       }
 
-      if (!validation.checkValidFoodRating(foodRating)) {    //  checking valid foodRating
-        errors.push('');
+      if (!checkValidFoodRating(foodRating)) {    //  checking valid foodRating
+        errors.push('Invalid foodRating, must be between 0 and 5 with at most one decimal place');
       }
 
-      if (!validation.checkValidSafetyRating(safetyRating)) {    //  checking valid safetyRating
-        errors.push('');
+      if (!checkValidSafetyRating(safetyRating)) {    //  checking valid safetyRating
+        errors.push('Invalid safetyRating, must be between 0 and 5 with at most one decimal place');
       }
 
-      if (!validation.checkValidActivityRating(activityRating)) {    //  checking valid activityRating
-        errors.push('');
+      if (!checkValidActivityRating(activityRating)) {    //  checking valid activityRating
+        errors.push('Invalid activityRating, must be between 0 and 5 with at most one decimal place');
       }
 
-      if (!validation.checkValidOverallRating(overallRating)) {    //  checking valid overallRating
-        errors.push('');
+      if (!checkValidOverallRating(overallRating)) {    //  checking valid overallRating
+        errors.push('Invalid overallRating, must be between 0 and 5 with at most one decimal place');
       }
 
-      if (!validation.checkValidReview(review)) {    //  checking valid review
-        errors.push('');
+      if (!checkValidReview(review)) {    //  checking valid review
+        errors.push('Invalid review');
       }
 
       if (errors.length > 0) {
@@ -323,8 +622,8 @@ const inputCheckCommentReview = (comment) => {
         return false;
       }
 
-      if (!validation.checkValidComment(comment)) {    //  checking valid comment
-        errors.push('');
+      if (!checkValidComment(comment)) {    //  checking valid comment
+        errors.push('Invalid comment');
       }
 
       if (errors.length > 0) {
@@ -370,12 +669,29 @@ const inputCheckProfileEdit = (editItem, newValue) => {
         return false;
       }
 
-      if (!validation.checkValidEditItem(editItem)) {    //  checking valid editItem
-        errors.push('');
+      if (!checkValidEditItem(editItem)) {    //  checking valid editItem
+        errors.push('Invalid editItem');
       }
 
-      if (!validation.checkValidNewValue(newValue)) {    //  checking valid newValue
-        errors.push('');
+      if (!checkValidNewValue(editItem, newValue)) {    //  checking valid newValue
+        if (editItem === 'firstName') {
+          errors.push('Invalid new firstName');
+        }
+        if (editItem === 'lastName') {
+          errors.push('Invalid new lastName');
+        }
+        if (editItem === 'email') {
+          errors.push('Invalid new email');
+        }
+        if (editItem === 'bio') {
+          errors.push('Invalid new bio');
+        }
+        if (editItem === 'password') {
+          errors.push('Invalid new password');
+        }
+        if (editItem === 'favoritePlace') {
+          errors.push('Invalid new favoritePlace');
+        }
       }
 
       if (errors.length > 0) {

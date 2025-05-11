@@ -1,3 +1,4 @@
+<p id="error" hidden></p>
 <form id="createreview-form" action="/review/createreview/{{spot._id}}" method="POST">
     <input type="hidden" name="locationId" value="{{spot._id}}">
     <input type="hidden" name="locationName" value="{{spot.name}}">
@@ -15,4 +16,6 @@
     <input type="text" name="review" id="review">
     <button type="submit" name="submit_button" id="submit_button">Submit Post</button>
 </form>
+
+<script src="/public/js/form_validation.js"></script>
 
