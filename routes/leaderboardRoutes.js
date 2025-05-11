@@ -10,7 +10,8 @@ router
         try{
             let leadData;
             const filterBy = req.query.filter;
-
+            const filterContinent = req.query.continentFilter
+            
             if (filterBy === "Food Rating") {
                 leadData = await leaderboardData.sortByFoodRating();
             }
@@ -23,8 +24,11 @@ router
             else if (filterBy === "Name") {
                 leadData = await leaderboardData.sortByAlphabet();
             }
-            else {
+            else{
                 leadData = await leaderboardData.sortByOverallRating();
+            }
+            if(filterContinent){
+                leadData = await leaderboardData.getFilteredLocations(filterContinent, leadData);
             }
 
             if(!leadData){
