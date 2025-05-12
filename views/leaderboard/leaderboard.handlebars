@@ -1,42 +1,47 @@
-<p>This is the leaderboard page</p>
-<p>This is where the more specific leaderboard sorting by location/price/etc </p>
-<form method="GET" action="/leaderboard" id="filter-form">
-    <select name="filter" id="filter">
-        <option value="Overall Rating">Overall Rating</option>
-        <option value="Food Rating">Food Rating</option>
-        <option value="Safety Rating">Safety Rating</option>
-        <option value="Activity Rating">Activity Rating</option>
-        <option value="Name">Name</option>
-    </select>
-    <select name="continentFilter" id="continentFilter">
-        <option value="world">All Continents</option>
-        <option value="africa">Africa</option>
-        <option value="antarctica">Antarctica</option>
-        <option value="asia">Asia</option>
-        <option value="europe">Europe</option>
-        <option value="north america">North America</option>
-        <option value="australia">Australia</option>
-        <option value="south america">South America</option>
-    </select>
-    <button name="submitButton" id="submitButton">Filter</button>
-</form>
-<p>Curretly filtering leaderboard by: {{filterBy}}</p>
-<p>{{test}}</p>
+<h1 class="page-title">Leaderboard</h1>
+
+<section class="filter-section">
+    <form method="GET" action="/leaderboard" id="filter-form" class="filter-form">
+    <label>
+        Sort by:
+        <select name="filter" id="filter">
+            <option value="Overall Rating">Overall Rating</option>
+            <option value="Food Rating">Food Rating</option>
+            <option value="Safety Rating">Safety Rating</option>
+            <option value="Activity Rating">Activity Rating</option>
+            <option value="Name">Name</option>
+        </select>
+    </label>
+    <label>
+        <select name="continentFilter" id="continentFilter">
+            <option value="world">All Continents</option>
+            <option value="africa">Africa</option>
+            <option value="antarctica">Antarctica</option>
+            <option value="asia">Asia</option>
+            <option value="europe">Europe</option>
+            <option value="north america">North America</option>
+            <option value="australia">Australia</option>
+            <option value="south america">South America</option>
+        </select>
+    </label>
+        <button name="submitButton" id="submitButton" class="btn-primary">Filter</button>
+    </form>
+    <p class="filter-info">Curretly filtering leaderboard by: {{filterBy}}</p>
+</section>
+
 {{#if posts.length}}
     <ol id="leaderboard">
         {{#each posts}}
-            <li>
-                <p><a href="/vacation/{{_id}}">{{name}}</a></p>
-                <p>Name: {{name}}</p>
-                <p>Description: {{description}}</p>
-                <p>City: {{city}}</p>
-                <p>Region: {{region}}</p>
-                <p>Country: {{country}}</p>
-                <p>Continent: {{continent}}</p>
-                <p>Overall Rating: {{overallRating}}</p>
-                <p>Food Rating: {{foodRating}}</p>
-                <p>Safety Rating: {{safetyRating}}</p>
-                <p>Activity Rating: {{activityRating}}</p>
+            <li class="leaderboard-item">
+                <a href="/vacation/{{_id}}" class="item-link">{{name}}</a>
+                <p class="item-description">{{description}}</p>
+                <p class="item-meta"> {{city}}, {{region}}, {{country}} &bull; {{continent}} </p>
+                <div class="item-ratings">
+                    <div class="rating"><span class="rating-label">Overall:</span> {{overallRating}}</div>
+                    <div class="rating"><span class="rating-label">Food:</span> {{foodRating}}</div>
+                    <div class="rating"><span class="rating-label">Safety:</span> {{safetyRating}}</div>
+                    <div class="rating"><span class="rating-label">Activity:</span> {{activityRating}}</div>
+                </div>
             </li>
         {{/each}}
     </ol>

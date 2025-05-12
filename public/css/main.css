@@ -297,3 +297,83 @@
     font-size: 14px;
   }
   
+  .filter-section {
+    margin-bottom: 30px;
+  }
+  
+  .filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .filter-form label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .filter-info {
+    font-style: italic;
+    color: #555;
+  }
+  
+  .leaderboard-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 24px;
+  }
+  
+  .leaderboard-item {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  
+  .item-link {
+    font-size: 20px;
+    font-weight: bold;
+    color: #004080;
+    text-decoration: none;
+  }
+  
+  .item-link:hover {
+    color: #002040;
+  }
+  
+  .item-description {
+    margin: 12px 0;
+    color: #333;
+    line-height: 1.4;
+  }
+  
+  .item-meta {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  
+  .item-ratings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .rating {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  .rating-label {
+    font-weight: bold;
+    margin-right: 4px;
+  }

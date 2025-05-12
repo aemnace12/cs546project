@@ -1,14 +1,19 @@
-<p>This is the login page</p>
+<h1 class="page-title">Login</h1>
 <p id="error" hidden></p>
-<form method="POST" action="/user/login" id="signin-form">
+<form method="POST" action="/user/login" id="signin-form" class="form">
+        <div class="form-group">
+        <label for="userId">Enter userId</label>
+        <input type="text" name="userId" id="userId">
+        </div>
 
-                <label for="userId">Enter userId</label>
-                <input type="text" name="userId" id="userId">
+        <div class="form-group">
+        <label for="password">Enter password</label>
+        <input type="password" name="password" id="password">
+        </div>
 
-                <label for="password">Enter password</label>
-                <input type="password" name="password" id="password">
-
-                <button id="submitButton">Submit</button>
+        <div class="form-actions">
+        <button id="submitButton">Submit</button>
+        </div>
 </form>
 
 <script src="/public/js/form_validation.js"></script>
