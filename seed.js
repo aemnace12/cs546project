@@ -29,7 +29,9 @@ try{
     const dubai = await posts.createLocation("Dubai", "Dubai", "Dubai Emirate", "United Arab Emirates", "Asia", "Dubai is famous for its futuristic skyscrapers and luxury shopping.", true);
     const santorini = await posts.createLocation("Santorini", "Santorini", "South Aegean", "Greece", "Europe", "Santorini dazzles with whitewashed buildings and stunning sunsets.", true);
     const machuPicchu = await posts.createLocation("Machu Picchu", "Machu Picchu", "Cusco Region", "Peru", "South America", "Machu Picchu is an ancient Incan citadel set high in the Andes.", true);
-    
+    //to-be-approved posts 
+    const barcelona = await posts.createLocation("Barcelona", "Barcelona", "Catalonia", "Spain", "Europe", "Barcelona is known for its art, architecture, and works like the Sagrada Família.", false);
+    const cairo = await posts.createLocation("Cairo", "Cairo", "Cairo Governorate", "Egypt", "Africa", "Cairo is famous for the nearby Pyramids of Giza and ancient Egyptian history.", false);
     //reviews
     const nycReview = await reviews.createReview(nyc._id, adminUser.userId, 5, 4, 3, 4.5, "I loved nyc but I felt like it didn't live up to expectations")
     const parisReview = await reviews.createReview(paris._id, normalUser.userId, 3, 3, 5, 4, "I liked paris but I felt like it didn't live up to expectations")
@@ -44,12 +46,9 @@ try{
     const santoriniReview = await reviews.createReview(santorini._id, normalUser.userId, 5, 5, 4, 4.8, "Santorini's views and sunsets are absolutely magical.");
     const machuPicchuReview = await reviews.createReview(machuPicchu._id, adminUser.userId, 4, 4, 5, 4.3, "Machu Picchu is a bucket-list experience with amazing views.");
 
-    await posts.createLocation(
-        "Test Pending Spot", "City", "Region", "Country",
-        "Europe", "This one is still waiting for approval", false
-      );
-    //comments?
 
+    //comments?
+    
     //likes
     
 }catch(e){

@@ -15,11 +15,13 @@
     <ol>
         {{#each spot.reviews}}
             <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}">
-                <p>Review: {{review}}</p>
-                <a href="/review/{{_id}}">Click me to see this review</a>
-                <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
-                <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
-                <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
+                <div class="reviewbox">
+                    <p>Review: {{review}}</p>
+                    <a href="/review/{{_id}}">Click me to see this review</a>
+                    <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
+                    <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
+                    <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
+                    </div>
                 </div>
             </li>
         {{/each}}
@@ -32,19 +34,6 @@
 
 <hr />
 
-<section class="qa-section">
-  <h2>Q&amp;A</h2>
-  <dl class="qa-list">
-    <dt>Q: What’s the best time of year to visit?</dt>
-    <dd>A: Late spring (May–June) offers mild weather and fewer crowds.</dd>
-
-    <dt>Q: Are there lodging options nearby?</dt>
-    <dd>A: Yes, hotels and guesthouses are typically within a 1 km radius of the main attractions.</dd>
-
-    <dt>Q: What’s the typical daily cost?</dt>
-    <dd>A: Expect to spend around $100–$150 per day, including meals and basic activities.</dd>
-  </dl>
-</section>
 
 <script src="/public/js/likes.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
