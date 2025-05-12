@@ -14,6 +14,8 @@ const staticDir = express.static(__dirname + '/public');
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use('/public', staticDir);
+
 app.use(
      session({
        name: 'AuthenticationState',
@@ -140,7 +142,7 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     next();
   };
 
-  app.use('/public', staticDir);
+  
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
   app.use(rewriteUnsupportedBrowserMethods);

@@ -9,24 +9,26 @@ router
         try {
             // Fetch the top 6 rated vacation spots
             const featuredDestinations = await vacationSpots.getTopSpots(6);
-            // Render the homepage with those spots
             res.render('partials/homepage', {
               title: 'Home',
               layout: 'main',
               featuredDestinations
             });
           } catch (e) {
-            // If something goes wrong, show the error page
             res.status(500).render('error', {
               title: 'Error',
               error: e.toString()
             });
           }
         });
+        
 router
     .route('/verifyage')
     .get(async (req,res) => {
-        res.render('partials/age');
+        res.render('partials/age', {
+            layout: 'main',
+            title: 'Age Verification'
+          });
         })
     .post(async (req, res) => {
         if(!req.body.age){
