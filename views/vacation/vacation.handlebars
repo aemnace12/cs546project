@@ -28,6 +28,8 @@
     <p class="not-found">We're sorry, but no reviews were for this vacation spot.</p>
 {{/if}}
 
+ <div id="map" data-city="{{spot.city}}" data-country="{{spot.country}}" style="height: 400px;"></div>
+
 <hr />
 
 <section class="qa-section">
@@ -45,3 +47,5 @@
 </section>
 
 <script src="/public/js/likes.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/public/js/map.js"></script>
