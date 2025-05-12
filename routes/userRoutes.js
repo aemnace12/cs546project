@@ -176,8 +176,7 @@ router.post('/edit', async (req, res) => {
   
     const userId = user.userId;
     const userReviews = await reviewData.getReviewsByUserid(userId);
-    const successMessage = req.session.success;
-    req.session.success = false; // debugging and clean
+   
     
     res.render('user/profile', {
       firstName: req.session.user.firstName,
@@ -186,8 +185,7 @@ router.post('/edit', async (req, res) => {
       bio: req.session.user.bio,
       favoritePlace: req.session.user.favoritePlace,
       role: req.session.user.role,
-      reviews: userReviews,
-      success: successMessage
+      reviews: userReviews
   });
   }catch(e){
     return res.status(400).render('user/edit', {

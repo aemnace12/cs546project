@@ -7,7 +7,9 @@
     const comment  = $('#comment').val().trim();
 
     if (comment.length < 3 || comment.length > 500) {
+      $('#comment-error').show();
       return $('#comment-error').text('Comment must be between 3 and 500 characters.');
+      
     }
     let requestConfig = {
       method: 'POST',
@@ -19,8 +21,7 @@
       $('#comment-error').empty();
       $('#comment').val('');
        $('#commentsList').empty();
-
-      if (comments.length > 0) {
+      if(comments.length > 0) {
         for (let i = 0; i < comments.length; i++) {
           const toAdd = comments[i];
           $('#commentsList').append(`
