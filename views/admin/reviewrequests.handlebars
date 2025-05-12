@@ -1,28 +1,36 @@
-<p>This is the page where you can look at user requests</p>
-<p id="error" hidden></p>
+<h1 class="page-title">User Review Requests</h1>
+<p id="error" class="error-message" hidden></p>
+
 {{#if posts.length}}
-    <ol>
-        {{#each posts}}
-            <form id="createpost-form" action="/admin/reviewrequests" method="POST">
-            <input type="hidden" name="locationId" value="{{_id}}">
-            <button type="submit" name="submit_button" id="submit_button">Approve Review for {{name}}</button>
-            </form>
-            <li>
-                <p>Name: {{name}}</p>
-                <p>Description: {{description}}</p>
-                <p>City: {{city}}</p>
-                <p>Region: {{region}}</p>
-                <p>Country: {{country}}</p>
-                <p>Continent: {{continent}}</p>
-                <p>Overall Rating: {{overallRating}}</p>
-                <p>Food Rating: {{foodRating}}</p>
-                <p>Safety Rating: {{safetyRating}}</p>
-                <p>Activity Rating: {{activityRating}}</p>
-            </li>
-        {{/each}}
-    </ol>
+  <ul class="request-list">
+    {{#each posts}}
+      <li class="request-item">
+        <div class="request-info">
+          <h2 class="request-title">{{this.name}}</h2>
+          <p class="request-description">{{this.description}}</p>
+          <p class="request-meta">
+            {{this.city}}, {{this.region}}, {{this.country}} &bull; {{this.continent}}
+          </p>
+          <div class="request-ratings">
+            <span>Overall: {{this.overallRating}}</span>
+            <span>Food: {{this.foodRating}}</span>
+            <span>Safety: {{this.safetyRating}}</span>
+            <span>Activity: {{this.activityRating}}</span>
+          </div>
+        </div>
+        <div class="request-actions">
+          <form action="/admin/reviewrequests" method="POST" class="approve-form">
+            <input type="hidden" name="locationId" value="{{this._id}}" />
+            <button type="submit" class="btn-primary">Approve</button>
+          </form>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
 {{else}}
-    <p class="not-found">We're sorry, but no results were found.</p>
+  <p class="not-found">
+    We’re sorry, but there are no pending review requests.
+  </p>
 {{/if}}
 
 <script src="/public/js/form_validation.js"></script>
