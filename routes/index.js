@@ -1,4 +1,4 @@
-import vacationRoutes from './vacationSpots.js';
+import vacationRoutes from './vacationSpotsRoutes.js';
 import userRoutes from './userRoutes.js';
 import reviewRoutes from './reviewRoutes.js';
 import leaderboardRoutes from './leaderboardRoutes.js';

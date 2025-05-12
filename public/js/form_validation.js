@@ -1,11 +1,15 @@
-//used to take up space for further use
+/**
+ * form_validation.js
+ * 
+ * Contains client-side validation logic for all forms on the website. 
+ */
 
-const signupForm = document.getElementById('signup-form');        //  good
-const signinForm = document.getElementById('signin-form');      //  good
-const createPostForm = document.getElementById('createpost-form');      //  good
-const createReviewForm = document.getElementById('createreview-form');      // good
-const commentReviewForm = document.getElementById('commentreview-form');      //  fine
-const profileEditForm = document.getElementById('profileedit-form');      //  good
+const signupForm = document.getElementById('signup-form');        
+const signinForm = document.getElementById('signin-form');      
+const createPostForm = document.getElementById('createpost-form');     
+const createReviewForm = document.getElementById('createreview-form');      
+const commentReviewForm = document.getElementById('commentreview-form');      
+const profileEditForm = document.getElementById('profileedit-form');     
 const errorDiv = document.getElementById('error');
 
 
@@ -27,7 +31,6 @@ const checkValidRating = (rating) => {
   return true;
 };
 
-
 const fetchCountries = async () => {
   const response = await fetch('https://restcountries.com/v3.1/all');
   if (!response.ok) {
@@ -37,41 +40,6 @@ const fetchCountries = async () => {
   return data.map(country => country.name.common.toLowerCase());
 };
 
-const checkId = (id, varName) => {
-    if (!id) throw `Error: You must provide a ${varName}`;
-    if (typeof id !== 'string') throw `Error:${varName} must be a string`;
-    id = id.trim();
-    if (id.length === 0)
-      throw `Error: ${varName} cannot be an empty string or just spaces`;
-    if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
-    return id;
-};
-
-const checkString = (strVal, varName) => {
-    if (!strVal) throw `Error: You must supply a ${varName}!`;
-    if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
-    strVal = strVal.trim();
-    if (strVal.length === 0)
-      throw `Error: ${varName} cannot be an empty string or string with just spaces`;
-    if (!isNaN(strVal))
-      throw `Error: ${strVal} is not a valid value for ${varName} as it only contains digits`;
-    return strVal;
-};
-
-const checkStringArray = (arr, varName) => {
-    //We will allow an empty array for this,
-    //if it's not empty, we will make sure all tags are strings
-    if (!arr || !Array.isArray(arr))
-      throw `You must provide an array of ${varName}`;
-    for (let i in arr) {
-      if (typeof arr[i] !== 'string' || arr[i].trim().length === 0) {
-        throw `One or more elements in ${varName} array is not a string or is an empty string`;
-      }
-      arr[i] = arr[i].trim();
-    }
-
-    return arr;
-};
 
 const checkValidName = (firstName) => {     
     if (typeof firstName !== 'string') {        // checking string type
