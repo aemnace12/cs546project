@@ -22,6 +22,14 @@ app.use(
        resave: false,
      })
    );
+app.use(async (req, res, next) => {
+    if (req.path !== "/verifyage" && !req.session.ageVerified) {
+        return res.redirect('/verifyage');
+    }
+    next();
+    
+});
+
 
 app.use(async (req, res, next) => {
   let date = new Date().toUTCString();
