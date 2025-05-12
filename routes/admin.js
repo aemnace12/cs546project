@@ -13,8 +13,20 @@ router.get('/', async (req, res) => {
   if (!user || user.role != 'admin') {
     return res.redirect('/');
   }
-  res.render('admin/dashboard');
+  try {
+    const pending = await vacationSpotData.getAllUnapprovedLocations();
+    const pendingCount = pending.length;
+    // choose singular vs. plural
+    const pendingLabel = pendingCount === 1 ? 'request' : 'requests';
 
+    res.render('admin/dashboard', {
+      title: 'Admin Dashboard',
+      pendingCount,
+      pendingLabel
+    });
+  } catch (e) {
+    res.status(500).render('error', { error: e.toString() });
+  }
 });
 
 router.route('/reviewrequests')

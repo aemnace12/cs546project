@@ -377,3 +377,50 @@
     font-weight: bold;
     margin-right: 4px;
   }
+
+  .admin-dashboard {
+    text-align: center;
+    margin: 40px 0;
+  }
+  
+  .admin-dashboard .pending-count {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #444;
+  }
+  
+  .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  
+  .admin-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 150ms, box-shadow 150ms; /*https://www.w3schools.com/css/css3_transitions.asp*/
+  }
+  
+  .admin-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #004080;
+    font-size: 20px;
+  }
+  
+  .admin-card p {
+    margin: 0;
+    color: #555;
+    line-height: 1.4;
+  }
+  
+  .admin-card:hover {
+    transform: translateY(-4px); /*https://developer.mozilla.org/en-US/docs/Web/CSS/transform*/
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }

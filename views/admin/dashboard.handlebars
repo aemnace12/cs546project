@@ -1,6 +1,24 @@
-<p>This is the admin dashboard page</p>
-<ul>
-<li><a href="/review/createpost">Click me to create a new vacation spot</a></li>
-<li><a href="/leaderboard">Click me to look at the vacation spots for updating</a></li>
-<li><a href="/admin/reviewrequests">Click me to review admin requests for creating new vacation spots</a></li>
-</ul>
+<section class="admin-dashboard">
+  <h1 class="page-title">Admin Dashboard</h1>
+
+  <p class="pending-count">
+    You have <strong>{{pendingCount}}</strong> pending {{pendingLabel}}.
+  </p>
+
+  <div class="dashboard-cards">
+    <a href="/review/createpost" class="admin-card">
+      <h2>Create Vacation Spot</h2>
+      <p>Submit a brand-new destination for users to review.</p>
+    </a>
+
+    <a href="/leaderboard" class="admin-card">
+      <h2>View &amp; Update Spots</h2>
+      <p>Browse existing spots and make any needed edits.</p>
+    </a>
+
+    <a href="/admin/reviewrequests" class="admin-card">
+      <h2>Review Pending Requests</h2>
+      <p>Approve or deny user submissions.</p>
+    </a>
+  </div>
+</section>

@@ -44,6 +44,10 @@ try{
     const santoriniReview = await reviews.createReview(santorini._id, normalUser.userId, 5, 5, 4, 4.8, "Santorini's views and sunsets are absolutely magical.");
     const machuPicchuReview = await reviews.createReview(machuPicchu._id, adminUser.userId, 4, 4, 5, 4.3, "Machu Picchu is a bucket-list experience with amazing views.");
 
+    await posts.createLocation(
+        "Test Pending Spot", "City", "Region", "Country",
+        "Europe", "This one is still waiting for approval", false
+      );
     //comments?
 
     //likes
