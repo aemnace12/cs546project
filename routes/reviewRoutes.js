@@ -44,24 +44,19 @@ router.route('/createpost')
         const city = validation.checkString(xss(regBody.city), 'city');
         const region = validation.checkString(xss(regBody.region), 'region');
         const country = validation.checkString(xss(regBody.country), 'country');
-        const continent = validation.checkString(xss(regBody.continent), 'continent');
+        let continent = validation.checkString(xss(regBody.continent), 'continent');
     
 
     
-        const continents = [
-            'africa',
-            'antarctica',
-            'asia',
-            'europe',
-            'north america',
-            'south america',
-            'australia'
+        const allowed = [
+            'africa','antarctica','asia','europe',
+            'north america','south america','australia'
         ];
-        
-        if (!(continents.includes(continent.toLowerCase()))) {
-            throw "Continent not correct!"
+        if (!allowed.includes(continent.toLowerCase())) {
+            throw 'Continent not correct!';
         }
-        continent=continent.toLowerCase();
+        continent = continent.toLowerCase();
+
         const makeSpot = await vacationSpotData.createLocation(
             name,
             city,
