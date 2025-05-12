@@ -218,6 +218,14 @@ async getLocationById(id) {
     location._id = location._id.toString();
 
     return location;
-}
+},
+
+async getTopSpots(limit = 6) {
+    if (!limit || typeof limit !== 'number') throw 'Limit must be a number';
+    const col = await vacationSpots();
+    const spots = await col.find({}).sort({overallRating: -1}).limit(limit).toArray();
+    return spots;
+  }
+
 }
 export default exportedMethods;

@@ -11,5 +11,22 @@
 <section class="homepage-leaderboard">
   <h2 class="page-title">Featured Destinations</h2>
   <p>Leaderboard goes here</p>
-  {{{body}}}  
+  <div class="destinations-grid">
+    {{#if featuredDestinations}}
+      {{#each featuredDestinations}}
+        <div class="destination-card">
+          <img
+            src="{{this.imageUrl}}"
+            alt="{{this.name}}"
+            class="destination-image"
+          />
+          <div class="destination-name" contenteditable="true">
+            {{this.name}}
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <p class="not-found">No featured destinations at the moment.</p>
+    {{/if}}
+  </div>
 </section>
