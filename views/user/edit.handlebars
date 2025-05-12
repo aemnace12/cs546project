@@ -1,27 +1,33 @@
-<p>Profile Edit HandleBars</p>
-<h1>Edit Profile</h1> <!-- Edit page THIS IS TENTATIVE -->
-<p>Welcome {{firstName}} {{lastName}}. Choose an item to edit!</p>
-<p id="error" hidden></p>
-<form id="profileedit-form" action="/user/edit" method="post">
-  <div class="editForm">
-  <dropdown>
-    <label for="editItem">Edit Item</label>
+<h1 class="page-title">Edit Profile</h1>
+<p id="error" class="error-message" hidden></p>
+<p>Welcome {{firstName}} {{lastName}}. Choose an item to edit:</p>
+
+<form
+  id="profileedit-form"
+  action="/user/edit"
+  method="POST"
+  class="form"
+>
+  <div class="form-group">
+    <label for="editItem">Field to edit</label>
     <select id="editItem" name="editItem">
       <option value="firstName">First Name</option>
       <option value="lastName">Last Name</option>
       <option value="email">Email</option>
       <option value="bio">Bio</option>
       <option value="password">Password</option>
-      <option value="favoritePlace">favoritePlace</option>
+      <option value="favoritePlace">Favorite Place</option>
     </select>
   </div>
 
-  <div class="editForm">
-    <label for="newValue">New value:</label>
-    <input type="text" id="newValue" name="newValue">
+  <div class="form-group">
+    <label for="newValue">New Value</label>
+    <input type="text" id="newValue" name="newValue" />
   </div>
 
-  <button type="submit">Update</button>
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Update</button>
+  </div>
 </form>
 
 <script src="/public/js/form_validation.js"></script>

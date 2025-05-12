@@ -1,19 +1,39 @@
+<h1 class="page-title">Create Vacation Spot</h1>
 <p id="error" hidden></p>
 
-<form id="createpost-form" action="/review/createpost" method="POST">
+<form id="createpost-form" action="/review/createpost" method="POST" class="form">
+    <div class="form-group">
     <label for="name">Location Name:</label>
     <input type="text" name="name" id="name">
+    </div>
+
+    <div class="form-group">
     <label for="city">City:</label>
     <input type="text" name="city" id="city">
+    </div>
+
+    <div class="form-group">
     <label for="city">Region/State:</label>
     <input type="text" name="region" id="region">
+    </div>
+
+    <div class="form-group">
     <label for="city">Country:</label>
     <input type="text" name="country" id="country">
+    </div>
+
+    <div class="form-group">
     <label for="city">Continent:</label>
-    <input type="text" name="country" id="country">
+    <input type="text" name="continent" id="continent">
+    </div>
+
+    <div class="form-group">
     <label for="description">Description:</label>
     <input type="text" name="description" id="description">
+    </div>
+    <div class="form-actions">
     <button type="submit" name="submit_button" id="submit_button">Submit Post</button>
+    </div>
 </form>
 
 <script src="/public/js/form_validation.js"></script>

@@ -1,20 +1,40 @@
-<p id="error" hidden></p>
+<h1 class="page-title">Request New Vacation Spot</h1>
+<p>This form will be sent to an admin for approval.</p>
+<p id="error" class="error-message" hidden></p>
 
-<p> This form will be sent to an admin to review and decide whether to add this review or not.</p>
-<form id="createpost-form" action="/review/requestpost" method="POST">
-    <label for="name">Location Name:</label>
-    <input type="text" name="name" id="name">
-    <label for="city">City:</label>
-    <input type="text" name="city" id="city">
-    <label for="city">Region/State:</label>
-    <input type="text" name="region" id="region">
-    <label for="city">Country:</label>
-    <input type="text" name="country" id="country">
-    <label for="city">Continent:</label>
-    <input type="text" name="continent" id="continent">
-    <label for="description">Description:</label>
-    <input type="text" name="description" id="description">
-    <button type="submit" name="submit_button" id="submit_button">Request Post</button>
+<div class="form-group">
+    <label for="name">Location Name</label>
+    <input type="text" id="name" name="name" />
+  </div>
+
+  <div class="form-group">
+    <label for="city">City</label>
+    <input type="text" id="city" name="city" />
+  </div>
+
+  <div class="form-group">
+    <label for="region">Region/State</label>
+    <input type="text" id="region" name="region" />
+  </div>
+
+  <div class="form-group">
+    <label for="country">Country</label>
+    <input type="text" id="country" name="country" />
+  </div>
+
+  <div class="form-group">
+    <label for="continent">Continent</label>
+    <input type="text" id="continent" name="continent" />
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4"></textarea>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Request Post</button>
+  </div>
 </form>
 
 <script src="/public/js/form_validation.js"></script>

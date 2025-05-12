@@ -1,43 +1,40 @@
 <h1>Profile Page</h1>
 
-<main>
-<div id="userView">
+<section class="profile-section">
+  <h1 class="page-title">Your Profile</h1>
+  {{#if success}}
+    <p class="success-message">{{success}} successfully changed!</p>
+  {{/if}}
 
-<h1 id="userID">{{userId}}</h1>
-{{#if success}}
-  <p class="success-message">{{success}} Sucessfully changed!</p>
-{{/if}} 
-<p id="welcome">Welcome {{firstName}} {{lastName}}.</p>
-<h3>Favorite Place</h3>
-<p id="favoritePlace"> {{favoritePlace}} </p>
-<h3>Bio</h3>
-<p id="bio">{{bio}} </p>
+  <div class="profile-info">
+    <p><strong>User ID:</strong> {{userId}}</p>
+    <p><strong>Name:</strong> {{firstName}} {{lastName}}</p>
+    <p><strong>Favorite Place:</strong> {{favoritePlace}}</p>
+    <p><strong>Bio:</strong> {{bio}}</p>
+  </div>
 
-<h3>{{userId}}'s Reviews</h3>
-
-    {{#if reviews.length}}
-      <ul id="reviews">
-        {{#each reviews}}
-          <li>
-            <p>Vacation Spot: {{locationName}}</p>
-            <p>Food Rating: {{foodRating}}</p>
-            <p>Safety Rating: {{safetyRating}}</p>
-            <p>Activity Rating: {{activityRating}}</p>
-            <p>Overall Rating: {{overallRating}}</p>
-            <p>Review: {{review}}</p>
-          </li>
-        {{/each}}
-      </ul>
-    {{else}}
-      <p id="reviews">This user hasn't posted any reviews yet.</p>
-    {{/if}}
-
-
-
-
-
-<a href="/user/profile/edit">
-  <button type="button">Edit Profile</button>
-</a>
-</div>
-</main>
+  <div class="form-actions">
+    <a href="/user/profile/edit" class="btn-primary">Edit Profile</a>
+  </div>
+</section>
+<section class="reviews-section">
+  <h2 class="section-title">{{userId}}’s Reviews</h2>
+  {{#if reviews.length}}
+    <ul class="leaderboard-list">
+      {{#each reviews}}
+        <li class="leaderboard-item">
+          <p class="item-description">{{review}}</p>
+          <p class="item-meta">
+            <strong>{{locationName}}</strong> —
+            Overall: {{overallRating}},
+            Food: {{foodRating}},
+            Safety: {{safetyRating}},
+            Activity: {{activityRating}}
+          </p>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="not-found">You haven’t posted any reviews yet.</p>
+  {{/if}}
+</section>
