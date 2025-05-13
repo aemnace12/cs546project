@@ -235,6 +235,9 @@ router
     .route('/:id')
     .get(async (req,res) => {
         try{
+        if (!req.session.user) {
+            return res.redirect('/user/login');
+        }
         let ownsReview = false;
         const getReview = await reviewData.getReviewById(xss(req.params.id));
         console.log(getReview.comments);
