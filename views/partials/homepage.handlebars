@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
 <section class="intro-section">
   <h2>What is TripScore?</h2>
   <p>
@@ -13,19 +18,16 @@
   <div class="destinations-grid">
     {{#if featuredDestinations}}
       {{#each featuredDestinations}}
-        <a href="/vacation/{{this._id}}" class="destination-card">
-          <img
-            src="/public/images/destinations/{{this.name}}.jpg"
-            alt="{{this.name}}"
-            class="destination-image"
-          />
+        <div class="destination-card" data-id="{{this._id}}" data-image="/public/images/destinations/{{this.name}}.jpg" data-name="{{this.name}}">
+          <img class="destination-image" alt="{{this.name}}" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="> <!-- this is transparent 1px gif loaded as src just so it can pass html validation -->
           <div class="destination-name">
             {{this.name}}
           </div>
-        </a>
+        </div>
       {{/each}}
     {{else}}
       <p class="not-found">No featured destinations at the moment.</p>
     {{/if}}
   </div>
 </section>
+<script src="/public/js/homepage.js"></script>

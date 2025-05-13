@@ -1,10 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <h1 class="page-title">User Review Requests</h1>
 <p id="error" class="error-message" hidden></p>
 
 {{#if posts.length}}
-  <ul class="request-list">
+  <div class="request-list">
     {{#each posts}}
-      <li class="request-item">
+      <div class="request-item">
         <div class="request-info">
           <h2 class="request-title">{{this.name}}</h2>
           <p class="request-description">{{this.description}}</p>
@@ -20,13 +26,12 @@
         </div>
         <div class="request-actions">
           <form action="/admin/reviewrequests" method="POST" class="approve-form">
-            <input type="hidden" name="locationId" value="{{this._id}}" />
+            <input type="hidden" name="locationId" value="{{this._id}}">
             <button type="submit" class="btn-primary">Approve</button>
           </form>
         </div>
-      </li>
-    {{/each}}
-  </ul>
+      </div>{{/each}}
+  </div>
 {{else}}
   <p class="not-found">
     We’re sorry, but there are no pending review requests.
