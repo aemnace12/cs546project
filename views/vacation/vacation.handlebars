@@ -33,7 +33,7 @@
         {{#if spot.reviews.length}}
             <div class="review-list">
                 {{#each spot.reviews}}
-                    <div class="review-item" data-id="{{this._id}}" data-user-id="{{userId}}">
+                    <div class="review-item" data-id="{{this._id}}" data-user="{{userId}}">
                         <div class="review-card">
                             <p class="review-text">{{this.review}}</p>
                             <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
