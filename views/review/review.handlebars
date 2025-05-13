@@ -29,7 +29,7 @@
   <h2 class="section-title">Comments</h2>
   <!--https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes-->
   {{#if review.comments.length}}
-    <ul class="comment-list">
+    <ul class="comment-list" id="commentsList">
     {{#each review.comments}}
       <li data-id=="{{this._id}}" class="comment-item">
         <p>{{this.comment}}</p>
