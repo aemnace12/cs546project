@@ -147,19 +147,15 @@ async removeUser (
 ) {
 
     if (!userId || typeof userId !== 'string') {
-        throw 'userId must be a non-empty string';
-      }
-
+      throw 'userId must be a non-empty string';
+    }
 
     const userCollection = await users();
-    const deletedResult = await userCollection.findOneAndDelete({ userId: userId }); //edit collection
-    if (!deletedResult.value) {
-        throw `No user found with userId: ${userId}`;
-      }
-   
-    console.log(deletedResult.value);
-
-
+    const user = await userCollection.findOne({ userId: userId.toLowerCase().trim() });
+    if (!user) {
+      throw `No user found with userId: ${userId}`;
+    }
+    await userCollection.findOneAndDelete({ userId: userId.toLowerCase().trim() }); //edit collection
 }
 };
 
