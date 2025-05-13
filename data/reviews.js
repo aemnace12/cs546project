@@ -325,9 +325,9 @@ async getReviewsByUserid(userId){
         }
       }
 
-      if (reviews.length === 0) {
+      /* if (reviews.length === 0) {
         throw (`No reviews found for user with id ${userId}`);
-      }
+      } */
     
       return reviews;
     },

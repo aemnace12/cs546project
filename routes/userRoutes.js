@@ -164,6 +164,9 @@ router.post('/edit', async (req, res) => {
       if (!number) {
         throw "Password must contain at least one number";
       }
+      const saltRounds = 10;
+      finValue = await bcrypt.hash(password, saltRounds);
+      console.log("Hashed password:", finValue);
     }
     const updatedUser = await userData.updateUser(req.session.user.userId, editItem, finValue);
     if (!updatedUser) {
@@ -173,7 +176,7 @@ router.post('/edit', async (req, res) => {
     if (editItem !== 'password') {
       req.session.user[editItem] = finValue;
     }
-  
+   
     const userId = user.userId;
     const userReviews = await reviewData.getReviewsByUserid(userId);
    
