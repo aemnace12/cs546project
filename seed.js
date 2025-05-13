@@ -4,6 +4,7 @@ import {dbConnection, closeConnection} from './config/mongoConnections.js';
 import users from './data/users.js';
 import posts from './data/vacationSpots.js';
 import reviews from './data/reviews.js';
+import comments from './data/comments.js';
 
 
 const db = await dbConnection();
@@ -48,6 +49,20 @@ try{
 
 
     //comments?
+    const nycComment = await comments.createComment(nycReview._id.toString(), normalUser.userId, "I agree with you! I loved NYC too!");
+    const parisComment = await comments.createComment(parisReview._id.toString(), adminUser.userId, "I disagree with you! I hated Paris!");
+    const baliComment = await comments.createComment(baliReview._id.toString(), normalUser.userId, "Neat!");
+    const tokyoComment = await comments.createComment(tokyoReview._id.toString(), adminUser.userId, "Interesting!");
+    const sydneyComment = await comments.createComment(sydneyReview._id.toString(), normalUser.userId, "Wow!!");
+    const romeComment = await comments.createComment(romeReview._id.toString(), adminUser.userId, "Do you have photos!?");
+    const londonComment = await comments.createComment(londonReview._id.toString(), normalUser.userId, "Cool wow!");
+    const capeTownComment = await comments.createComment(capeTownReview._id.toString(), adminUser.userId, "I want to go there!");
+    const rioComment = await comments.createComment(rioReview._id.toString(), normalUser.userId, "Neato!");
+    const dubaiComment = await comments.createComment(dubaiReview._id.toString(), adminUser.userId, "Wow So cool!");
+    const santoriniComment = await comments.createComment(santoriniReview._id.toString(), normalUser.userId, "I agree with you! I loved Santorini too!");
+    const machuPicchuComment = await comments.createComment(machuPicchuReview._id.toString(), adminUser.userId, "I disagree with you! I hated Machu Picchu!");
+
+
     
     //likes
     

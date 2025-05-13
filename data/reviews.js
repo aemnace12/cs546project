@@ -405,33 +405,6 @@ async removeReview (reviewId) {
     return updatedInfo;
 },
 
-    async addComment(reviewId, userId, comment) { // idk if this works i just looked at the add review, i will test tmrw im going to bed
-        if(!reviewId || !userId || !comment) {
-            throw ('ERROR: Missing required fields.');
-        }
-        reviewId = validation.checkId(reviewId, "Review ID");
-        userId = validation.checkString(userId, "User ID");
-        comment = validation.checkString(comment, 'comment');
-        if (comment.length > 500 || comment.length < 3) {
-            throw 'Comment cannot be greater than 500 characters or less than 3 characters.';
-          }
-        const newComment = {
-            _id: new ObjectId(),
-            userId,
-            comment
-        }
-        const review = await this.getReviewById(reviewId);
-        const reviewtoAdd = await review.findOneAndUpdate(
-            {_id: new ObjectId(reviewId)}, 
-            {$push: {comments: {userId, comment}}}, 
-            {returnDocument: 'after'}
-        );
-        if (!reviewtoAdd) {
-            throw ('ERROR: could not add comment successfully');
-        }
-        return newComment;
-    
-},
 async toggleLike(reviewId, userId) {
     if (!reviewId || !userId) throw 'You must supply reviewId and userId';
     const reviewObjId = new ObjectId(reviewId);

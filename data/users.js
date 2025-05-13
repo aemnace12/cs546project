@@ -1,4 +1,5 @@
 import {users} from '../config/mongoCollections.js';
+import {vacationSpots} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import bcrypt from "bcryptjs";
 import validation from '../validation.js'
