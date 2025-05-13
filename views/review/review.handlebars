@@ -1,9 +1,18 @@
 <section class="review-page">
   <div class="review-header">
     <h1 class="page-title">Review by {{review.userId}}</h1>
+    <div class="header-actions">
     <a href="/vacation/{{review.locationId}}" class="btn-secondary">
       ← Back to Spot
     </a>
+    <button id="share-btn" class="btn-secondary">Share</button>
+    </div>
+  </div>
+
+  <div id="share-menu" class="share-menu">
+    <a href="#" id="twitter-share">Twitter</a>
+    <a href="#" id="facebook-share">Facebook</a>
+    <a href="#" id="reddit-share">Reddit</a>
   </div>
 
 <div class="review-card">
@@ -49,3 +58,4 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/public/js/ajax.js"></script>
 <script src="/public/js/form_validation.js"></script>
+<script src="/public/js/shareReview.js"></script>

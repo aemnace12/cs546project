@@ -700,3 +700,37 @@ button.btn-primary {
 .btn-secondary:hover {
     background: #bbb;
 }
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+  
+.share-menu {
+    position: absolute;
+    top: 72px;
+    right: 20px;
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+  
+.share-menu.visible {
+    display: flex;
+}
+  
+.share-menu a {
+    padding: 10px 16px;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #0077cc;
+    font-weight: 500;
+}
+  
+.share-menu a:hover {
+    background: #f0f8ff;
+}
