@@ -18,6 +18,11 @@
   <div class="form-actions">
     <a href="/user/profile/edit" class="btn-primary">Edit Profile</a>
   </div>
+  <div class="form-actions">
+    <form method="POST" action="/user/delete/{{userId}}" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+      <button type="submit" class="btn-primary-red">Delete My Account</button>
+    </form>
+  </div>
 </section>
 <section class="reviews-section">
   <h2 class="section-title">{{userId}}’s Reviews</h2>

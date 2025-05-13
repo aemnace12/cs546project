@@ -27,6 +27,11 @@
       <div class="rating"><span class="rating-label">Activity:</span> {{review.activityRating}}</div>
     </div>
   <p class="review-text">{{review.review}}</p>
+  {{#if userOwnsReview}}
+    <form method="POST" action="/review/delete/{{review._id}}" onsubmit="return confirm('Are you sure you want to delete your review? This action cannot be undone.');">
+      <button type="submit" class="btn-primary-red">Delete Review</button>
+    </form>
+  {{/if}}
 </div>
 </section>
 <!-- had to demolish a lot for ajax-->
@@ -34,7 +39,7 @@
   <h2 class="section-title">Comments</h2>
   <!--https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes-->
   {{#if review.comments.length}}
-    <div class="comment-list">
+    <ul class="comment-list" id="commentsList">
     {{#each review.comments}}
       <div class="comment-item" data-id="{{this._id}}">
             <p>{{this.comment}}</p>
@@ -47,6 +52,7 @@
   {{/if}}
 
 <p id="comment-error" hidden></p>
+<p>Comment:</p>
 <form id="comment-form">
 
   <input type="hidden" id="reviewId" value="{{review._id}}">
@@ -55,7 +61,7 @@
   <label for="comment"></label>
   <input type="text" id="comment" name="comment">
 
-  <button type="submit">Submit</button>
+  <button type="submit" class="btn-primary">Submit</button>
 </form>
 
 </section>

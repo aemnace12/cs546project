@@ -73,7 +73,7 @@ body {
   
 .btn,
 .nav-link,
-button.btn-primary {
+button.btn-primary, button.btn-primary-red {
     cursor: pointer;
 }
   
@@ -88,8 +88,24 @@ button.btn-primary {
     font-weight: 600;
     transition: opacity 200ms;
 }
+
+.btn-primary-red {
+    display: inline-block;
+    background: red;
+    color: #fff;
+    padding: 10px 19px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 200ms;
+}
   
 .btn-primary:hover {
+    opacity: 0.85;
+}
+
+.btn-primary-red:hover {
     opacity: 0.85;
 }
   

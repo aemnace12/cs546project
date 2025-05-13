@@ -227,7 +227,7 @@ router
       regBody.userId = validation.checkString(xss(regBody.userId));
       regBody.password = validation.checkString(xss(regBody.password));
       regBody.confirmPassword = validation.checkString(xss(regBody.confirmPassword));
-      regBody.role = validation.checkString(xss(regBody.role));
+      //regBody.role = validation.checkString(xss(regBody.role));
 
       if(!(/^[A-Za-z]+$/).test(regBody.firstName)){
         throw "first name contains non-letters"
@@ -274,14 +274,14 @@ router
       }
 
     
-      regBody.role=validation.checkString(regBody.role);
+      /*regBody.role=validation.checkString(regBody.role);
       regBody.role=regBody.role.toLowerCase();
       if(regBody.role !== "admin" && regBody.role !== "user"){
         throw "incorrect role";
-      }
+      }*/
 
       //This function is needed! from userData
-      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.confirmPassword, regBody.role);
+      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.confirmPassword, "user");
       console.log("Registration result:", reg);
       if(reg.registrationCompleted){
         res.redirect("/user/login");
@@ -304,7 +304,24 @@ router.get('/logout', async (req, res) => {
     res.redirect('/leaderboard')
   }
   req.session.destroy();
-  res.render('auth/logout')
+  res.render('auth/logout', {logout: true})
 });
+
+router.route('/delete/:id')
+.post(async(req,res) => {
+  try {
+    let userId = validation.checkString(xss(req.params.id));
+    userId = userId.toLowerCase();
+
+    if (!req.session.user || userId !== req.session.user.userId) {
+        return res.status(403).render('error', { error: 'Not authorized to delete this account.' });
+    }
+    await userData.removeUser(userId);
+    req.session.destroy();
+    res.render('auth/logout', {deleteAcc: true})
+    } catch (e) {
+      res.status(400).render('error', { error: e });
+    }
+})
 
 export default router;
