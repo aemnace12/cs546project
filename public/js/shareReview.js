@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       shareMenu.classList.toggle('visible');
     });
   
-    shareMenu.querySelectorAll('a').forEach(link => {
+    shareMenu.querySelectorAll('a').forEach(link => { /* https://www.w3schools.com/howto/howto_js_redirect_webpage.asp */
       link.addEventListener('click', e => {
         e.preventDefault();
         window.open(
