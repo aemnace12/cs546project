@@ -307,4 +307,21 @@ router.get('/logout', async (req, res) => {
   res.render('auth/logout')
 });
 
+router.route('/delete/:id')
+.post(async(req,res) => {
+  try {
+    let userId = validation.checkString(xss(req.params.id));
+    userId = userId.toLowerCase();
+
+    if (!req.session.user || userId !== req.session.user.userId) {
+        return res.status(403).render('error', { error: 'Not authorized to delete this account.' });
+    }
+    await userData.removeUser(userId);
+    req.session.destroy();
+    return res.redirect('/')
+    } catch (e) {
+      res.status(400).render('error', { error: e });
+    }
+})
+
 export default router;
