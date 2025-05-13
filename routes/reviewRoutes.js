@@ -135,6 +135,23 @@ router.route('/requestpost')
     }
 })
 
+router.route('/delete/:id')
+.post(async(req,res) => {
+    try {
+        const reviewId = validation.checkId(xss(req.params.id), "reviewId");
+
+        const review = await reviewData.getReviewById(reviewId);
+        if (!req.session.user || review.userId !== req.session.user.userId) {
+            return res.status(403).render('error', { error: 'Not authorized to delete this review.' });
+        }
+        const locationId = review.locationId;
+        await reviewData.removeReview(reviewId);
+        res.redirect(`/vacation/${locationId}`);
+    } catch (e) {
+        res.status(404).render('error', { error: e });
+    }
+})
+
 
 router.route('/createreview/:id')
 .get(async(req,res) => {
@@ -218,9 +235,13 @@ router
     .route('/:id')
     .get(async (req,res) => {
         try{
+        let ownsReview = false;
         const getReview = await reviewData.getReviewById(xss(req.params.id));
         console.log(getReview.comments);
-        res.render('review/review', {review: getReview, comments: getReview.comments});
+        if (getReview.userId === req.session.user.userId) {
+            ownsReview = true;
+        }
+        res.render('review/review', {review: getReview, comments: getReview.comments, userOwnsReview: ownsReview});
         }catch(e){
             res.status(404).render('error', {error: e})
         }
