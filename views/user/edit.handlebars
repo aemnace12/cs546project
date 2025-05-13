@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <h1 class="page-title">Edit Profile</h1>
 <p id="error" class="error-message" hidden></p>
 <p>Welcome {{firstName}} {{lastName}}. Choose an item to edit:</p>
@@ -21,7 +27,7 @@
 
   <div class="form-group">
     <label for="newValue">New Value</label>
-    <input type="text" id="newValue" name="newValue" />
+    <input type="text" id="newValue" name="newValue">
   </div>
 
   <div class="form-actions">

@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <h1 class="page-title">Login</h1>
 <p id="error" hidden></p>
 <form method="POST" action="/user/login" id="signin-form" class="form">
@@ -12,7 +18,7 @@
         </div>
 
         <div class="form-actions">
-        <button id="submitButton">Submit</button>
+        <button id="submitButton" class="btn-primary">Submit</button>
         </div>
 </form>
 

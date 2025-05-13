@@ -1,77 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <div class="form-header">
   <h1 class="page-title">Write a Review for {{spot.name}}</h1>
-  <a href="/vacation/{{spot._id}}" class="btn-secondary">
-    ← Back to Spot
-  </a>
+  <button id="btn-back" type="button" class="btn-secondary" data-id="{{spot._id}}">← Back to Spot</button>
 </div>
 
 <p class="form-subtitle">Give a review from 1-5 for each part of this vacation spot. Only go to one decimal place.</p>
-<p id="error" class="error-message"hidden></p>
-<form id="createreview-form" action="/review/createreview/{{spot._id}}" method="POST" class="form">
+<p id="error" class="error-message" hidden></p>
+<form id="createreview-form" method="POST" class="form" data-id="{{spot._id}}">
     <input type="hidden" name="locationId" value="{{spot._id}}">
     <input type="hidden" name="locationName" value="{{spot.name}}">
     <input type="hidden" name="userId" value="{{user._id}}">
 
 <div class="form-group">
     <label for="foodRating">Food Rating:</label>
-    <input
-      type="number"
-      name="foodRating"
-      id="foodRating"
-      step="0.1"
-      min="0"
-      max="5"
-      required
-    />
+    <input type="number" name="foodRating" id="foodRating" step="0.1" min="0" max="5" required>
 </div>
 
 <div class="form-group">
     <label for="safetyRating">Safety Rating:</label>
-    <input
-      type="number"
-      name="safetyRating"
-      id="safetyRating"
-      step="0.1"
-      min="0"
-      max="5"
-      required
-    />
-</div>
+    <input type="number" name="safetyRating" id="safetyRating" step="0.1" min="0" max="5" required>
+</div> 
 <div class="form-group">
     <label for="activityRating">Activity Rating:</label>
-    <input
-      type="number"
-      name="activityRating"
-      id="activityRating"
-      step="0.1"
-      min="0"
-      max="5"
-      required
-    />
+    <input type="number" name="activityRating" id="activityRating" step="0.1" min="0" max="5" required>
 </div>
 <div class="form-group">
     <label for="overallRating">Overall Rating:</label>
-    <input
-      type="number"
-      name="overallRating"
-      id="overallRating"
-      step="0.1"
-      min="0"
-      max="5"
-      required
-    />
+    <input type="number" name="overallRating" id="overallRating" step="0.1" min="0" max="5" required>
 </div>
 <div class="form-group">
     <label for="review">Review:</label>
-    <textarea
-      name="review"
-      id="review"
-      rows="4"
-      required
-    ></textarea>
+    <textarea name="review" id="review" rows="4" required></textarea>
 </div>
-    <button type="submit" name="submit_button" id="submit_button">Submit Post</button>
+    <button type="submit" name="submit_button" id="submit_button" class="btn-primary">Submit Post</button>
 </form>
 
 <script src="/public/js/form_validation.js"></script>
-
+<script src="/public/js/createreview.js"></script>

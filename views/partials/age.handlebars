@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
 <section class="age-verification">
   <h1 class="page-title">Welcome to TripScore</h1>
   <p>To enter this website, you must be at least 14 years old.</p>
@@ -10,14 +15,7 @@
   >
     <div class="form-group">
       <label for="age">Enter your age:</label>
-      <input
-        type="number"
-        name="age"
-        id="age"
-        min="1"
-        max="130"
-        placeholder="e.g. 25"
-      />
+      <input type="number" name="age" id="age" min="1" max="130" placeholder="e.g. 25">
       <div id="age-error" class="error-message"></div>
     </div>
 

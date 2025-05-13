@@ -1,10 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <section class="review-page">
   <div class="review-header">
     <h1 class="page-title">Review by {{review.userId}}</h1>
     <div class="header-actions">
-    <a href="/vacation/{{review.locationId}}" class="btn-secondary">
-      ← Back to Spot
-    </a>
+    <button id="btn-back-to-spot" type="button" class="btn-secondary" data-id="{{review.locationId}}" >← Back to Spot</button>
     <button id="share-btn" class="btn-secondary">Share</button>
     </div>
   </div>
@@ -24,6 +28,7 @@
     </div>
   <p class="review-text">{{review.review}}</p>
 </div>
+</section>
 <!-- had to demolish a lot for ajax-->
 <section class="comments-section">
   <h2 class="section-title">Comments</h2>
@@ -31,31 +36,33 @@
   {{#if review.comments.length}}
     <ul class="comment-list" id="commentsList">
     {{#each review.comments}}
-      <li data-id=="{{this._id}}" class="comment-item">
-        <p>{{this.comment}}</p>
+      <div class="comment-item" data-id="{{this._id}}">
+            <p>{{this.comment}}</p>
         <small class="comment-meta">by {{this.userId}}</small>
-      </li>
+      </div>
     {{/each}}
-    </ul>
+    </div>
   {{else}}
-    <li class="not-found">No comments yet.</li>
+    <div class="not-found">No comments yet.</div>
   {{/if}}
-</ul>
 
 <p id="comment-error" hidden></p>
 <form id="comment-form">
 
-  <input type="hidden" id="reviewId" value="{{review._id}}" />
-  <input type="hidden" id="UserId" value="{{session.user.userId}}"/>
+  <input type="hidden" id="reviewId" value="{{review._id}}">
+  <input type="hidden" id="UserId" value="{{session.user.userId}}">
 
   <label for="comment"></label>
-  <input type="text" id="comment" name="comment" />
+  <input type="text" id="comment" name="comment">
 
-  <button type="submit">Submit</button>
+  <button type="submit" class="btn-primary">Submit</button>
 </form>
+
+</section>
 <!--https://stackoverflow.com/questions/52741262/how-to-install-import-and-use-dompurify-in-frontend-js-file-->
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/public/js/ajax.js"></script>
 <script src="/public/js/form_validation.js"></script>
 <script src="/public/js/shareReview.js"></script>
+<script src="/public/js/review.js"></script>

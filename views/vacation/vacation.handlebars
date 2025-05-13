@@ -1,19 +1,19 @@
-<section class="spot-page">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
 
-  <div class="spot-imageover">
-    <img
-      src="/public/images/destinations/{{spot.name}}.jpg"
-      alt="{{spot.name}}"
-      class="spot-image"
-    />
+<section class="spot-page">
+<h2 class="visually-hidden">Vacation Spot Details</h2>
+  <div class="spot-imageover" data-image="/public/images/destinations/{{spot.name}}.jpg" data-name="{{spot.name}}">
+    <img class="spot-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="{{spot.name}}">
     <div class="spot-imageover-title">{{spot.name}}</div>
   </div>
 
-  <div class="spot-actions">
-    <a href="/review/createreview/{{spot._id}}" class="btn-primary">
-      Write a Review
-    </a>
-  </div>
+<div class="spot-actions">
+    <button id="btn-create-review" class="btn-primary" data-id="{{spot._id}}">Write a Review</button>
+ </div>
 
 <div class="spot-details">
     <p class="item-description">{{spot.description}}</p>
@@ -31,20 +31,20 @@
 <section class="spot-reviews">
     <h2 class="section-title">User Reviews</h2>
         {{#if spot.reviews.length}}
-            <ol>
+            <div class="review-list">
                 {{#each spot.reviews}}
-                    <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}">
-                        <div class="reviewbox">
-                            <p>Review: {{review}}</p>
-                            <a href="/review/{{_id}}">Click me to see this review</a>
+                    <div class="review-item" data-id="{{this._id}}" data-user="{{userId}}">
+                        <div class="review-card">
+                            <p class="review-text">{{this.review}}</p>
                             <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
                             <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
                             <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
                             </div>
+                            <button class="btn-secondary btn-view-detail" data-id="{{this._id}}">View Details →</button>
                         </div>
-                    </li>
+                    </div>
                 {{/each}}
-            </ol>
+            </div>
         {{else}}
     <p class="not-found">We're sorry, but no reviews were for this vacation spot.</p>
 {{/if}}
@@ -52,18 +52,21 @@
 
  <div id="map" data-city="{{spot.city}}" data-country="{{spot.country}}" style="height: 400px;"></div>
 
-<hr />
+<hr>
 
 <section class="spot-recommendations">
   <div class="recommendation-box">
     <h2>If you like {{spot.name}}, then check out these similar places!</h2>
     
     {{#if recommendations.length}}
-      <ul class="recommendation-list">
+      <div class="recommendation-list">
         {{#each recommendations}}
-          <li><a href="/vacation/{{this._id}}">{{this.name}}</a></li>
+         <div class="recommendation-item" data-id="{{this._id}}" data-image="/public/images/destinations/{{this.name}}.jpg" data-name="{{this.name}}">
+            <img class="recommendation-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="{{this.name}}">
+              <div class="recommendation-name">{{this.name}}</div>
+         </div>
         {{/each}}
-      </ul>
+      </div>
     {{else}}
       <p>No recommendations available at this time.</p>
     {{/if}}
@@ -75,3 +78,4 @@
 <script src="/public/js/likes.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="/public/js/map.js"></script>
+<script src="/public/js/vacation.js"></script>
