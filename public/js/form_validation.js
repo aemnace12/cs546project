@@ -273,7 +273,7 @@ const checkValidNewValue = (editItem, newValue) => {
 };
 
 //  helper function for signup-form validation
-const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword, role) => {
+const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword) => {
     let missingFields = [];
     let errors = [];
 
@@ -293,10 +293,6 @@ const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword
         missingFields.push('confirmPassword');
       }
 
-      if (!role) {
-        missingFields.push('role');
-      }
-  
       if (missingFields.length > 0) {       //  checking for missing fields
         let missingFieldsStr = missingFields.join(', ');
         errors.push(`${missingFieldsStr} are missing`);
@@ -324,10 +320,6 @@ const inputCheckSignup = (firstName, lastName, userId, password, confirmPassword
       if (confirmPassword !== password) {     //  checking valid confirmPassword
         errors.push('Confirm password must be the same as initial password');
       }
-
-      if (!checkValidRole(role)) {       //  checking valid role
-        errors.push('Invalid role, must be user or admin');
-      }
       
       if (errors.length > 0) {
         let errorStr = errors.join('. ') + '.';
@@ -346,9 +338,8 @@ if (signupForm) {
         const userId = document.getElementById('userId').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        const role = document.getElementById('role').value;
 
-        if (inputCheckSignup(firstName, lastName, userId, password, confirmPassword, role)) {        // error checking
+        if (inputCheckSignup(firstName, lastName, userId, password, confirmPassword)) {        // error checking
             errorDiv.hidden = true;
         } else {
             event.preventDefault();
