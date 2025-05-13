@@ -530,4 +530,53 @@
     box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
 }
 
+.spot-imageover {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 24px;
+  }
   
+  .spot-image {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    max-height: 330px;
+
+  }
+  
+  .spot-imageover-title {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 50px;
+    border-radius: 4px;
+  }
+  
+  /* Align the primary action under the hero */
+  .spot-actions {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  /* Tweak details spacing */
+  .spot-details {
+    margin-bottom: 24px;
+  }
+  
+  /* Ensure item-link aligns with theme */
+  .spot-details .item-link,
+  .review-item .item-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: #0077cc;
+    text-decoration: none;
+  }
+  
+  .spot-details .item-link:hover,
+  .review-item .item-link:hover {
+    text-decoration: underline;
+  }

@@ -1,32 +1,51 @@
-<a href="/review/createreview/{{spot._id}}">Click me to create a review for this vacation spot!</a>
+<section class="spot-page">
 
-<p>Name: {{spot.name}}</p>
-<p>Description: {{spot.description}}</p>
-<p>City: {{spot.city}}</p>
-<p>Region/State: {{spot.region}}</p>
-<p>Country: {{spot.country}}</p>
-<p>Continent: {{spot.continent}}</p>
-<p>Overall Rating: {{spot.overallRating}}</p>
-<p>Food Rating: {{spot.foodRating}}</p>
-<p>Safety Rating: {{spot.safetyRating}}</p>
-<p>Activity Rating: {{spot.activityRating}}</p>
+  <div class="spot-imageover">
+    <img
+      src="/public/images/destinations/{{spot.name}}.jpg"
+      alt="{{spot.name}}"
+      class="spot-image"
+    />
+    <div class="spot-imageover-title">{{spot.name}}</div>
+  </div>
 
-{{#if spot.reviews.length}}
-    <ol>
-        {{#each spot.reviews}}
-            <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}">
-                <div class="reviewbox">
-                    <p>Review: {{review}}</p>
-                    <a href="/review/{{_id}}">Click me to see this review</a>
-                    <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
-                    <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
-                    <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
-                    </div>
-                </div>
-            </li>
-        {{/each}}
-    </ol>
-{{else}}
+  <div class="spot-actions">
+    <a href="/review/createreview/{{spot._id}}" class="btn-primary">
+      Write a Review
+    </a>
+  </div>
+
+<div class="spot-details">
+    <p class="item-description">{{spot.description}}</p>
+    <p class="item-meta">
+      {{spot.city}}, {{spot.region}}, {{spot.country}} &bull; {{spot.continent}}
+    </p>
+    <div class="item-ratings">
+      <span class="rating"><span class="rating-label">Overall:</span> {{spot.overallRating}}</span>
+      <span class="rating"><span class="rating-label">Food:</span> {{spot.foodRating}}</span>
+      <span class="rating"><span class="rating-label">Safety:</span> {{spot.safetyRating}}</span>
+      <span class="rating"><span class="rating-label">Activity:</span> {{spot.activityRating}}</span>
+    </div>
+  </div>
+
+<section class="spot-reviews">
+    <h2 class="section-title">User Reviews</h2>
+        {{#if spot.reviews.length}}
+            <ol>
+                {{#each spot.reviews}}
+                    <li class="review-item" data-review-id="{{this._id}}" data-user-id="{{userId}}">
+                        <div class="reviewbox">
+                            <p>Review: {{review}}</p>
+                            <a href="/review/{{_id}}">Click me to see this review</a>
+                            <div class="review-votes" data-review-id="{{this._id}}" data-user-id="{{userId}}">
+                            <button class="btn-like"    data-id="{{this._id}}">👍 <span class="like-count">{{this.likes}}</span></button>
+                            <button class="btn-dislike" data-id="{{this._id}}">👎 <span class="dislike-count">{{this.dislikes}}</span></button>
+                            </div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
+        {{else}}
     <p class="not-found">We're sorry, but no reviews were for this vacation spot.</p>
 {{/if}}
 
