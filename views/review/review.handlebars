@@ -1,22 +1,33 @@
-<p>This is a page for an individual review</p>
+<section class="review-page">
+  <div class="review-header">
+    <h1 class="page-title">Review by {{review.userId}}</h1>
+    <a href="/vacation/{{review.locationId}}" class="btn-secondary">
+      ← Back to Spot
+    </a>
+  </div>
 
-<h1>{{review.userId}}'s Review</h1>
-<p>Vacation Spot: {{review.vacationSpotId}}</p>
-<p>Food Rating: {{review.foodRating}}</p>
-<p>Safety Rating: {{review.safetyRating}}</p>
-<p>Activity Rating: {{review.activityRating}}</p>
-<p>Overall Rating: {{review.overallRating}}</p>
-<p>Review: {{review.review}}</p>
+<div class="review-card">
+    <div class="review-ratings">
+      <div class="rating"><span class="rating-label">Overall:</span> {{review.overallRating}}</div>
+      <div class="rating"><span class="rating-label">Food:</span> {{review.foodRating}}</div>
+      <div class="rating"><span class="rating-label">Safety:</span> {{review.safetyRating}}</div>
+      <div class="rating"><span class="rating-label">Activity:</span> {{review.activityRating}}</div>
+    </div>
+  <p class="review-text">{{review.review}}</p>
+</div>
 <!-- had to demolish a lot for ajax-->
-<h2>Comments</h2>
-<ul id="commentsList">
+<section class="comments-section">
+  <h2 class="section-title">Comments</h2>
   <!--https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes-->
   {{#if review.comments.length}}
+    <ul class="comment-list">
     {{#each review.comments}}
-      <li data-id=="{{this._id}}">
+      <li data-id=="{{this._id}}" class="comment-item">
         <p>{{this.comment}}</p>
+        <small class="comment-meta">by {{this.userId}}</small>
       </li>
     {{/each}}
+    </ul>
   {{else}}
     <li class="not-found">No comments yet.</li>
   {{/if}}
