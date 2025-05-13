@@ -61,7 +61,16 @@
     {{#if recommendations.length}}
       <ul class="recommendation-list">
         {{#each recommendations}}
-          <li><a href="/vacation/{{this._id}}">{{this.name}}</a></li>
+         <li class="recommendation-item">
+            <a href="/vacation/{{this._id}}" class="recommendation-card">
+              <img
+                src="/public/images/destinations/{{this.name}}.jpg"
+                alt="{{this.name}}"
+                class="recommendation-image"
+              />
+              <div class="recommendation-name">{{this.name}}</div>
+            </a>
+         </li>
         {{/each}}
       </ul>
     {{else}}

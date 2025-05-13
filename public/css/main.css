@@ -549,7 +549,7 @@ button.btn-primary {
     position: absolute;
     bottom: 16px;
     left: 16px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.608);
     color: #fff;
     padding: 8px 16px;
     font-size: 50px;
@@ -610,7 +610,7 @@ button.btn-primary {
     border-radius: 6px;
     padding: 20px;
     margin-bottom: 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 8px black;
 }
   
 .review-ratings {
@@ -691,7 +691,7 @@ button.btn-primary {
   
 .btn-secondary {
     background: #ccc;
-    color: #333;
+    color: #333333;
     padding: 6px 12px;
     border-radius: 4px;
     text-decoration: none;
@@ -713,10 +713,10 @@ button.btn-primary {
     right: 20px;
     display: none;
     flex-direction: column;
-    background: #fff;
+    background: white;
     border: 1px solid #ddd;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px black;
     z-index: 1000;
 }
   
@@ -734,4 +734,53 @@ button.btn-primary {
   
 .share-menu a:hover {
     background: #f0f8ff;
+}
+
+.spot-recommendations {
+    margin-top: 40px;
+}
+
+.spot-recommendations .section-title {
+    margin-bottom: 20px;
+}
+
+.recommendation-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.recommendation-item {
+    text-align: center;
+}
+
+.recommendation-card {
+    display: block;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    color: black;
+    box-shadow: 0 2px 8px black;
+    transition: transform 150ms, box-shadow 150ms;
+}
+
+  .recommendation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px black;
+}
+
+.recommendation-image {
+    width: 100%;
+    display: block;
+    height: 120px;
+    object-fit: cover;
+}
+
+.recommendation-name {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
 }
