@@ -27,13 +27,13 @@
       <div class="rating"><span class="rating-label">Activity:</span> {{review.activityRating}}</div>
     </div>
   <p class="review-text">{{review.review}}</p>
+  {{#if userOwnsReview}}
+    <form method="POST" action="/review/delete/{{review._id}}">
+      <button type="submit" class="btn-primary-red">Delete Review</button>
+    </form>
+  {{/if}}
 </div>
 </section>
-{{#if userOwnsReview}}
-  <form method="POST" action="/review/delete/{{review._id}}">
-    <button type="submit">Delete Review</button>
-  </form>
-{{/if}}
 <!-- had to demolish a lot for ajax-->
 <section class="comments-section">
   <h2 class="section-title">Comments</h2>
