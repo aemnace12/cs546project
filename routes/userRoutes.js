@@ -227,7 +227,7 @@ router
       regBody.userId = validation.checkString(xss(regBody.userId));
       regBody.password = validation.checkString(xss(regBody.password));
       regBody.confirmPassword = validation.checkString(xss(regBody.confirmPassword));
-      regBody.role = validation.checkString(xss(regBody.role));
+      //regBody.role = validation.checkString(xss(regBody.role));
 
       if(!(/^[A-Za-z]+$/).test(regBody.firstName)){
         throw "first name contains non-letters"
@@ -274,14 +274,14 @@ router
       }
 
     
-      regBody.role=validation.checkString(regBody.role);
+      /*regBody.role=validation.checkString(regBody.role);
       regBody.role=regBody.role.toLowerCase();
       if(regBody.role !== "admin" && regBody.role !== "user"){
         throw "incorrect role";
-      }
+      }*/
 
       //This function is needed! from userData
-      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.confirmPassword, regBody.role);
+      const reg = await userData.createUser(regBody.firstName, regBody.lastName, regBody.userId, regBody.password, regBody.confirmPassword, "user");
       console.log("Registration result:", reg);
       if(reg.registrationCompleted){
         res.redirect("/user/login");
