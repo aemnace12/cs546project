@@ -225,7 +225,43 @@ async getTopSpots(limit = 6) {
     const col = await vacationSpots();
     const spots = await col.find({}).sort({overallRating: -1}).limit(limit).toArray();
     return spots;
-  }
+},
 
+recommendationScore(location) {
+    //  weighted average 
+    return 0.4 * location.foodRating + 0.4 * location.activityRating + 0.2 * location.safetyRating;
+},
+
+async getRecommendationsById(id) {
+    if (!id){
+        throw ('ERROR: You must provide an id to search for');
+    }
+    if (typeof id !== 'string'){
+        throw ('ERROR: Id must be a string');
+    }
+    if (id.trim().length === 0){
+        throw ('ERROR: id cannot be an empty string or just spaces');
+    }
+    id = id.trim();
+    if (!ObjectId.isValid(id)){
+        throw ('ERROR: invalid object ID');
+    }   
+
+    const location = await this.getLocationById(id);
+    const recommendationScore = this.recommendationScore(location);
+
+    let allLocations = await this.getAllApprovedLocations();
+    allLocations = allLocations.filter(loc => loc._id.toString() !== id);
+
+    const sorted = allLocations.sort((a, b) => {
+        const diffA = Math.abs(recommendationScore - this.recommendationScore(a._id.toString()));
+        const diffB = Math.abs(recommendationScore - this.recommendationScore(b._id.toString()));
+
+        return diffA - diffB; 
+    });
+
+    return sorted.slice(0, 3);
+}   
+    
 }
 export default exportedMethods;

@@ -48,11 +48,29 @@
         {{else}}
     <p class="not-found">We're sorry, but no reviews were for this vacation spot.</p>
 {{/if}}
+</section>
 
  <div id="map" data-city="{{spot.city}}" data-country="{{spot.country}}" style="height: 400px;"></div>
 
 <hr />
 
+<section class="spot-recommendations">
+  <div class="recommendation-box">
+    <h2>If you like {{spot.name}}, then check out these similar places!</h2>
+    
+    {{#if recommendations.length}}
+      <ul class="recommendation-list">
+        {{#each recommendations}}
+          <li><a href="/vacation/{{this._id}}">{{this.name}}</a></li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No recommendations available at this time.</p>
+    {{/if}}
+  </div>
+</section>
+
+</section>
 
 <script src="/public/js/likes.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

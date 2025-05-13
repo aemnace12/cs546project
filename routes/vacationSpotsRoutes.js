@@ -16,9 +16,9 @@ router.route('/:id')
 .get(async (req,res) => {
     try{
         const spotData = await vacationSpotData.getLocationById(xss(req.params.id));
-
+        const recommendations = await vacationSpotData.getRecommendationsById(xss(req.params.id));
         spotData._id = spotData._id.toString();
-        res.render('vacation/vacation', {spot: spotData});
+        res.render('vacation/vacation', {spot: spotData, recommendations: recommendations});
     }catch(e){
         res.status(404).render('error', {error: e})
     }
