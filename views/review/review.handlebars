@@ -29,6 +29,11 @@
   <p class="review-text">{{review.review}}</p>
 </div>
 </section>
+{{#if userOwnsReview}}
+  <form method="POST" action="/review/delete/{{review._id}}">
+    <button type="submit">Delete Review</button>
+  </form>
+{{/if}}
 <!-- had to demolish a lot for ajax-->
 <section class="comments-section">
   <h2 class="section-title">Comments</h2>
@@ -47,6 +52,7 @@
   {{/if}}
 
 <p id="comment-error" hidden></p>
+<p>Comment:</p>
 <form id="comment-form">
 
   <input type="hidden" id="reviewId" value="{{review._id}}">
