@@ -4,5 +4,10 @@
   <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
 </head> <!-- formalities for html validation -->
 
-<p>You have been logged out.</p>
+{{#if logout}}
+  <p>You have been logged out.</p>
+{{/if}}
+{{#if deleteAcc}}
+  <p>You have successfully deleted your account.</p>
+{{/if}}
 <a href="/" class="nav-link">Go back to homepage</a>
