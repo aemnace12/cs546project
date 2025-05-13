@@ -28,7 +28,7 @@
     </div>
   <p class="review-text">{{review.review}}</p>
   {{#if userOwnsReview}}
-    <form method="POST" action="/review/delete/{{review._id}}">
+    <form method="POST" action="/review/delete/{{review._id}}" onsubmit="return confirm('Are you sure you want to delete your review? This action cannot be undone.');">
       <button type="submit" class="btn-primary-red">Delete Review</button>
     </form>
   {{/if}}
