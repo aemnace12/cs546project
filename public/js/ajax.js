@@ -24,9 +24,10 @@
       if(comments.length > 0) {
         for (let i = 0; i < comments.length; i++) {
           const toAdd = comments[i];
+          const cleanComment = DOMPurify.sanitize(toAdd.comment, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }); // for xss purposes
           $('#commentsList').append(`
             <li data-id="${toAdd._id}">
-              <p>${toAdd.userId}: ${toAdd.comment}</p>
+              <p>${toAdd.userId}: ${cleanComment}</p>
             </li>
           `);
         }

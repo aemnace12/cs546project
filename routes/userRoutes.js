@@ -4,6 +4,7 @@ import {userData} from '../data/index.js';
 import {reviewData} from '../data/index.js';
 import validation from '../validation.js';
 import xss from 'xss';
+import bcrypt from 'bcryptjs';
 
 router
   .route('/login')
@@ -138,7 +139,6 @@ router.post('/edit', async (req, res) => {
     if (!editItem || !newValue) {
       throw "All fields are required"
     }
-
     const allowedFields = ['firstName', 'lastName', 'bio', 'favoritePlace', 'password'];
     if (!allowedFields.includes(editItem)) {
       throw "Invalid field to edit.";
@@ -164,16 +164,19 @@ router.post('/edit', async (req, res) => {
       if (!number) {
         throw "Password must contain at least one number";
       }
+      const saltRounds = 10;
+      finValue = await bcrypt.hash(password, saltRounds);
+     // console.log("Hashed password:", finValue);
     }
     const updatedUser = await userData.updateUser(req.session.user.userId, editItem, finValue);
     if (!updatedUser) {
       //error here
       throw "Updating did not work."
     }
-    if (editItem !== 'password') {
+    if (editItem !== 'Password') {
       req.session.user[editItem] = finValue;
     }
-  
+   
     const userId = user.userId;
     const userReviews = await reviewData.getReviewsByUserid(userId);
    
