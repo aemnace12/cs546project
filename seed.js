@@ -16,6 +16,7 @@ try{
     //firstname, lastname, userId, password, role
     const adminUser = await users.createUser("John", "Doe", "admin", "Admin123!", "Admin123!", "admin")
     const normalUser = await users.createUser("Harry", "Styles", "normalUser", "User1234!", "User1234!", "user");
+    const person = await users.createUser("Bob", "Smith", "person", "User1234!", "User1234!", "user");
 
     //posts
     const nyc = await posts.createLocation("NYC", "New York City", "New York", "United States of America", "North America", "New York City is the economic capital of America.", true)
@@ -46,6 +47,7 @@ try{
     const dubaiReview = await reviews.createReview(dubai._id, adminUser.userId, 5, 2, 3, 3.7, "Dubai is luxurious but felt too artificial at times.");
     const santoriniReview = await reviews.createReview(santorini._id, normalUser.userId, 5, 5, 4, 4.8, "Santorini's views and sunsets are absolutely magical.");
     const machuPicchuReview = await reviews.createReview(machuPicchu._id, adminUser.userId, 4, 4, 5, 4.3, "Machu Picchu is a bucket-list experience with amazing views.");
+    const santoriniReview2 = await reviews.createReview(santorini._id, person.userId, 4.9, 5, 5, 4.8, "Some of the most beautiful architecture I've ever seen.");
 
 
     //comments?
@@ -61,6 +63,8 @@ try{
     const dubaiComment = await comments.createComment(dubaiReview._id.toString(), adminUser.userId, "Wow So cool!");
     const santoriniComment = await comments.createComment(santoriniReview._id.toString(), normalUser.userId, "I agree with you! I loved Santorini too!");
     const machuPicchuComment = await comments.createComment(machuPicchuReview._id.toString(), adminUser.userId, "I disagree with you! I hated Machu Picchu!");
+    const santoriniComment2 = await comments.createComment(santoriniReview._id.toString(), person.userId, "My favorite place ever!");
+
 
 
     
