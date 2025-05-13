@@ -27,7 +27,7 @@
           const cleanComment = DOMPurify.sanitize(toAdd.comment, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }); // for xss purposes
           $('#commentsList').append(`
             <li data-id="${toAdd._id}">
-              <p>${toAdd.userId}: ${cleanComment.comment}</p>
+              <p>${toAdd.userId}: ${cleanComment}</p>
             </li>
           `);
         }
