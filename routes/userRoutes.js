@@ -304,7 +304,7 @@ router.get('/logout', async (req, res) => {
     res.redirect('/leaderboard')
   }
   req.session.destroy();
-  res.render('auth/logout')
+  res.render('auth/logout', {logout: true})
 });
 
 router.route('/delete/:id')
@@ -318,7 +318,7 @@ router.route('/delete/:id')
     }
     await userData.removeUser(userId);
     req.session.destroy();
-    return res.redirect('/')
+    res.render('auth/logout', {deleteAcc: true})
     } catch (e) {
       res.status(400).render('error', { error: e });
     }
