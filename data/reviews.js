@@ -60,6 +60,12 @@ async createReview (
     if (!ObjectId.isValid(locationId)) {
         throw ('ERROR: invalid location object ID');
     }
+    const reviews = location.reviews;
+    for (let i = 0; i < reviews.length; i++){
+        if (reviews[i].userId === userId) {
+            throw "You have already submitted a review for this vacation spot.";
+        }
+    }
 
     let comments = [];
     const newReview = {
