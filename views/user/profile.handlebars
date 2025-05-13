@@ -1,7 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <h1>Profile Page</h1>
 
 <section class="profile-section">
-  <h1 class="page-title">Your Profile</h1>
+  <h2 class="page-title">Your Profile</h2>
   <div class="profile-info">
     <p><strong>User ID:</strong> {{userId}}</p>
     <p><strong>Name:</strong> {{firstName}} {{lastName}}</p>
@@ -16,9 +22,9 @@
 <section class="reviews-section">
   <h2 class="section-title">{{userId}}’s Reviews</h2>
   {{#if reviews.length}}
-    <ul class="leaderboard-list">
+    <div class="review-list">
       {{#each reviews}}
-        <li class="leaderboard-item">
+        <div class="review-item">
           <p class="item-description">{{review}}</p>
           <p class="item-meta">
             <strong>{{locationName}}</strong> —
@@ -27,9 +33,9 @@
             Safety: {{safetyRating}},
             Activity: {{activityRating}}
           </p>
-        </li>
+        </div>
       {{/each}}
-    </ul>
+    </div>
   {{else}}
     <p class="not-found">You haven’t posted any reviews yet.</p>
   {{/if}}

@@ -1,6 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
+</head> <!-- formalities for html validation -->
+
 <h1 class="page-title">Leaderboard</h1>
 
 <section class="filter-section">
+    <h2 class="visually-hidden">Filter Options</h2>
     <form method="GET" action="/leaderboard" id="filter-form" class="filter-form">
     <label>
         Sort by:
@@ -30,21 +37,23 @@
 </section>
 
 {{#if posts.length}}
-    <ol id="leaderboard">
+<div class="leaderboard-list">
         {{#each posts}}
-            <li class="leaderboard-item">
-                <a href="/vacation/{{_id}}" class="item-link">{{name}}</a>
-                <p class="item-description">{{description}}</p>
-                <p class="item-meta"> {{city}}, {{region}}, {{country}} &bull; {{continent}} </p>
+            <div class="leaderboard-item" data-id="{{this._id}}">
+                <h2 class="item-title">{{this.name}}</h2>
+                <p class="item-description">{{this.description}}</p>
+                <p class="item-meta"> {{this.city}}, {{this.region}}, {{this.country}} &bull; {{this.continent}} </p>
                 <div class="item-ratings">
                     <div class="rating"><span class="rating-label">Overall:</span> {{overallRating}}</div>
                     <div class="rating"><span class="rating-label">Food:</span> {{foodRating}}</div>
                     <div class="rating"><span class="rating-label">Safety:</span> {{safetyRating}}</div>
                     <div class="rating"><span class="rating-label">Activity:</span> {{activityRating}}</div>
                 </div>
-            </li>
+            </div>
         {{/each}}
-    </ol>
+    </div>
 {{else}}
     <p class="not-found">We're sorry, but no results were found.</p>
 {{/if}}
+
+<script src="/public/js/leaderboard.js"></script>
