@@ -53,6 +53,31 @@
  <div id="map" data-city="{{spot.city}}" data-country="{{spot.country}}" style="height: 400px;"></div>
 
 <hr>
+<section class="spot-questions">
+  <h2>Questions & Answers</h2>
+  <form method="POST" action="/vacation/qa/{{spot._id}}" id="qa-form">
+    <label for="question">Ask a question about {{spot.name}}:</label><br>
+    <textarea name="question" id="question" rows="4" cols="50" required></textarea><br>
+    <button type="submit">Submit Question</button>
+  </form>
+  {{#if spot.qas.length}}
+    <div class="qa-list">
+      {{#each spot.qas}}
+        <div class="qa-item">
+          <p><strong>Q:</strong> {{this.question}}</p>
+          {{#if this.answer}}
+            <p><strong>A:</strong> {{this.answer}}</p>
+          {{else}}
+            <p><em>No answer yet.</em></p>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p>No questions have been asked about this location yet.</p>
+  {{/if}}
+</section>
+
 
 <section class="spot-recommendations">
   <div class="recommendation-box">
