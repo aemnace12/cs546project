@@ -270,6 +270,13 @@ async addQuestionToSpot(spotId, qaObj) {
         throw 'Invalid question';
     }
 
+    if(qaObj.question.length < 3){
+        throw "Too short of a question."
+    }
+    if(qaObj.question.length > 500){
+        throw "Too long of a question."
+    }
+
     const questionId = new ObjectId();
 
     const newQuestion = {
@@ -300,6 +307,13 @@ async addAnswerToQuestion(spotId, questionId, answerText, userId) {
     }
     if (!userId || typeof userId !== 'string') {
         throw 'Invalid user ID';
+    }
+
+    if(answerText.length < 3){
+        throw "Too short of a answer."
+    }
+    if(answerText.length > 500){
+        throw "Too long of a answer."
     }
 
     const spotCollection = await vacationSpots();
