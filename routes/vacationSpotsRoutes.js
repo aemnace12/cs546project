@@ -24,5 +24,28 @@ router.route('/:id')
     }
 })
 
+router.route('/qa/:id').post(async (req, res) => {
+  try {
+    const spotId = req.params.id;
+    const questionText = xss(req.body.question);
+    const userId = req.session.user?.userId;
+
+    if (!userId) {
+      return res.status(403).render('error', { error: 'You must be logged in to ask a question.' });
+    }
+
+    await vacationSpotData.addQuestionToSpot(spotId, {
+      question: questionText,
+      userId: userId,
+      createdAt: new Date().toISOString()
+    });
+
+    res.redirect(`/vacation/${spotId}`);
+  } catch (e) {
+    res.status(500).render('error', { error: 'Failed to submit question.' });
+  }
+});
+
+
 
 export default router;

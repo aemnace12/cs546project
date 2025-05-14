@@ -261,7 +261,28 @@ async getRecommendationsById(id) {
     });
 
     return sorted.slice(0, 3);
-}   
+},
+async addQuestionToSpot(spotId, qaObj) {
+    if (!spotId || typeof spotId !== 'string') {
+        throw 'Invalid spot ID';
+    }
+    if (!qaObj || typeof qaObj.question !== 'string') {
+        throw 'Invalid question';
+    }
+
+    const spotCollection = await vacationSpots();
+    const updateInfo = await spotCollection.updateOne(
+        { _id: new ObjectId(spotId) },
+        { $push: { qas: qaObj } }
+    );
+
+    if (updateInfo.modifiedCount === 0) {
+        throw 'Could not add question';
+    }
+
+    return true;
+}
+
     
 }
 export default exportedMethods;
