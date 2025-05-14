@@ -30,6 +30,14 @@ router.route('/qa/:id').post(async (req, res) => {
     const questionText = xss(req.body.question);
     const userId = req.session.user?.userId;
 
+    if(questionText.length < 3){
+        return res.status(403).render('error', { error: 'Too short of a question.' });
+    }
+    if(questionText.length > 500){
+        return res.status(403).render('error', { error: 'Too long of a question.' });
+
+    }
+
     if (!userId) {
       return res.status(403).render('error', { error: 'You must be logged in to ask a question.' });
     }
@@ -55,6 +63,13 @@ router.post('/qa/:spotId/answer/:questionId', async (req, res) => {
 
     if (!userId) {
       return res.status(403).render('error', { error: 'You must be logged in to answer questions.' });
+    }
+    
+    if(answerText.length < 3){
+        return res.status(403).render('error', { error: 'Too short of a answer.' });
+    }
+    if(answerText.length > 500){
+        return res.status(403).render('error', { error: 'Too long of a answer.' });
     }
 
     await vacationSpotData.addAnswerToQuestion(spotId, questionId, answerText, userId);
