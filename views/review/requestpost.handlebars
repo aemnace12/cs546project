@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>{{#if title}}{{title}}{{else}}Home{{/if}} - TripScore</title>
-</head> <!-- formalities for html validation -->
 <h1 class="page-title">Request New Vacation Spot</h1>
 <p>This form will be sent to an admin for approval.</p>
 <p id="error" class="error-message" hidden></p>
 
+  <form id="request-form" method="POST" action="/review/requestpost" class="form">
 <div class="form-group">
     <label for="name">Location Name</label>
     <input type="text" id="name" name="name">
@@ -40,5 +36,5 @@
   <div class="form-actions">
     <button type="submit" class="btn-primary">Request Post</button>
   </div>
-
+</form>
 <script src="/public/js/form_validation.js"></script>
