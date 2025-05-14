@@ -70,6 +70,10 @@
           {{else}}
             <p><em>No answer yet.</em></p>
           {{/if}}
+          <form method="POST" action="/vacation/qa/{{../spot._id}}/answer/{{this._id}}">
+            <input name="answerText" placeholder="Write your answer here..." required>
+            <button type="submit">Submit Answer</button>
+          </form>
         </div>
       {{/each}}
     </div>

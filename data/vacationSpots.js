@@ -270,14 +270,51 @@ async addQuestionToSpot(spotId, qaObj) {
         throw 'Invalid question';
     }
 
+    const questionId = new ObjectId();
+
+    const newQuestion = {
+        _id: questionId,
+        question: qaObj.question,
+        userId: qaObj.userId,
+        answer: null
+    };
+
     const spotCollection = await vacationSpots();
     const updateInfo = await spotCollection.updateOne(
         { _id: new ObjectId(spotId) },
-        { $push: { qas: qaObj } }
+        { $push: { qas: newQuestion } }
     );
 
     if (updateInfo.modifiedCount === 0) {
         throw 'Could not add question';
+    }
+
+    return { inserted: true, questionId: questionId.toString() };
+},
+async addAnswerToQuestion(spotId, questionId, answerText, userId) {
+    if (!ObjectId.isValid(spotId) || !ObjectId.isValid(questionId)) {
+        throw 'Invalid spot ID or question ID';
+    }
+    if (!answerText || typeof answerText !== 'string' || answerText.trim().length === 0) {
+        throw 'Invalid answer text';
+    }
+    if (!userId || typeof userId !== 'string') {
+        throw 'Invalid user ID';
+    }
+
+    const spotCollection = await vacationSpots();
+    const updateInfo = await spotCollection.updateOne(
+        { _id: new ObjectId(spotId), "qas._id": new ObjectId(questionId) },
+        { 
+          $set: { 
+            "qas.$.answer": answerText.trim(),
+            "qas.$.answeredBy": userId
+          }
+        }
+    );
+
+    if (updateInfo.modifiedCount === 0) {
+        throw 'Failed to add answer to the question';
     }
 
     return true;

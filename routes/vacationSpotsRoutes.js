@@ -46,6 +46,24 @@ router.route('/qa/:id').post(async (req, res) => {
   }
 });
 
+router.post('/qa/:spotId/answer/:questionId', async (req, res) => {
+  try {
+    const spotId = req.params.spotId;
+    const questionId = req.params.questionId;
+    const answerText = xss(req.body.answerText);
+    const userId = req.session.user?.userId;
+
+    if (!userId) {
+      return res.status(403).render('error', { error: 'You must be logged in to answer questions.' });
+    }
+
+    await vacationSpotData.addAnswerToQuestion(spotId, questionId, answerText, userId);
+
+    return res.redirect(`/vacation/${spotId}`);
+  } catch (e) {
+    return res.status(400).render('error', { error: e });
+  }
+});
 
 
 export default router;
